@@ -72,6 +72,7 @@ namespace Eggado
 
         private static Expression GetValueLambda(ParameterExpression reader, int ordinal, Type fieldType, Type targetType)
         {
+            // TODO Support for DBNull and nullable types
             var type = typeof(Func<,>).MakeGenericType(typeof(IDataRecord), targetType);
             return Expression.Lambda(type, GetValue(reader, ordinal, fieldType, targetType), reader);
         }
