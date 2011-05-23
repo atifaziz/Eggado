@@ -29,7 +29,6 @@ namespace Eggado
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
-    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -100,37 +99,11 @@ namespace Eggado
                 return source;
 
             var converter = ConversionLambda.Find(sourceType, targetType);
-            if (converter == null)
-            {
-                return ConversionLambda.ChangeType(source, targetType);
-                /*
-                var message = string.Format(@"No conversion available method available from {0} to {1}.", sourceType.FullName, targetType.FullName);
-                throw new NotSupportedException(message);*/
-            }
-
-            return Expression.Invoke(converter, source);
-
-            /*
-            const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
-            var name = "To" + targetType.Name;
-
-            var culturalMethod = typeof(Convert).GetMethod(name, bindingFlags, null, new[] { sourceType, typeof(IFormatProvider) }, null);
-
-            if (culturalMethod != null)
-                return Expression.Call(culturalMethod, source, _invariantCultureExpression);
-
-            var method = typeof(Convert).GetMethod(name, bindingFlags, null, new[] { sourceType }, null);
-
-            if (method == null)
-            {
-                var message = string.Format(@"No conversion available method available from {0} to {1}.", sourceType.FullName, targetType.FullName);
-                throw new NotSupportedException(message);
-            }
-            
-            return Expression.Call(method);*/
+            return converter != null 
+                 ? Expression.Invoke(converter, source) 
+                 : ConversionLambda.ChangeType(source, targetType);
         }
 
-        private static readonly Expression _invariantCultureExpression = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
         private static readonly MethodInfo _dataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
 
         private static readonly Dictionary<Type, MethodInfo> _methodByType = new Dictionary<Type, MethodInfo>
