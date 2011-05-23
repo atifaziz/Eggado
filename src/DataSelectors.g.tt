@@ -1,0 +1,82 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Linq" #>
+#region License, Terms and Author(s)
+//
+// Eggado
+// Copyright (c) 2011 Atif Aziz. All rights reserved.
+//
+//  Author(s):
+//
+//      Atif Aziz, http://www.raboof.com
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+#endregion
+
+namespace Eggado
+{
+    #region Imports
+
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+
+    #endregion
+
+    // This partial implementation was template-generated:
+    // <#= DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture) #>
+
+    partial class DataReaderExtensions
+    { <# 
+    var targz = from arity in Enumerable.Range(2, 15)
+                let ts = from n in Enumerable.Range(1, arity)
+                        select "T" + n.ToString(CultureInfo.InvariantCulture)
+                select "<" + string.Join(", ", ts) + ", TResult>";
+    
+    foreach (var targs in targz) { #>
+
+        public static IEnumerable<TResult> Select<#= targs #>(
+            this IDataReader reader,
+            Func<#= targs #> selector)
+        {
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<#= targs #>, TResult>>(selector);
+            while (reader.Read())
+                yield return f(reader, selector);
+        } 
+<#  } #>
+    }
+
+    partial class DbCommandExtensions
+    { <# 
+    foreach (var targs in targz) { #>
+
+        public static IEnumerable<TResult> Select<#= targs #>(
+            this IDbCommand command,
+            Func<#= targs #> selector)
+        {
+            if (command == null) throw new ArgumentNullException("command");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            using (var reader = command.ExecuteReader())
+            foreach (var record in reader.Select(selector))
+                yield return record;
+        }
+<#  } #>
+    }
+}

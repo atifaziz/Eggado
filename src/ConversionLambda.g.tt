@@ -1,0 +1,103 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.CodeDom" #>
+<#@ import namespace="System.CodeDom.Compiler" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Microsoft.CSharp" #>
+#region License, Terms and Author(s)
+//
+// Eggado
+// Copyright (c) 2011 Atif Aziz. All rights reserved.
+//
+//  Author(s):
+//
+//      Atif Aziz, http://www.raboof.com
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+#endregion
+
+namespace Eggado
+{
+    #region Imports
+
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq.Expressions;
+    using ConversionKey = System.Tuple<System.RuntimeTypeHandle, System.RuntimeTypeHandle>;
+
+    #endregion
+
+    // This partial implementation was template-generated:
+    // <#= DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture) #>
+
+    partial class ConversionLambda
+    {
+        private static ConversionKey K<TInput, TOutput>()
+        {
+            return Tuple.Create(typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
+        }
+
+        private static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
+        { <#  
+    var cscp = new CSharpCodeProvider();
+    var methodsByType = 
+        from g in
+            from method in typeof(Convert).GetMethods() 
+            let parameters = method.GetParameters()
+            where parameters.Length >= 1
+                && parameters.Length <= 2
+                && method.Name.Length > 2 
+                && method.Name.StartsWith("To", StringComparison.Ordinal)
+                && method.Name.IndexOf("Base64", StringComparison.Ordinal) < 0
+            let outputType = method.ReturnType
+            let inputType = parameters.First().ParameterType
+            where inputType != outputType
+            let cultural = parameters.Length == 2 
+                           && parameters.Last().ParameterType == typeof(IFormatProvider)
+            group new 
+            {
+                Info            = method,
+                InputType       = inputType,
+                InputTypeText   = TrimPrefix(cscp.GetTypeOutput(new CodeTypeReference(inputType)), "System."),
+                OutputType      = outputType,
+                OutputTypeText  = TrimPrefix(cscp.GetTypeOutput(new CodeTypeReference(outputType)), "System."),
+                IsCultural      = cultural,
+            }
+            by new { outputType, inputType }
+        let multiples = g.Count() > 1
+        let method = g.First(m => !multiples || m.IsCultural)
+        group method by method.OutputType;
+
+    foreach (var outputType in methodsByType) { 
+#> 
+            // <#= outputType.Key #>
+
+<#      foreach (var method in outputType) { #>
+            { K<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>(), (Expression<Func<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>>) (v => Convert.<#= method.Info.Name #>(v<#= method.IsCultural ? ", CultureInfo.InvariantCulture" : string.Empty #>)) }, 
+<# 
+        } 
+    } #>
+        };
+    }
+}
+<#+
+static string TrimPrefix(string str, string prefix)
+{
+    return !string.IsNullOrEmpty(prefix) && str.StartsWith(prefix, StringComparison.Ordinal) 
+         ? str.Substring(prefix.Length) 
+         : str;
+}
+#>
