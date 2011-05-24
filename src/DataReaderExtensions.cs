@@ -79,12 +79,37 @@ namespace Eggado
 
         private static Expression GetValue(Expression reader, int ordinal, Type sourceType, Type targetType)
         {
-            var method = _methodByType.Find(sourceType, _dataRecordGetValueMethod);
-            var call = Expression.Call(reader, method, Expression.Constant(ordinal));
-            return Convert(call.Type == sourceType
-                 ? (Expression) call
-                 : Expression.Convert(call, sourceType), 
-                 targetType);
+            Debug.Assert(targetType != null);
+
+            bool nullable;
+            var baseSourceType = sourceType;
+
+            if (targetType.IsValueType 
+                && targetType.IsGenericType
+                && typeof(Nullable<>) == targetType.GetGenericTypeDefinition())
+            {
+                nullable = true;
+                baseSourceType = targetType.GetGenericArguments()[0];
+            }
+            else
+            {
+                nullable = targetType.IsClass;
+            }
+            
+            var method = _methodByType.Find(baseSourceType, _dataRecordGetValueMethod);
+            var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
+
+            if (nullable)
+            {
+                result = Expression.Condition(
+                             Expression.Call(reader, _dataRecordIsDbNullMethod, Expression.Constant(ordinal)),
+                             Expression.Constant(null), result);
+            }
+            
+            return Convert(result.Type == sourceType
+                           ? result
+                           : Expression.Convert(result, sourceType), 
+                           targetType);
         }
 
         /// <remarks>
@@ -106,6 +131,7 @@ namespace Eggado
         }
 
         private static readonly MethodInfo _dataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
+        private static readonly MethodInfo _dataRecordIsDbNullMethod = ReflectMethod(r => r.IsDBNull(0));
 
         private static readonly Dictionary<Type, MethodInfo> _methodByType = new Dictionary<Type, MethodInfo>
         {
