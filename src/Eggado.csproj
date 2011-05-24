@@ -50,9 +50,11 @@
       <DependentUpon>DataSelectors.g.tt</DependentUpon>
     </Compile>
     <Compile Include="DbCommandExtensions.cs" />
+    <Compile Include="Expando.cs" />
     <Compile Include="Mannex\Collections\Generic\Dictionary.cs" />
     <Compile Include="DataReaderExtensions.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
+    <Compile Include="Mannex\Collections\Generic\Pairing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

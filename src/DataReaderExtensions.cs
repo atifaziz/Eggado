@@ -32,12 +32,52 @@ namespace Eggado
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
     #endregion
 
     public static partial class DataReaderExtensions
     {
+        public static IEnumerable<T> Select<T>(
+            [NotNull] this IDataReader reader, 
+            [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
+        {
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            while (reader.Read())
+            {
+                var record = (IDataRecord) reader;
+                yield return record.Select(selector);
+            }
+        }
+
+        public static IEnumerable<dynamic> SelectDynamic([NotNull] this IDataReader reader)
+        {
+            return reader.Select(fields => fields.ToExpando());
+        }
+
+        public static T Select<T>(
+            [NotNull] this IDataRecord record, 
+            [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
+        {
+            if (record == null) throw new ArgumentNullException("record");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            return selector(from i in Enumerable.Range(0, record.FieldCount)
+                            select record.Get(i));
+        }
+
+        public static KeyValuePair<string, object> Get([NotNull] this IDataRecord record, int ordinal)
+        {
+            if (record == null) throw new ArgumentNullException("record");
+
+            var name = record.GetName(ordinal);
+            var value = record.IsDBNull(ordinal) ? null : record.GetValue(ordinal);
+            return name.AsKeyTo(value);
+        }
+
         public static IEnumerable<TResult> Select<T, TResult>(
             this IDataReader reader,
             Func<T, TResult> selector)
