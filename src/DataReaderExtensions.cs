@@ -112,7 +112,6 @@ namespace Eggado
 
         private static Expression GetValueLambda(ParameterExpression reader, int ordinal, Type fieldType, Type targetType)
         {
-            // TODO Support for DBNull and nullable types
             var type = typeof(Func<,>).MakeGenericType(typeof(IDataRecord), targetType);
             return Expression.Lambda(type, GetValue(reader, ordinal, fieldType, targetType), reader);
         }
@@ -139,17 +138,19 @@ namespace Eggado
             var method = _methodByType.Find(baseSourceType, _dataRecordGetValueMethod);
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
 
+            result = Convert(result.Type == sourceType
+                             ? result
+                             : Expression.Convert(result, sourceType),
+                             targetType);
+
             if (nullable)
             {
                 result = Expression.Condition(
                              Expression.Call(reader, _dataRecordIsDbNullMethod, Expression.Constant(ordinal)),
-                             Expression.Constant(null), result);
+                             Expression.Convert(Expression.Constant(null), targetType), result);
             }
-            
-            return Convert(result.Type == sourceType
-                           ? result
-                           : Expression.Convert(result, sourceType), 
-                           targetType);
+
+            return result;
         }
 
         /// <remarks>
