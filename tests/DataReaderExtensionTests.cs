@@ -2,6 +2,7 @@
 {
     #region Imports
 
+    using System.Collections.Generic;
     using System.Data;
     using System.Text;
     using System.Xml;
@@ -13,8 +14,22 @@
     [TestClass]
     public class DataReaderExtensionTests
     {
-        [TestMethod]
-        public void Select()
+        class Product
+        {
+            public int ProductId { get; set; }
+            public string ProductName { get; set; }
+            public string EnglishName { get; set; }
+            public string QuantityPerUnit { get; set; }
+            public decimal UnitPrice { get; set; }
+            public int UnitsInStock { get; set; }
+            public int UnitsOnOrder { get; set; }
+            public int ReorderLevel { get; set; }
+            public bool Discontinued { get; set; }
+            public string Supplier { get; set; }
+            public string Category { get; set; }
+        }
+
+        private IDataReader GetProducts()
         {
             var table = new DataTable();
             using (var reader = GetType().Assembly.GetManifestResourceReader(GetType(), "Products.xml", Encoding.UTF8))
@@ -22,15 +37,26 @@
                 Assert.IsNotNull(reader);
                 table.ReadXml(XmlReader.Create(reader));
             }
-            
-            var items = new DataTableReader(table).Select(
+            return new DataTableReader(table);
+        }
+
+        [TestMethod]
+        public void Select()
+        {
+            AssertProducts(GetProducts().Select<Product>());
+        }
+        
+        [TestMethod]
+        public void SelectViaSelector()
+        {
+            var products = GetProducts().Select(
             (
                 int productId, string productName, string englishName, 
                 string quantityPerUnit, decimal unitPrice, 
                 int unitsInStock, int unitsOnOrder, int reorderLevel, 
                 bool discontinued, string supplier, string category
             ) 
-            => new 
+            => new Product
             {
                 ProductId       = productId,
                 ProductName     = productName,
@@ -44,8 +70,13 @@
                 Supplier        = supplier,
                 Category        = category,
             });
-            
-            using (var e = items.GetEnumerator())
+
+            AssertProducts(products);
+        }            
+
+        private static void AssertProducts(IEnumerable<Product> products)
+        {
+            using (var e = products.GetEnumerator())
             {
                 Assert.IsTrue(e.MoveNext());
                 Assert.AreEqual(1, e.Current.ProductId);

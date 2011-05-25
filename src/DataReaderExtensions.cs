@@ -110,6 +110,61 @@ namespace Eggado
                    select new Mapping(ordinal, fieldType, p.ParameterType);
         }
 
+        public static IEnumerable<T> Select<T>(this IDataReader reader)
+            where T : new()
+        {
+            var f = reader.CreateRecordSelector<T>();
+            while (reader.Read())
+                yield return f(reader);
+        }
+
+        public static Func<IDataRecord, T> CreateRecordSelector<T>(this IDataReader reader)
+            where T : new()
+        {
+            return reader.CreateRecordSelectorLambda<T>().Compile();
+        }
+
+        public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader) 
+            where T : new()
+        {
+            if (reader == null) throw new ArgumentNullException("reader");
+
+            var record = Expression.Parameter(typeof(IDataRecord), "record");
+            var obj = Expression.Variable(typeof(T));
+            
+            var statements = new IEnumerable<Expression>[]
+            {
+                new[] { Expression.Assign(obj, Expression.New(typeof(T))) },
+                from m in GetMappings(reader, typeof(T))
+                select Expression.Assign(
+                           Expression.MakeMemberAccess(obj, m.Member), 
+                           Expression.Invoke(
+                               GetValueLambda(record, m.Ordinal, m.SourceType, m.TargetType), 
+                               record)),
+                new[] { obj },
+            };
+            
+            var body = Expression.Block(typeof(T), new[] { obj }, statements.SelectMany(s => s));
+            return Expression.Lambda<Func<IDataRecord, T>>(body, record);
+        }
+
+        private static IEnumerable<Mapping> GetMappings(IDataRecord source, Type targetType)
+        {
+            return from m in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public, null, null)
+                   let p = m.MemberType == MemberTypes.Property ? (PropertyInfo) m : null
+                   let f = m.MemberType == MemberTypes.Field ? (FieldInfo) m : null
+                   where (p != null && p.CanRead && p.CanWrite) 
+                      || (f != null && f.Attributes.HasFlag(FieldAttributes.InitOnly))
+                   let type = p != null 
+                            ? p.PropertyType 
+                            : f != null 
+                            ? f.FieldType 
+                            : null
+                   let ordinal = source.GetOrdinal(m.Name)
+                   let fieldType = source.GetFieldType(ordinal)
+                   select new Mapping(ordinal, fieldType, type, m);
+        }
+
         private static Expression GetValueLambda(ParameterExpression reader, int ordinal, Type fieldType, Type targetType)
         {
             var type = typeof(Func<,>).MakeGenericType(typeof(IDataRecord), targetType);
@@ -200,10 +255,11 @@ namespace Eggado
             public readonly int Ordinal;
             public readonly Type SourceType;
             public readonly Type TargetType;
+            public readonly MemberInfo Member;
 
             private readonly int _hashCode;
 
-            public Mapping(int ordinal, Type sourceType, Type targetType)
+            public Mapping(int ordinal, Type sourceType, Type targetType, MemberInfo member = null)
             {
                 Debug.Assert(ordinal >= 0);
                 Debug.Assert(sourceType != null);
@@ -212,7 +268,13 @@ namespace Eggado
                 SourceType = sourceType;
                 TargetType = targetType;
                 Ordinal = ordinal;
-                _hashCode = unchecked(((Ordinal*397) ^ SourceType.GetHashCode()*397) ^ TargetType.GetHashCode());
+                Member = member;
+                
+                _hashCode = unchecked(
+                    (((ordinal * 397) 
+                    ^ sourceType.GetHashCode() * 397) 
+                    ^ targetType.GetHashCode() * 397) 
+                    ^ (member != null ? member.GetHashCode() : 0));
             }
 
             public bool Equals(Mapping other)
@@ -221,7 +283,8 @@ namespace Eggado
                     && (ReferenceEquals(this, other) 
                         || (other.Ordinal == Ordinal 
                             && other.SourceType == SourceType
-                            && other.TargetType == TargetType));
+                            && other.TargetType == TargetType
+                            && other.Member == Member));
             }
 
             public override bool Equals(object obj)
@@ -236,7 +299,9 @@ namespace Eggado
 
             public override string ToString()
             {
-                return string.Format("Ordinal: {0}, SourceType: {1}, TargetType: {2}", Ordinal, SourceType, TargetType);
+                return string.Format(
+                    @"Ordinal: {0}, SourceType: {1}, TargetType: {2}, Member: {3}", 
+                    Ordinal, SourceType, TargetType, Member);
             }
         }
     }
