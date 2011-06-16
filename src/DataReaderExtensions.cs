@@ -176,27 +176,30 @@ namespace Eggado
             Debug.Assert(targetType != null);
 
             bool nullable;
-            var baseSourceType = sourceType;
+            var baseTargetType = targetType;
 
             if (targetType.IsValueType 
                 && targetType.IsGenericType
                 && typeof(Nullable<>) == targetType.GetGenericTypeDefinition())
             {
                 nullable = true;
-                baseSourceType = targetType.GetGenericArguments()[0];
+                baseTargetType = targetType.GetGenericArguments()[0];
             }
             else
             {
                 nullable = targetType.IsClass;
             }
             
-            var method = _methodByType.Find(baseSourceType, _dataRecordGetValueMethod);
+            var method = _methodByType.Find(sourceType, _dataRecordGetValueMethod);
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
 
-            result = Convert(result.Type == sourceType
+            result = Convert(result.Type == baseTargetType
                              ? result
-                             : Expression.Convert(result, sourceType),
-                             targetType);
+                             : Expression.Convert(result, baseTargetType),
+                             baseTargetType);
+
+            if (targetType != baseTargetType)
+                result = Expression.Convert(result, targetType);
 
             if (nullable)
             {

@@ -23,7 +23,7 @@
             public decimal UnitPrice { get; set; }
             public int UnitsInStock { get; set; }
             public int UnitsOnOrder { get; set; }
-            public int ReorderLevel { get; set; }
+            public int? ReorderLevel { get; set; }
             public bool Discontinued { get; set; }
             public string Supplier { get; set; }
             public string Category { get; set; }
@@ -53,7 +53,7 @@
             (
                 int productId, string productName, string englishName, 
                 string quantityPerUnit, decimal unitPrice, 
-                int unitsInStock, int unitsOnOrder, int reorderLevel, 
+                int unitsInStock, int unitsOnOrder, int? reorderLevel, 
                 bool discontinued, string supplier, string category
             ) 
             => new Product
