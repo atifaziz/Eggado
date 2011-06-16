@@ -193,9 +193,9 @@ namespace Eggado
             var method = _methodByType.Find(sourceType, _dataRecordGetValueMethod);
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
 
-            result = Convert(result.Type == baseTargetType
+            result = Convert(result.Type == sourceType
                              ? result
-                             : Expression.Convert(result, baseTargetType),
+                             : Expression.Convert(result, sourceType),
                              baseTargetType);
 
             if (targetType != baseTargetType)
