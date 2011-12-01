@@ -28,6 +28,7 @@ namespace Eggado
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
@@ -53,9 +54,24 @@ namespace Eggado
             }
         }
 
-        public static IEnumerable<dynamic> SelectDynamic([NotNull] this IDataReader reader)
+        public static IEnumerable<IDataRecord> SelectRecords([NotNull] this IDataReader reader)
         {
-            return reader.Select(fields => fields.ToExpando());
+            return Select<IDataRecord>(reader, r => r);
+        }
+
+        public static IEnumerable<T> Select<T>([NotNull] this IDataReader reader, Func<IDataRecord, T> selector)
+        {
+            if (reader == null) throw new ArgumentNullException("reader");
+
+            DbEnumerator e;
+            using ((e = new DbEnumerator(reader)) as IDisposable)
+            while (e.MoveNext())
+                yield return selector((IDataRecord) e.Current);
+        }
+
+        public static IEnumerable<dynamic> SelectDynamicRecords([NotNull] this IDataReader reader)
+        {
+            return reader.Select(record => new DynamicRecord(record));
         }
 
         public static T Select<T>(

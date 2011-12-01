@@ -44,5 +44,15 @@ namespace Eggado
                 foreach (var record in reader.Select(selector))
                     yield return record;
         }
+
+        public static IEnumerable<dynamic> SelectDynamic(
+            this IDbCommand command)
+        {
+            if (command == null) throw new ArgumentNullException("command");
+
+            using (var reader = command.ExecuteReader())
+                foreach (var record in reader.SelectDynamicRecords())
+                    yield return record;
+        }
     }
 }
