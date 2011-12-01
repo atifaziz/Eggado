@@ -26,6 +26,7 @@ namespace Eggado
     #region Imports
 
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
@@ -33,6 +34,7 @@ namespace Eggado
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.Caching;
     using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
@@ -40,6 +42,8 @@ namespace Eggado
 
     public static partial class DataReaderExtensions
     {
+        private static readonly ObjectCache Cache = new MemoryCache("Eggado");
+        
         public static IEnumerable<T> Select<T>(
             [NotNull] this IDataReader reader, 
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
@@ -105,20 +109,50 @@ namespace Eggado
 
         public static T CreateRecordSelector<T>(this IDataReader reader, Delegate selector)
         {
-            var lambda = reader.CreateRecordSelectorLambda<T>(selector);
-            return lambda.Compile();
+            return PageRecordSelector(GetMappings(reader, selector), selector.GetType(), (mappings, type) => CreateRecordSelectorLambdaForDelegate<T>(mappings, type).Compile());
+        }
+
+        private static T PageRecordSelector<T>(Mappings mappings, Type type, Func<IEnumerable<Mapping>, Type, T> factory)
+        {
+            var cache = Cache;
+
+            var cacheKey = type.GUID.ToString();
+            var cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cache[cacheKey];
+            if (cachedSelectors != null)
+            {
+                var cached = cachedSelectors.FirstOrDefault(e => e.Key.GetHashCode().Equals(mappings.GetHashCode()) && e.Key.Equals(mappings));
+                if (cached.Key != null)
+                    return (T) (object) cached.Value;
+            }
+
+            var selector = factory(mappings, type);
+            
+            cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Concat(new[] { mappings.AsKeyTo((Delegate) (object) selector) }).ToArray();
+
+            return selector;
         }
 
         public static Expression<T> CreateRecordSelectorLambda<T>(this IDataReader reader, Delegate selector)
         {
+            return CreateRecordSelectorLambdaForDelegate<T>(EnumerateMappings(reader, selector), selector.GetType());
+        }
+
+        private static Expression<T> CreateRecordSelectorLambdaForDelegate<T>(IEnumerable<Mapping> mappings, Type delegateType)
+        {
+            Debug.Assert(typeof(Delegate).IsAssignableFrom(delegateType));
             var rpe = Expression.Parameter(typeof(IDataRecord), "record");
-            var getters = from m in GetMappings(reader, selector)
+            var getters = from m in mappings
                           select Expression.Invoke(GetValueLambda(rpe, m.Ordinal, m.SourceType, m.TargetType), rpe);
-            var spe = Expression.Parameter(selector.GetType(), "selector");
+            var spe = Expression.Parameter(delegateType, "selector");
             return Expression.Lambda<T>(Expression.Invoke(spe, getters), rpe, spe);
         }
 
-        private static IEnumerable<Mapping> GetMappings(IDataRecord source, Delegate target)
+        private static Mappings GetMappings(IDataRecord source, Delegate target)
+        {
+            return new Mappings(EnumerateMappings(source, target));
+        }
+
+        private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Delegate target)
         {
             return from p in target.Method.GetParameters()
                    let ordinal = source.GetOrdinal(p.Name)
@@ -137,21 +171,25 @@ namespace Eggado
         public static Func<IDataRecord, T> CreateRecordSelector<T>(this IDataReader reader)
             where T : new()
         {
-            return reader.CreateRecordSelectorLambda<T>().Compile();
+            return PageRecordSelector(GetMappings(reader, typeof(T)), typeof(T), (mappings, _) => CreateRecordSelectorLambda<T>(mappings).Compile());
         }
 
-        public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader) 
+        public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader)
             where T : new()
         {
-            if (reader == null) throw new ArgumentNullException("reader");
+            return CreateRecordSelectorLambda<T>(EnumerateMappings(reader, typeof(T)));
+        }
 
+        private static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings) 
+            where T : new()
+        {
             var record = Expression.Parameter(typeof(IDataRecord), "record");
             var obj = Expression.Variable(typeof(T));
             
             var statements = new IEnumerable<Expression>[]
             {
                 new[] { Expression.Assign(obj, Expression.New(typeof(T))) },
-                from m in GetMappings(reader, typeof(T))
+                from m in mappings
                 select Expression.Assign(
                            Expression.MakeMemberAccess(obj, m.Member), 
                            Expression.Invoke(
@@ -164,7 +202,12 @@ namespace Eggado
             return Expression.Lambda<Func<IDataRecord, T>>(body, record);
         }
 
-        private static IEnumerable<Mapping> GetMappings(IDataRecord source, Type targetType)
+        private static Mappings GetMappings(IDataRecord source, Type targetType)
+        {
+            return new Mappings(EnumerateMappings(source, targetType));
+        }
+
+        private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Type targetType)
         {
             return from m in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public, null, null)
                    let p = m.MemberType == MemberTypes.Property ? (PropertyInfo) m : null
@@ -269,6 +312,63 @@ namespace Eggado
         }
 
         [ Serializable ]
+        sealed class Mappings : IEquatable<Mappings>, IEnumerable<Mapping>
+        {
+            private int? _hashCode;
+            private readonly IEnumerable<Mapping> _entries;
+
+            public Mappings(IEnumerable<Mapping> mappings)
+            {
+                Debug.Assert(mappings != null);
+                _entries = mappings.ToArray();
+            }
+
+            public bool Equals(Mappings other)
+            {
+                return other != null 
+                    && (ReferenceEquals(this, other) 
+                        || other._entries.SequenceEqual(_entries));
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as Mappings);
+            }
+
+            public override int GetHashCode()
+            {
+                return (int) (_hashCode ?? (_hashCode = ComputeHashCode()));
+            }
+
+            private int ComputeHashCode()
+            {
+                if (!_entries.Any())
+                    return 0;
+                
+                unchecked
+                {
+                    var hashes = from m in _entries select m.GetHashCode() * 397;
+                    return hashes.Aggregate((acc, h) => acc ^ h);
+                }
+            }
+
+            public IEnumerator<Mapping> GetEnumerator()
+            {
+                return _entries.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public override string ToString()
+            {
+                return string.Join(", ", from m in this select "{ " + m + " }");
+            }
+        }
+
+        [ Serializable ]
         sealed class Mapping : IEquatable<Mapping>
         {
             public readonly int Ordinal;
@@ -318,9 +418,13 @@ namespace Eggado
 
             public override string ToString()
             {
+                var member = Member;
                 return string.Format(
-                    @"Ordinal: {0}, SourceType: {1}, TargetType: {2}, Member: {3}", 
-                    Ordinal, SourceType, TargetType, Member);
+                    member == null 
+                    ? @"Ordinal: {0}, SourceType: {1}, TargetType: {2}"
+                    : @"Ordinal: {0}, SourceType: {1}, TargetType: {2}, Member: {3}",
+                    Ordinal, SourceType, TargetType, 
+                    member != null ? member.Name : null);
             }
         }
     }
