@@ -33,6 +33,16 @@ namespace Eggado
 
     public static partial class DbCommandExtensions
     {
+        public static IEnumerable<T> Select<T>(this IDbCommand command) 
+            where T : new()
+        {
+            if (command == null) throw new ArgumentNullException("command");
+
+            using (var reader = command.ExecuteReader())
+                foreach (var record in reader.Select<T>())
+                    yield return record;
+        }
+
         public static IEnumerable<TResult> Select<T, TResult>(
             this IDbCommand command,
             Func<T, TResult> selector)
