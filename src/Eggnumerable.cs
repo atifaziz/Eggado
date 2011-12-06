@@ -21,8 +21,6 @@
 //
 #endregion
 
-using System.Linq;
-
 namespace Eggado
 {
     #region Imports
