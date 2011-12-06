@@ -33,6 +33,8 @@ using ComVisible = System.Runtime.InteropServices.ComVisibleAttribute;
 // General description
 //
 
+[assembly: AssemblyTitle("Eggado")]
+[assembly: AssemblyDescription("ADO.NET Modernizer")]
 [assembly: AssemblyProduct("Eggado")]
 [assembly: AssemblyCompany("http://eggado.googlecode.com")]
 [assembly: AssemblyCopyright("Copyright (c) 2011, Atif Aziz. All rights reserved.")]
