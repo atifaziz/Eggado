@@ -21,6 +21,8 @@
 //
 #endregion
 
+using JetBrains.Annotations;
+
 namespace Eggado
 {
     #region Imports
@@ -33,19 +35,18 @@ namespace Eggado
 
     public static partial class DbCommandExtensions
     {
-        public static IEnumerable<T> Select<T>(this IDbCommand command) 
+        public static IEnumerable<T> Select<T>([NotNull] this IDbCommand command) 
             where T : new()
         {
             if (command == null) throw new ArgumentNullException("command");
-
             using (var reader = command.ExecuteReader())
                 foreach (var record in reader.Select<T>())
                     yield return record;
         }
 
         public static IEnumerable<TResult> Select<T, TResult>(
-            this IDbCommand command,
-            Func<T, TResult> selector)
+            [NotNull] this IDbCommand command,
+            [NotNull] Func<T, TResult> selector)
         {
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
@@ -56,7 +57,7 @@ namespace Eggado
         }
 
         public static IEnumerable<dynamic> Select(
-            this IDbCommand command)
+            [NotNull] this IDbCommand command)
         {
             if (command == null) throw new ArgumentNullException("command");
 

@@ -63,9 +63,12 @@ namespace Eggado
             return Select<IDataRecord>(reader, r => r);
         }
 
-        public static IEnumerable<T> Select<T>([NotNull] this IDataReader reader, Func<IDataRecord, T> selector)
+        public static IEnumerable<T> Select<T>(
+            [NotNull] this IDataReader reader, 
+            [NotNull] Func<IDataRecord, T> selector)
         {
             if (reader == null) throw new ArgumentNullException("reader");
+            if (selector == null) throw new ArgumentNullException("selector");
 
             DbEnumerator e;
             using ((e = new DbEnumerator(reader)) as IDisposable)
@@ -99,21 +102,30 @@ namespace Eggado
         }
 
         public static IEnumerable<TResult> Select<T, TResult>(
-            this IDataReader reader,
-            Func<T, TResult> selector)
+            [NotNull] this IDataReader reader,
+            [NotNull] Func<T, TResult> selector)
         {
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
         }
 
-        public static T CreateRecordSelector<T>(this IDataReader reader, Delegate selector)
+        public static T CreateRecordSelector<T>(
+            [NotNull] this IDataReader reader, 
+            [NotNull] Delegate selector)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return PageRecordSelector(GetMappings(reader, selector), selector.GetType(), (mappings, type) => CreateRecordSelectorLambdaForDelegate<T>(mappings, type).Compile());
         }
 
         private static T PageRecordSelector<T>(Mappings mappings, Type type, Func<IEnumerable<Mapping>, Type, T> factory)
         {
+            Debug.Assert(mappings != null);
+            Debug.Assert(type != null);
+            Debug.Assert(factory != null);
+
             var cache = Cache;
 
             var cacheKey = type.GUID.ToString();
@@ -192,14 +204,21 @@ namespace Eggado
             }
         }
 
-        public static Expression<T> CreateRecordSelectorLambda<T>(this IDataReader reader, Delegate selector)
+        public static Expression<T> CreateRecordSelectorLambda<T>(
+            [NotNull] this IDataReader reader, 
+            [NotNull] Delegate selector)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (selector == null) throw new ArgumentNullException("selector");
             return CreateRecordSelectorLambdaForDelegate<T>(EnumerateMappings(reader, selector), selector.GetType());
         }
 
         private static Expression<T> CreateRecordSelectorLambdaForDelegate<T>(IEnumerable<Mapping> mappings, Type delegateType)
         {
+            Debug.Assert(mappings != null);
+            Debug.Assert(delegateType != null);
             Debug.Assert(typeof(Delegate).IsAssignableFrom(delegateType));
+            
             var rpe = Expression.Parameter(typeof(IDataRecord), "record");
             var getters = from m in mappings
                           select Expression.Invoke(GetValueLambda(rpe, m.Ordinal, m.SourceType, m.TargetType), rpe);
@@ -214,13 +233,16 @@ namespace Eggado
 
         private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Delegate target)
         {
+            Debug.Assert(source != null);
+            Debug.Assert(target != null);
+
             return from p in target.Method.GetParameters()
                    let ordinal = source.GetOrdinal(p.Name)
                    let fieldType = source.GetFieldType(ordinal)
                    select new Mapping(ordinal, fieldType, p.ParameterType);
         }
 
-        public static IEnumerable<T> Select<T>(this IDataReader reader)
+        public static IEnumerable<T> Select<T>([NotNull] this IDataReader reader)
             where T : new()
         {
             var f = reader.CreateRecordSelector<T>();
@@ -228,9 +250,10 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static Func<IDataRecord, T> CreateRecordSelector<T>(this IDataReader reader)
+        public static Func<IDataRecord, T> CreateRecordSelector<T>([NotNull] this IDataReader reader)
             where T : new()
         {
+            if (reader == null) throw new ArgumentNullException("reader");
             return PageRecordSelector(GetMappings(reader, typeof(T)), typeof(T), (mappings, _) => CreateRecordSelectorLambda<T>(mappings).Compile());
         }
 
@@ -243,6 +266,8 @@ namespace Eggado
         private static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings) 
             where T : new()
         {
+            Debug.Assert(mappings != null);
+
             var record = Expression.Parameter(typeof(IDataRecord), "record");
             var obj = Expression.Variable(typeof(T));
             
@@ -269,6 +294,9 @@ namespace Eggado
 
         private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Type targetType)
         {
+            Debug.Assert(source != null);
+            Debug.Assert(targetType != null);
+
             return from m in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public, null, null)
                    let p = m.MemberType == MemberTypes.Property ? (PropertyInfo) m : null
                    let f = m.MemberType == MemberTypes.Field ? (FieldInfo) m : null
@@ -333,11 +361,14 @@ namespace Eggado
         /// <remarks>
         /// If <paramref name="source"/> is already typed as 
         /// <paramref name="targetType"/> then <paramref name="source"/> is
-        /// directly return as the resulting expression.
+        /// directly returned as the resulting expression.
         /// </remarks>
 
         private static Expression Convert(Expression source, Type targetType)
         {
+            Debug.Assert(source != null);
+            Debug.Assert(targetType != null);
+
             var sourceType = source.Type;
             if (sourceType == targetType)
                 return source;
@@ -368,7 +399,8 @@ namespace Eggado
 
         private static MethodInfo ReflectMethod<T>(Expression<Func<IDataRecord, T>> e)
         {
-            return ((MethodCallExpression) e.Body).Method;
+            Debug.Assert(e != null);
+            return ((MethodCallExpression)e.Body).Method;
         }
 
         [ Serializable ]
