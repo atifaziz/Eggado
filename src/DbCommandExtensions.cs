@@ -55,13 +55,13 @@ namespace Eggado
                     yield return record;
         }
 
-        public static IEnumerable<dynamic> SelectDynamic(
+        public static IEnumerable<dynamic> Select(
             this IDbCommand command)
         {
             if (command == null) throw new ArgumentNullException("command");
 
             using (var reader = command.ExecuteReader())
-                foreach (var record in reader.SelectDynamicRecords())
+                foreach (var record in reader.Select())
                     yield return record;
         }
     }

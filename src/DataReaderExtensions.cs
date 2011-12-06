@@ -73,7 +73,7 @@ namespace Eggado
                 yield return selector((IDataRecord) e.Current);
         }
 
-        public static IEnumerable<dynamic> SelectDynamicRecords([NotNull] this IDataReader reader)
+        public static IEnumerable<dynamic> Select([NotNull] this IDataReader reader)
         {
             return reader.Select(record => new DynamicRecord(record));
         }
