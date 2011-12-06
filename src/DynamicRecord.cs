@@ -46,7 +46,7 @@ namespace Eggado
             _record = record;
         }
 
-        public override bool TryGetMember([NotNull] GetMemberBinder binder, out object result)
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             if (binder == null) throw new ArgumentNullException("binder");
             var value = _record[binder.Name];
