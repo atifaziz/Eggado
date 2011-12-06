@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="DbCommandExtensions.cs" />
     <Compile Include="DynamicRecord.cs" />
+    <Compile Include="Eggnumerable.cs" />
     <Compile Include="Mannex\Collections\Generic\Dictionary.cs" />
     <Compile Include="DataReaderExtensions.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
