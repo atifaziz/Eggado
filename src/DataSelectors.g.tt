@@ -77,4 +77,20 @@ namespace Eggado
         }
 <#  } #>
     }
+
+    partial class DataTableExtensions
+    { <# 
+    foreach (var targs in targz) { #>
+
+        public static IEnumerable<TResult> Select<#= targs #>(
+            this DataTable table,
+            Func<#= targs #> selector)
+        {
+            if (table == null) throw new ArgumentNullException("table");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            return Eggnumerable.From(() => new DataTableReader(table), r => r.Select(selector));
+        }
+<#  } #>
+    }
 }
