@@ -32,7 +32,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Wed, 07 Dec 2011 07:51:02 GMT
+    // Wed, 07 Dec 2011 19:24:00 GMT
 
     partial class DataReaderExtensions
     { 

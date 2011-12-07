@@ -48,7 +48,7 @@ namespace Eggado
     
     foreach (var targs in targz) { #>
 
-        public static IEnumerable<TResult> Select<#= targs #>(
+        public static IEnumerator<TResult> Select<#= targs #>(
             this IDataReader reader,
             Func<#= targs #> selector)
         {
@@ -73,9 +73,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 <#  } #>
     }
