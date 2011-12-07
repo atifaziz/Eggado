@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Eggado</id>
+    <version>0.9.14306</version>
+    <title>Eggado</title>
+    <authors>Atif Aziz</authors>
+    <owners>Atif Aziz</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://eggado.googlecode.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ADO.NET Modernizer</description>
+    <releaseNotes>Initial BETA release.</releaseNotes>
+    <copyright>Copyright (c) 2011, Atif Aziz. All rights reserved.</copyright>
+    <tags>ado orm micro-orm sql</tags>
+  </metadata>
+</package>
