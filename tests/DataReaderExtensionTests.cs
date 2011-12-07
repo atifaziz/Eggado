@@ -29,7 +29,7 @@
             public string Category { get; set; }
         }
 
-        private IDataReader GetProducts()
+        private DataTable GetProductsTable()
         {
             var table = new DataTable();
             using (var reader = GetType().Assembly.GetManifestResourceReader(GetType(), "Products.xml", Encoding.UTF8))
@@ -37,19 +37,19 @@
                 Assert.IsNotNull(reader);
                 table.ReadXml(XmlReader.Create(reader));
             }
-            return new DataTableReader(table);
+            return table;
         }
 
         [TestMethod]
         public void Select()
         {
-            AssertProducts(Eggnumerable.From(GetProducts, r => r.Select<Product>()));
+            AssertProducts(GetProductsTable().Select<Product>());
         }
         
         [TestMethod]
         public void SelectViaSelector()
         {
-            var products = Eggnumerable.From(GetProducts, r => r.Select(
+            var products = GetProductsTable().Select(
             (
                 int productId, string productName, string englishName, 
                 string quantityPerUnit, decimal unitPrice, 
@@ -69,7 +69,7 @@
                 Discontinued    = discontinued,
                 Supplier        = supplier,
                 Category        = category,
-            }));
+            });
 
             AssertProducts(products);
         }            
