@@ -21,8 +21,6 @@
 //
 #endregion
 
-using JetBrains.Annotations;
-
 namespace Eggado
 {
     #region Imports
@@ -30,6 +28,7 @@ namespace Eggado
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using JetBrains.Annotations;
 
     #endregion
 
