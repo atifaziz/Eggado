@@ -31,14 +31,28 @@ namespace Eggado
 
     #endregion
 
-    static class Eggnumerable
+    public static class Eggnumerable
     {
+        public static IEnumerable<T> From<TCursor, T>([NotNull] Func<TCursor> opener, [NotNull] Func<TCursor, IEnumerator<T>> selector)
+        {
+            if (opener == null) throw new ArgumentNullException("opener");
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            var cursor = opener();
+            using (cursor as IDisposable)
+            using (var e = selector(cursor))
+            {
+                while (e.MoveNext())
+                    yield return e.Current;
+            }
+        }
+
         /// <summary>
         /// A version of <see cref="System.Linq.Enumerable.ToArray{TSource}"/> that is
         /// optimized for 16 elements.
         /// </summary>
-
-        public static T[] ToArray<T>([NotNull] this IEnumerable<T> source)
+        
+        internal static T[] ToArray<T>([NotNull] this IEnumerable<T> source)
         {
             if (source == null) throw new ArgumentNullException("source");
 

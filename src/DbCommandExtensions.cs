@@ -39,9 +39,7 @@ namespace Eggado
             where T : new()
         {
             if (command == null) throw new ArgumentNullException("command");
-            using (var reader = command.ExecuteReader())
-                foreach (var record in reader.Select<T>())
-                    yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select<T>());
         }
 
         public static IEnumerable<TResult> Select<T, TResult>(
@@ -50,20 +48,14 @@ namespace Eggado
         {
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
-
-            using (var reader = command.ExecuteReader())
-                foreach (var record in reader.Select(selector))
-                    yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<dynamic> Select(
             [NotNull] this IDbCommand command)
         {
             if (command == null) throw new ArgumentNullException("command");
-
-            using (var reader = command.ExecuteReader())
-                foreach (var record in reader.Select())
-                    yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select());
         }
     }
 }

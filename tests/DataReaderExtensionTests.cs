@@ -43,13 +43,13 @@
         [TestMethod]
         public void Select()
         {
-            AssertProducts(GetProducts().Select<Product>());
+            AssertProducts(Eggnumerable.From(GetProducts, r => r.Select<Product>()));
         }
         
         [TestMethod]
         public void SelectViaSelector()
         {
-            var products = GetProducts().Select(
+            var products = Eggnumerable.From(GetProducts, r => r.Select(
             (
                 int productId, string productName, string englishName, 
                 string quantityPerUnit, decimal unitPrice, 
@@ -69,7 +69,7 @@
                 Discontinued    = discontinued,
                 Supplier        = supplier,
                 Category        = category,
-            });
+            }));
 
             AssertProducts(products);
         }            

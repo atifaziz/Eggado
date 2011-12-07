@@ -32,11 +32,11 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 23 May 2011 23:16:37 GMT
+    // Wed, 07 Dec 2011 07:51:02 GMT
 
     partial class DataReaderExtensions
     { 
-        public static IEnumerable<TResult> Select<T1, T2, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, TResult>(
             this IDataReader reader,
             Func<T1, T2, TResult> selector)
         {
@@ -48,7 +48,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, TResult> selector)
         {
@@ -60,7 +60,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, TResult> selector)
         {
@@ -72,7 +72,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
@@ -84,7 +84,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
@@ -96,7 +96,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
@@ -108,7 +108,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
@@ -120,7 +120,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
@@ -132,7 +132,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
@@ -144,7 +144,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
@@ -156,7 +156,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
@@ -168,7 +168,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
@@ -180,7 +180,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
@@ -192,7 +192,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
@@ -204,7 +204,7 @@ namespace Eggado
                 yield return f(reader, selector);
         } 
 
-        public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
+        public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
@@ -226,9 +226,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, TResult>(
@@ -238,9 +236,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, TResult>(
@@ -250,9 +246,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, TResult>(
@@ -262,9 +256,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, TResult>(
@@ -274,9 +266,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, TResult>(
@@ -286,9 +276,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
@@ -298,9 +286,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
@@ -310,9 +296,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
@@ -322,9 +306,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
@@ -334,9 +316,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
@@ -346,9 +326,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
@@ -358,9 +336,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
@@ -370,9 +346,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
@@ -382,9 +356,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
@@ -394,9 +366,7 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException("command");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            using (var reader = command.ExecuteReader())
-            foreach (var record in reader.Select(selector))
-                yield return record;
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
     }
 }

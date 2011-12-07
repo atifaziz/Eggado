@@ -43,8 +43,8 @@ namespace Eggado
     public static partial class DataReaderExtensions
     {
         private static readonly ObjectCache Cache = new MemoryCache("Eggado");
-        
-        public static IEnumerable<T> Select<T>(
+
+        public static IEnumerator<T> Select<T>(
             [NotNull] this IDataReader reader, 
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
@@ -58,12 +58,12 @@ namespace Eggado
             }
         }
 
-        public static IEnumerable<IDataRecord> SelectRecords([NotNull] this IDataReader reader)
+        public static IEnumerator<IDataRecord> SelectRecords([NotNull] this IDataReader reader)
         {
             return Select<IDataRecord>(reader, r => r);
         }
 
-        public static IEnumerable<T> Select<T>(
+        public static IEnumerator<T> Select<T>(
             [NotNull] this IDataReader reader, 
             [NotNull] Func<IDataRecord, T> selector)
         {
@@ -76,7 +76,7 @@ namespace Eggado
                 yield return selector((IDataRecord) e.Current);
         }
 
-        public static IEnumerable<dynamic> Select([NotNull] this IDataReader reader)
+        public static IEnumerator<dynamic> Select([NotNull] this IDataReader reader)
         {
             return reader.Select(record => new DynamicRecord(record));
         }
@@ -101,7 +101,7 @@ namespace Eggado
             return name.AsKeyTo(value);
         }
 
-        public static IEnumerable<TResult> Select<T, TResult>(
+        public static IEnumerator<TResult> Select<T, TResult>(
             [NotNull] this IDataReader reader,
             [NotNull] Func<T, TResult> selector)
         {
@@ -182,7 +182,7 @@ namespace Eggado
                    select new Mapping(ordinal, fieldType, p.ParameterType);
         }
 
-        public static IEnumerable<T> Select<T>([NotNull] this IDataReader reader)
+        public static IEnumerator<T> Select<T>([NotNull] this IDataReader reader)
             where T : new()
         {
             var f = reader.CreateRecordSelector<T>();
