@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Eggado</id>
-    <version>0.9.14306</version>
+    <version>0.9.14308</version>
     <title>Eggado</title>
     <authors>Atif Aziz</authors>
     <owners>Atif Aziz</owners>
@@ -10,7 +10,7 @@
     <projectUrl>http://eggado.googlecode.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ADO.NET Modernizer</description>
-    <releaseNotes>Initial BETA release.</releaseNotes>
+    <releaseNotes>Initial BETA release with JetBrains.Annotations fix.</releaseNotes>
     <copyright>Copyright (c) 2011, Atif Aziz. All rights reserved.</copyright>
     <tags>ado orm micro-orm sql</tags>
   </metadata>
