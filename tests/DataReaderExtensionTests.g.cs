@@ -9,7 +9,7 @@
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 19 Dec 2011 22:58:36 GMT
+    // Mon, 19 Dec 2011 23:23:27 GMT
 
     partial class DataReaderExtensionTests
     {

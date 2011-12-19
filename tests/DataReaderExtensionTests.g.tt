@@ -30,7 +30,7 @@
                     : tc == TypeCode.Boolean
                     ? ((bool) item.Value ? "true" : "false")
                     : tc == TypeCode.String
-                    ? "\"" + Regex.Replace(item.Value.ToString(), @"[^\u0020-\u007f]|""|\\", m => @"\u" + ((int) m.Value[0]).ToString("x").PadLeft(4, '0')) + "\""
+                    ? AsciiLiteralEncoded(item.Value.ToString())
                     : format("{0}", item.Value)
             };
 #>
@@ -66,3 +66,27 @@ namespace Eggado.Tests
         }
     }
 }
+<#+
+static string AsciiLiteralEncoded(string str)
+{
+    var unquoted = Regex.Replace(str, @"[^\u0020-\u007f]|""|\\", m => 
+    {
+        var ch = m.Value[0];
+        switch (ch)
+        {
+            case '\0' : return @"\0";
+            case '\a' : return @"\a";
+            case '\b' : return @"\a";
+            case '\f' : return @"\f";
+            case '\n' : return @"\n";
+            case '\r' : return @"\r";
+            case '\t' : return @"\t";
+            case '\v' : return @"\v";
+            case '\\' : return @"\\";
+            case '"'  : return @"\""";
+            default   : return @"\u" + ((int) ch).ToString("x").PadLeft(4, '0');
+        }
+    });
+    return "\"" + unquoted + "\"";
+}
+#>
