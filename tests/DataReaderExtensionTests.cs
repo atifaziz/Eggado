@@ -1,4 +1,4 @@
-﻿namespace Eggado.Tests
+namespace Eggado.Tests
 {
     #region Imports
 

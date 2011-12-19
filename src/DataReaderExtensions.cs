@@ -1,4 +1,4 @@
-﻿#region License, Terms and Author(s)
+#region License, Terms and Author(s)
 //
 // Eggado
 // Copyright (c) 2011 Atif Aziz. All rights reserved.
