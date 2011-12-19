@@ -1,0 +1,68 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Xml" #>
+<#
+    var table = new DataTable();
+    table.ReadXml(XmlReader.Create(Host.ResolvePath(@"Products.xml")));
+    var cols = table.Columns.Cast<DataColumn>();
+    var format = new Func<string, object, string>((fmt, v) => String.Format(CultureInfo.InvariantCulture, fmt, v));
+    var rows = 
+        from DataRow row in table.Rows
+        select
+            from item in cols.Zip(row.ItemArray, (c, v) => new { Name = c.ColumnName, c.DataType, Value = v })
+            let tc = Type.GetTypeCode(item.DataType)
+            select new
+            {
+                Actual = 
+                    "ProductID".Equals(item.Name, StringComparison.OrdinalIgnoreCase)
+                    ? "ProductId"
+                    : item.Name,
+                Expected = 
+                    tc == TypeCode.Decimal
+                    ? format("{0}m", item.Value)
+                    : tc == TypeCode.Boolean
+                    ? ((bool) item.Value ? "true" : "false")
+                    : tc == TypeCode.String
+                    ? "\"" + Regex.Replace(item.Value.ToString(), @"[^\u0020-\u007f]|""|\\", m => @"\u" + ((int) m.Value[0]).ToString("x").PadLeft(4, '0')) + "\""
+                    : format("{0}", item.Value)
+            };
+#>
+namespace Eggado.Tests
+{
+    #region Imports
+
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    #endregion
+
+    // This partial implementation was template-generated:
+    // <#= DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture) #>
+
+    partial class DataReaderExtensionTests
+    {
+        private static void AssertProducts(IEnumerator<Product> e)
+        {
+            Debug.Assert(e != null);
+<# 
+    foreach (var asserts in rows) { #>
+
+            Assert.IsTrue(e.MoveNext());
+<# 
+        foreach (var assert in asserts) { #>
+            Assert.AreEqual(<#= assert.Expected #>, e.Current.<#= assert.Actual #>);
+<# 
+        } #>
+<# 
+    } #>
+        }
+    }
+}
