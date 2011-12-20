@@ -27,6 +27,7 @@ namespace Eggado
 
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
@@ -34,7 +35,6 @@ namespace Eggado
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Runtime.Caching;
     using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
@@ -42,7 +42,7 @@ namespace Eggado
 
     public static partial class DataReaderExtensions
     {
-        private static readonly ObjectCache Cache = new MemoryCache("Eggado");
+        private static readonly ConcurrentDictionary<object, object> Cache = new ConcurrentDictionary<object, object>();
 
         public static IEnumerator<T> Select<T>(
             [NotNull] this IDataReader reader, 
@@ -128,9 +128,8 @@ namespace Eggado
 
             var cache = Cache;
 
-            var cacheKey = type.AssemblyQualifiedName;
-            Debug.Assert(cacheKey != null);
-            var cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cache[cacheKey];
+            var cacheKey = type;
+            var cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cache.Find(cacheKey);
             if (cachedSelectors != null)
             {
                 var cached = cachedSelectors.FirstOrDefault(e => e.Key.GetHashCode().Equals(mappings.GetHashCode()) && e.Key.Equals(mappings));
