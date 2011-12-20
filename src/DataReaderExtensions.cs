@@ -128,7 +128,8 @@ namespace Eggado
 
             var cache = Cache;
 
-            var cacheKey = type.GUID.ToString();
+            var cacheKey = type.AssemblyQualifiedName;
+            Debug.Assert(cacheKey != null);
             var cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cache[cacheKey];
             if (cachedSelectors != null)
             {
