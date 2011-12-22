@@ -32,6 +32,7 @@ namespace Eggado
     using System.Data;
     using System.Data.Common;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -171,12 +172,35 @@ namespace Eggado
             return new Mappings(EnumerateMappings(source, target));
         }
 
+        private static readonly string[] _ordinalParameterNames = new[]
+        {
+             "_1",  "_2",  "_3",  "_4",  "_5",  "_6",  "_7",  "_8",  "_9", "_10", 
+            "_11", "_12", "_13", "_14", "_15", "_16", "_17", "_18", "_19", "_20",
+        };
+            /*
+            Enumerable.Range(1, 20)
+                      .Select(i => "_" + i.ToString(CultureInfo.InvariantCulture))
+                      .ToArray();*/
+
         private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Delegate target)
         {
             Debug.Assert(source != null);
             Debug.Assert(target != null);
 
-            return from p in target.Method.GetParameters()
+            var parameters = target.Method.GetParameters();
+            
+            var ordinally = 
+                _ordinalParameterNames.Take(parameters.Length)
+                                      .Zip(parameters.Select(p => p.Name), (a, b) => a.Equals(b, StringComparison.OrdinalIgnoreCase))
+                                      .All(yes => yes);
+
+            return ordinally
+
+                 ? from p in parameters
+                   let fieldType = source.GetFieldType(p.Position)
+                   select new Mapping(p.Position, fieldType, p.ParameterType)
+
+                 : from p in parameters
                    let ordinal = source.GetOrdinal(p.Name)
                    let fieldType = source.GetFieldType(ordinal)
                    select new Mapping(ordinal, fieldType, p.ParameterType);

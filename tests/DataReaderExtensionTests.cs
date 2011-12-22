@@ -72,8 +72,38 @@ namespace Eggado.Tests
             });
 
             AssertProducts(products);
-        }            
+        }
 
+        [TestMethod]
+        public void SelectOrdinallyViaSelector()
+        {
+            var products = GetProductsTable().Select(
+            (
+                // ReSharper disable InconsistentNaming
+                int _1, string _2, string _3,
+                string _4, decimal _5,
+                int _6, int _7, int? _8,
+                bool _9, string _10, string _11
+                // ReSharper restore InconsistentNaming
+            )
+            => new Product
+            {
+                ProductId       = _1,
+                ProductName     = _2,
+                EnglishName     = _3,
+                QuantityPerUnit = _4,
+                UnitPrice       = _5,
+                UnitsInStock    = _6,
+                UnitsOnOrder    = _7,
+                ReorderLevel    = _8,
+                Discontinued    = _9,
+                Supplier        = _10,
+                Category        = _11,
+            });
+
+            AssertProducts(products);
+        }
+        
         private static void AssertProducts(IEnumerable<Product> products)
         {
             using (var e = products.GetEnumerator())
