@@ -391,8 +391,8 @@ namespace Eggado
             }
 
             public override int GetHashCode()
-            {
-                return (int) (_hashCode ?? (_hashCode = ComputeHashCode()));
+            {                                                                // ReSharper disable NonReadonlyFieldInGetHashCode
+                return (int) (_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
             }
 
             int ComputeHashCode()
