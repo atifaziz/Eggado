@@ -173,7 +173,7 @@ namespace Eggado
             return new Mappings(EnumerateMappings(source, target));
         }
 
-        static readonly string[] _ordinalParameterNames =
+        static readonly string[] OrdinalParameterNames =
         {
              "_1",  "_2",  "_3",  "_4",  "_5",  "_6",  "_7",  "_8",  "_9", "_10", 
             "_11", "_12", "_13", "_14", "_15", "_16", "_17", "_18", "_19", "_20",
@@ -187,7 +187,7 @@ namespace Eggado
             var parameters = target.Method.GetParameters();
             
             var ordinally = 
-                _ordinalParameterNames.Take(parameters.Length)
+                OrdinalParameterNames.Take(parameters.Length)
                                       .Zip(parameters.Select(p => p.Name), (a, b) => a.Equals(b, StringComparison.OrdinalIgnoreCase))
                                       .All(yes => yes);
 
@@ -298,7 +298,7 @@ namespace Eggado
                 nullable = targetType.IsClass;
             }
             
-            var method = _methodByType.Find(sourceType, _dataRecordGetValueMethod);
+            var method = MethodByType.Find(sourceType, DataRecordGetValueMethod);
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
 
             result = Convert(result.Type == sourceType
@@ -312,7 +312,7 @@ namespace Eggado
             if (nullable)
             {
                 result = Expression.Condition(
-                             Expression.Call(reader, _dataRecordIsDbNullMethod, Expression.Constant(ordinal)),
+                             Expression.Call(reader, DataRecordIsDbNullMethod, Expression.Constant(ordinal)),
                              Expression.Convert(Expression.Constant(null), targetType), result);
             }
 
@@ -340,10 +340,10 @@ namespace Eggado
                  : ConversionLambda.ChangeType(source, targetType);
         }
 
-        static readonly MethodInfo _dataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
-        static readonly MethodInfo _dataRecordIsDbNullMethod = ReflectMethod(r => r.IsDBNull(0));
+        static readonly MethodInfo DataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
+        static readonly MethodInfo DataRecordIsDbNullMethod = ReflectMethod(r => r.IsDBNull(0));
 
-        static readonly Dictionary<Type, MethodInfo> _methodByType = new Dictionary<Type, MethodInfo>
+        static readonly Dictionary<Type, MethodInfo> MethodByType = new Dictionary<Type, MethodInfo>
         {
             { typeof(bool),     ReflectMethod(r => r.GetBoolean(0))  },
             { typeof(char),     ReflectMethod(r => r.GetChar(0))     },     

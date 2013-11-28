@@ -63,15 +63,15 @@ namespace Eggado
             return 
                 Expression.Convert(
                     Expression.Call(
-                        _changeTypeMethod, 
+                        ChangeTypeMethod, 
                         Expression.Convert(value, typeof(object)), 
                         Expression.Constant(targetType), 
-                        _culture),
+                        Culture),
                     targetType);
         }
 
-        static readonly Expression _culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
-        static readonly MethodInfo _changeTypeMethod = ((MethodCallExpression) (((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body)).Method;
+        static readonly Expression Culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
+        static readonly MethodInfo ChangeTypeMethod = ((MethodCallExpression) (((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body)).Method;
 
         public static Expression<Func<object, T>> ChangeType<T>()
         {
