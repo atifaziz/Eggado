@@ -299,6 +299,7 @@ namespace Eggado
             }
             
             var method = MethodByType.Find(sourceType, DataRecordGetValueMethod);
+            // ReSharper disable once PossiblyMistakenUseOfParamsMethod
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
 
             result = Convert(result.Type == sourceType
@@ -312,6 +313,7 @@ namespace Eggado
             if (nullable)
             {
                 result = Expression.Condition(
+                             // ReSharper disable once PossiblyMistakenUseOfParamsMethod
                              Expression.Call(reader, DataRecordIsDbNullMethod, Expression.Constant(ordinal)),
                              Expression.Convert(Expression.Constant(null), targetType), result);
             }
