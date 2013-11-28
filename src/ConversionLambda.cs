@@ -71,8 +71,8 @@ namespace Eggado
                     targetType);
         }
 
-        private static readonly Expression _culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
-        private static readonly MethodInfo _changeTypeMethod = ((MethodCallExpression) (((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body)).Method;
+        static readonly Expression _culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
+        static readonly MethodInfo _changeTypeMethod = ((MethodCallExpression) (((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body)).Method;
 
         public static Expression<Func<object, T>> ChangeType<T>()
         {

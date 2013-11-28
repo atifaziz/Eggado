@@ -43,7 +43,7 @@ namespace Eggado
 
     public static partial class DataReaderExtensions
     {
-        private static readonly ConcurrentDictionary<object, object> Cache = new ConcurrentDictionary<object, object>();
+        static readonly ConcurrentDictionary<object, object> Cache = new ConcurrentDictionary<object, object>();
 
         public static IEnumerator<T> Select<T>(
             [NotNull] this IDataReader reader, 
@@ -121,7 +121,7 @@ namespace Eggado
             return PageRecordSelector(GetMappings(reader, selector), selector.GetType(), (mappings, type) => CreateRecordSelectorLambdaForDelegate<T>(mappings, type).Compile());
         }
 
-        private static T PageRecordSelector<T>(Mappings mappings, Type type, Func<IEnumerable<Mapping>, Type, T> factory)
+        static T PageRecordSelector<T>(Mappings mappings, Type type, Func<IEnumerable<Mapping>, Type, T> factory)
         {
             Debug.Assert(mappings != null);
             Debug.Assert(type != null);
@@ -154,7 +154,7 @@ namespace Eggado
             return CreateRecordSelectorLambdaForDelegate<T>(EnumerateMappings(reader, selector), selector.GetType());
         }
 
-        private static Expression<T> CreateRecordSelectorLambdaForDelegate<T>(IEnumerable<Mapping> mappings, Type delegateType)
+        static Expression<T> CreateRecordSelectorLambdaForDelegate<T>(IEnumerable<Mapping> mappings, Type delegateType)
         {
             Debug.Assert(mappings != null);
             Debug.Assert(delegateType != null);
@@ -167,18 +167,18 @@ namespace Eggado
             return Expression.Lambda<T>(Expression.Invoke(spe, getters), rpe, spe);
         }
 
-        private static Mappings GetMappings(IDataRecord source, Delegate target)
+        static Mappings GetMappings(IDataRecord source, Delegate target)
         {
             return new Mappings(EnumerateMappings(source, target));
         }
 
-        private static readonly string[] _ordinalParameterNames = new[]
+        static readonly string[] _ordinalParameterNames = new[]
         {
              "_1",  "_2",  "_3",  "_4",  "_5",  "_6",  "_7",  "_8",  "_9", "_10", 
             "_11", "_12", "_13", "_14", "_15", "_16", "_17", "_18", "_19", "_20",
         };
 
-        private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Delegate target)
+        static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Delegate target)
         {
             Debug.Assert(source != null);
             Debug.Assert(target != null);
@@ -223,7 +223,7 @@ namespace Eggado
             return CreateRecordSelectorLambda<T>(EnumerateMappings(reader, typeof(T)));
         }
 
-        private static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings) 
+        static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings) 
             where T : new()
         {
             Debug.Assert(mappings != null);
@@ -247,12 +247,12 @@ namespace Eggado
             return Expression.Lambda<Func<IDataRecord, T>>(body, record);
         }
 
-        private static Mappings GetMappings(IDataRecord source, Type targetType)
+        static Mappings GetMappings(IDataRecord source, Type targetType)
         {
             return new Mappings(EnumerateMappings(source, targetType));
         }
 
-        private static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Type targetType)
+        static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Type targetType)
         {
             Debug.Assert(source != null);
             Debug.Assert(targetType != null);
@@ -272,13 +272,13 @@ namespace Eggado
                    select new Mapping(ordinal, fieldType, type, m);
         }
 
-        private static Expression GetValueLambda(ParameterExpression reader, int ordinal, Type fieldType, Type targetType)
+        static Expression GetValueLambda(ParameterExpression reader, int ordinal, Type fieldType, Type targetType)
         {
             var type = typeof(Func<,>).MakeGenericType(typeof(IDataRecord), targetType);
             return Expression.Lambda(type, GetValue(reader, ordinal, fieldType, targetType), reader);
         }
 
-        private static Expression GetValue(Expression reader, int ordinal, Type sourceType, Type targetType)
+        static Expression GetValue(Expression reader, int ordinal, Type sourceType, Type targetType)
         {
             Debug.Assert(targetType != null);
 
@@ -324,7 +324,7 @@ namespace Eggado
         /// directly returned as the resulting expression.
         /// </remarks>
 
-        private static Expression Convert(Expression source, Type targetType)
+        static Expression Convert(Expression source, Type targetType)
         {
             Debug.Assert(source != null);
             Debug.Assert(targetType != null);
@@ -339,10 +339,10 @@ namespace Eggado
                  : ConversionLambda.ChangeType(source, targetType);
         }
 
-        private static readonly MethodInfo _dataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
-        private static readonly MethodInfo _dataRecordIsDbNullMethod = ReflectMethod(r => r.IsDBNull(0));
+        static readonly MethodInfo _dataRecordGetValueMethod = ReflectMethod(r => r.GetValue(0));
+        static readonly MethodInfo _dataRecordIsDbNullMethod = ReflectMethod(r => r.IsDBNull(0));
 
-        private static readonly Dictionary<Type, MethodInfo> _methodByType = new Dictionary<Type, MethodInfo>
+        static readonly Dictionary<Type, MethodInfo> _methodByType = new Dictionary<Type, MethodInfo>
         {
             { typeof(bool),     ReflectMethod(r => r.GetBoolean(0))  },
             { typeof(char),     ReflectMethod(r => r.GetChar(0))     },     
@@ -357,7 +357,7 @@ namespace Eggado
             { typeof(string),   ReflectMethod(r => r.GetString(0))   },
         };
 
-        private static MethodInfo ReflectMethod<T>(Expression<Func<IDataRecord, T>> e)
+        static MethodInfo ReflectMethod<T>(Expression<Func<IDataRecord, T>> e)
         {
             Debug.Assert(e != null);
             return ((MethodCallExpression)e.Body).Method;
@@ -366,8 +366,8 @@ namespace Eggado
         [Serializable]
         sealed class Mappings : IEquatable<Mappings>, IEnumerable<Mapping>
         {
-            private int? _hashCode;
-            private readonly IEnumerable<Mapping> _entries;
+            int? _hashCode;
+            readonly IEnumerable<Mapping> _entries;
 
             public Mappings(IEnumerable<Mapping> mappings)
             {
@@ -392,7 +392,7 @@ namespace Eggado
                 return (int) (_hashCode ?? (_hashCode = ComputeHashCode()));
             }
 
-            private int ComputeHashCode()
+            int ComputeHashCode()
             {
                 if (!_entries.Any())
                     return 0;
@@ -428,7 +428,7 @@ namespace Eggado
             public readonly Type TargetType;
             public readonly MemberInfo Member;
 
-            private readonly int _hashCode;
+            readonly int _hashCode;
 
             public Mapping(int ordinal, Type sourceType, Type targetType, MemberInfo member = null)
             {
