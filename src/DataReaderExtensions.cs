@@ -72,7 +72,10 @@ namespace Eggado
             if (reader == null) throw new ArgumentNullException("reader");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            DbEnumerator e;
+            DbEnumerator e; 
+            // DbEnumerator may implement IDisposable in the future so type 
+            // type conversion is safe and intended at the runtime level.
+            // ReSharper disable once SuspiciousTypeConversion.Global
             using ((e = new DbEnumerator(reader)) as IDisposable)
             while (e.MoveNext())
                 yield return selector((IDataRecord) e.Current);
