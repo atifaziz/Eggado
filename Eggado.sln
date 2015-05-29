@@ -1,18 +1,21 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eggado", "Eggado.csproj", "{4ED77A7B-4686-4141-9D13-D7E325D92D66}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eggado", "src\Eggado.csproj", "{4ED77A7B-4686-4141-9D13-D7E325D92D66}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C542E67-7C1F-45D6-95CF-DDB759B3EA0A}"
 	ProjectSection(SolutionItems) = preProject
-		..\build.cmd = ..\build.cmd
-		..\buildw.cmd = ..\buildw.cmd
-		..\COPYING.txt = ..\COPYING.txt
-		..\pkg\Eggado.nuspec = ..\pkg\Eggado.nuspec
-		..\pack.cmd = ..\pack.cmd
-		..\packw.cmd = ..\packw.cmd
+		build.cmd = build.cmd
+		buildw.cmd = buildw.cmd
+		COPYING.txt = COPYING.txt
+		pkg\Eggado.nuspec = pkg\Eggado.nuspec
+		pack.cmd = pack.cmd
+		packw.cmd = packw.cmd
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eggado.Tests", "..\tests\Eggado.Tests.csproj", "{8CB14BCD-88D0-4D3A-97F4-4A6C769DC695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eggado.Tests", "tests\Eggado.Tests.csproj", "{8CB14BCD-88D0-4D3A-97F4-4A6C769DC695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

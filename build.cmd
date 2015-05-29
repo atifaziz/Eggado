@@ -13,4 +13,4 @@ if not exist "%MSBUILDEXE%" (
     exit /b 1
 )
 set EnableNuGetPackageRestore=true
-for %%s in (src\*.sln) do for %%c in (debug release) do "%MSBUILDEXE%" %%s /p:Configuration=%%c /v:m %*
+for %%s in (*.sln) do for %%c in (debug release) do "%MSBUILDEXE%" %%s /p:Configuration=%%c /v:m %*
