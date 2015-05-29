@@ -7,7 +7,7 @@
     <authors>Atif Aziz</authors>
     <owners>Atif Aziz</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>http://eggado.googlecode.com</projectUrl>
+    <projectUrl>https://bitbucket.org/raboof/eggado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ADO.NET Modernizer</description>
     <releaseNotes>Project moved to BitBucket (updating links).</releaseNotes>
