@@ -1,18 +1,17 @@
 @echo off
-setlocal
 pushd "%~dp0"
-call build && call :pack
+call :main %*
+popd
 goto :EOF
 
-:pack
+:main
 setlocal
-pushd "%~dp0pkg"
-if exist base rd base /s /q
-if not errorlevel 0 exit /b %errorlevel%
-set net40=base\lib\net40
-if not exist "%net40%" md "%net40%"
-if not errorlevel 0 exit /b %errorlevel%
-copy ..\COPYING*.txt base > nul ^
- && copy ..\bin\Release "%net40%" > nul ^
- && nuget pack Eggado.nuspec -BasePath base
+call :mkdist && call build && nuget pack -Symbols -OutputDirectory dist
 goto :EOF
+
+:mkdist
+if exist dist goto :EOF
+md dist
+if exist dist goto :EOF
+echo Error creating package distribution directory
+exit /b 1

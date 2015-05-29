@@ -10,8 +10,14 @@
     <projectUrl>http://eggado.googlecode.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ADO.NET Modernizer</description>
-    <releaseNotes>Cache fix and targeting client platform.</releaseNotes>
+    <releaseNotes>Project moved to BitBucket (updating links).</releaseNotes>
     <copyright>Copyright (c) 2011, Atif Aziz. All rights reserved.</copyright>
     <tags>ado orm micro-orm sql</tags>
   </metadata>
+  <files>
+    <file src="bin\Release\Eggado.dll" target="lib\net40\Eggado.dll" />
+    <file src="bin\Release\Eggado.pdb" target="lib\net40\Eggado.pdb" />
+    <file src="COPYING.txt" target="COPYING.txt" />
+    <file src="src\**\*.cs" target="src" />
+  </files>
 </package>
