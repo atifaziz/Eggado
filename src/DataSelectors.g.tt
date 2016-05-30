@@ -89,7 +89,7 @@ namespace Eggado
             if (table == null) throw new ArgumentNullException("table");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return Eggnumerable.From(() => new DataTableReader(table), r => r.Select(selector));
+            return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
 <#  } #>
     }
