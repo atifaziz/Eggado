@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ADO.NET Modernizer</description>
     <releaseNotes>Project moved to BitBucket (updating links).</releaseNotes>
-    <copyright>Copyright (c) 2011, Atif Aziz. All rights reserved.</copyright>
+    <copyright>Copyright &#169; 2011, Atif Aziz. All rights reserved.</copyright>
     <tags>ado orm micro-orm sql</tags>
   </metadata>
   <files>

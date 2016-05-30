@@ -30,7 +30,7 @@ using ComVisible = System.Runtime.InteropServices.ComVisibleAttribute;
 [assembly: AssemblyDescription("ADO.NET Modernizer")]
 [assembly: AssemblyProduct("Eggado")]
 [assembly: AssemblyCompany("https://bitbucket.org/raboof/eggado")]
-[assembly: AssemblyCopyright("Copyright (c) 2011, Atif Aziz. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright \u00a9 2011, Atif Aziz. All rights reserved.")]
 [assembly: AssemblyCulture("")]
 
 //
