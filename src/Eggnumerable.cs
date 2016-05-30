@@ -28,8 +28,8 @@ namespace Eggado
     {
         public static IEnumerable<T> From<TCursor, T>([NotNull] Func<TCursor> opener, [NotNull] Func<TCursor, IEnumerator<T>> selector)
         {
-            if (opener == null) throw new ArgumentNullException("opener");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (opener == null) throw new ArgumentNullException(nameof(opener));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var cursor = opener();
             using (cursor as IDisposable)
@@ -47,7 +47,7 @@ namespace Eggado
 
         internal static T[] ToArray<T>([NotNull] this IEnumerable<T> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null) throw new ArgumentNullException(nameof(source));
 
             var collection = source as ICollection<T>;
             if (collection != null)

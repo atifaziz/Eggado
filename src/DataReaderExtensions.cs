@@ -43,8 +43,8 @@ namespace Eggado
             [NotNull] this IDataReader reader,
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             while (reader.Read())
             {
@@ -62,8 +62,8 @@ namespace Eggado
             [NotNull] this IDataReader reader,
             [NotNull] Func<IDataRecord, T> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             DbEnumerator e;
             // DbEnumerator may implement IDisposable in the future so type
@@ -83,8 +83,8 @@ namespace Eggado
             [NotNull] this IDataRecord record,
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
-            if (record == null) throw new ArgumentNullException("record");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (record == null) throw new ArgumentNullException(nameof(record));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return selector(from i in Enumerable.Range(0, record.FieldCount)
                             select record.Get(i));
@@ -92,7 +92,7 @@ namespace Eggado
 
         public static KeyValuePair<string, object> Get([NotNull] this IDataRecord record, int ordinal)
         {
-            if (record == null) throw new ArgumentNullException("record");
+            if (record == null) throw new ArgumentNullException(nameof(record));
 
             var name = record.GetName(ordinal);
             var value = record.IsDBNull(ordinal) ? null : record.GetValue(ordinal);
@@ -112,8 +112,8 @@ namespace Eggado
             [NotNull] this IDataReader reader,
             [NotNull] Delegate selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return PageRecordSelector(GetMappings(reader, selector), selector.GetType(), (mappings, type) => CreateRecordSelectorLambdaForDelegate<T>(mappings, type).Compile());
         }
@@ -146,8 +146,8 @@ namespace Eggado
             [NotNull] this IDataReader reader,
             [NotNull] Delegate selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
             return CreateRecordSelectorLambdaForDelegate<T>(EnumerateMappings(reader, selector), selector.GetType());
         }
 
@@ -164,10 +164,8 @@ namespace Eggado
             return Expression.Lambda<T>(Expression.Invoke(spe, getters), rpe, spe);
         }
 
-        static Mappings GetMappings(IDataRecord source, Delegate target)
-        {
-            return new Mappings(EnumerateMappings(source, target));
-        }
+        static Mappings GetMappings(IDataRecord source, Delegate target) =>
+            new Mappings(EnumerateMappings(source, target));
 
         static readonly string[] OrdinalParameterNames =
         {
@@ -210,13 +208,14 @@ namespace Eggado
         public static Func<IDataRecord, T> CreateRecordSelector<T>([NotNull] this IDataReader reader)
             where T : new()
         {
-            if (reader == null) throw new ArgumentNullException("reader");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
             return PageRecordSelector(GetMappings(reader, typeof(T)), typeof(T), (mappings, _) => CreateRecordSelectorLambda<T>(mappings).Compile());
         }
 
         public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader)
             where T : new()
         {
+            // TODO if (reader == null) throw new ArgumentNullException(nameof(reader));
             return CreateRecordSelectorLambda<T>(EnumerateMappings(reader, typeof(T)));
         }
 
@@ -244,10 +243,8 @@ namespace Eggado
             return Expression.Lambda<Func<IDataRecord, T>>(body, record);
         }
 
-        static Mappings GetMappings(IDataRecord source, Type targetType)
-        {
-            return new Mappings(EnumerateMappings(source, targetType));
-        }
+        static Mappings GetMappings(IDataRecord source, Type targetType) =>
+            new Mappings(EnumerateMappings(source, targetType));
 
         static IEnumerable<Mapping> EnumerateMappings(IDataRecord source, Type targetType)
         {
@@ -259,11 +256,7 @@ namespace Eggado
                    let f = m.MemberType == MemberTypes.Field ? (FieldInfo) m : null
                    where (p != null && p.CanRead && p.CanWrite)
                       || (f != null && f.Attributes.HasFlag(FieldAttributes.InitOnly))
-                   let type = p != null
-                            ? p.PropertyType
-                            : f != null
-                            ? f.FieldType
-                            : null
+                   let type = p?.PropertyType ?? f?.FieldType
                    let ordinal = source.GetOrdinal(m.Name)
                    let fieldType = source.GetFieldType(ordinal)
                    select new Mapping(ordinal, fieldType, type, m);
@@ -374,22 +367,16 @@ namespace Eggado
                 _entries = mappings.ToArray();
             }
 
-            public bool Equals(Mappings other)
-            {
-                return other != null
-                    && (ReferenceEquals(this, other)
-                        || other._entries.SequenceEqual(_entries));
-            }
+            public bool Equals(Mappings other) =>
+                other != null
+                && (ReferenceEquals(this, other)
+                    || other._entries.SequenceEqual(_entries));
 
-            public override bool Equals(object obj)
-            {
-                return Equals(obj as Mappings);
-            }
+            public override bool Equals(object obj) =>
+                Equals(obj as Mappings);
 
-            public override int GetHashCode()
-            {                                                                // ReSharper disable NonReadonlyFieldInGetHashCode
-                return (int) (_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
-            }
+            public override int GetHashCode() =>                      // ReSharper disable NonReadonlyFieldInGetHashCode
+                (int) (_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
 
             int ComputeHashCode()
             {
@@ -403,20 +390,11 @@ namespace Eggado
                 }
             }
 
-            public IEnumerator<Mapping> GetEnumerator()
-            {
-                return _entries.GetEnumerator();
-            }
+            public IEnumerator<Mapping> GetEnumerator() => _entries.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            public override string ToString()
-            {
-                return string.Join(", ", from m in this select "{ " + m + " }");
-            }
+            public override string ToString() =>
+                string.Join(", ", from m in this select "{ " + m + " }");
         }
 
         [ Serializable ]
@@ -444,28 +422,20 @@ namespace Eggado
                     (((ordinal * 397)
                     ^ sourceType.GetHashCode() * 397)
                     ^ targetType.GetHashCode() * 397)
-                    ^ (member != null ? member.GetHashCode() : 0));
+                    ^ (member?.GetHashCode() ?? 0));
             }
 
-            public bool Equals(Mapping other)
-            {
-                return other != null
-                    && (ReferenceEquals(this, other)
-                        || (other.Ordinal == Ordinal
-                            && other.SourceType == SourceType
-                            && other.TargetType == TargetType
-                            && other.Member == Member));
-            }
+            public bool Equals(Mapping other) =>
+                other != null
+                && (ReferenceEquals(this, other)
+                    || (other.Ordinal == Ordinal
+                        && other.SourceType == SourceType
+                        && other.TargetType == TargetType
+                        && other.Member == Member));
 
-            public override bool Equals(object obj)
-            {
-                return Equals(obj as Mapping);
-            }
+            public override bool Equals(object obj) => Equals(obj as Mapping);
 
-            public override int GetHashCode()
-            {
-                return _hashCode;
-            }
+            public override int GetHashCode() => _hashCode;
 
             public override string ToString()
             {
@@ -475,7 +445,7 @@ namespace Eggado
                     ? @"Ordinal: {0}, SourceType: {1}, TargetType: {2}"
                     : @"Ordinal: {0}, SourceType: {1}, TargetType: {2}, Member: {3}",
                     Ordinal, SourceType, TargetType,
-                    member != null ? member.Name : null);
+                    member?.Name);
             }
         }
     }

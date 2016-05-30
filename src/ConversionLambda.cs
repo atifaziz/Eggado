@@ -37,15 +37,13 @@ namespace Eggado
 
         public static Expression Find([NotNull] Type input, [NotNull] Type output)
         {
-            if (input == null) throw new ArgumentNullException("input");
-            if (output == null) throw new ArgumentNullException("output");
+            if (input == null) throw new ArgumentNullException(nameof(input));
+            if (output == null) throw new ArgumentNullException(nameof(output));
             return Find(input.TypeHandle, output.TypeHandle);
         }
 
-        public static Expression Find(RuntimeTypeHandle input, RuntimeTypeHandle output)
-        {
-            return Expressions.Find(Tuple.Create(input, output));
-        }
+        public static Expression Find(RuntimeTypeHandle input, RuntimeTypeHandle output) =>
+            Expressions.Find(Tuple.Create(input, output));
 
         /// <summary>
         /// Generates an expression that calls <see cref="Convert.ChangeType(object,System.Type,System.IFormatProvider)"/>.
@@ -66,9 +64,7 @@ namespace Eggado
         static readonly Expression Culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
         static readonly MethodInfo ChangeTypeMethod = ((MethodCallExpression) (((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body)).Method;
 
-        public static Expression<Func<object, T>> ChangeType<T>()
-        {
-            return value => (T) Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
-        }
+        public static Expression<Func<object, T>> ChangeType<T>() =>
+            value => (T) Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
     }
 }

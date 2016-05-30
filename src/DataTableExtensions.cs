@@ -30,7 +30,7 @@ namespace Eggado
         public static IEnumerable<T> Select<T>([NotNull] this DataTable table)
             where T : new()
         {
-            if (table == null) throw new ArgumentNullException("table");
+            if (table == null) throw new ArgumentNullException(nameof(table));
             return Eggnumerable.From(() => new DataTableReader(table), r => r.Select<T>());
         }
 
@@ -38,15 +38,15 @@ namespace Eggado
             [NotNull] this DataTable table,
             [NotNull] Func<T, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
             return Eggnumerable.From(() => new DataTableReader(table), r => r.Select(selector));
         }
 
         public static IEnumerable<dynamic> Select(
             [NotNull] this DataTable table)
         {
-            if (table == null) throw new ArgumentNullException("table");
+            if (table == null) throw new ArgumentNullException(nameof(table));
             return Eggnumerable.From(() => new DataTableReader(table), r => r.Select());
         }
     }

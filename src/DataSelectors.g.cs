@@ -25,7 +25,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 30 May 2016 09:27:49 GMT
+    // Mon, 30 May 2016 11:22:33 GMT
 
     partial class DataReaderExtensions
     {
@@ -33,8 +33,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -45,8 +45,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -57,8 +57,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -69,8 +69,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -81,8 +81,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -93,8 +93,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -105,8 +105,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -117,8 +117,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -129,8 +129,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -141,8 +141,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -153,8 +153,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -165,8 +165,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -177,8 +177,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -189,8 +189,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -201,8 +201,8 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -216,8 +216,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -226,8 +226,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -236,8 +236,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -246,8 +246,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -256,8 +256,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -266,8 +266,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -276,8 +276,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -286,8 +286,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -296,8 +296,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -306,8 +306,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -316,8 +316,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -326,8 +326,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -336,8 +336,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -346,8 +346,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -356,8 +356,8 @@ namespace Eggado
             this IDbCommand command,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -369,8 +369,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -379,8 +379,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -389,8 +389,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -399,8 +399,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -409,8 +409,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -419,8 +419,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -429,8 +429,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -439,8 +439,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -449,8 +449,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -459,8 +459,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -469,8 +469,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -479,8 +479,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -489,8 +489,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -499,8 +499,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
@@ -509,8 +509,8 @@ namespace Eggado
             this DataTable table,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }

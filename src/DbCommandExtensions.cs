@@ -30,7 +30,7 @@ namespace Eggado
         public static IEnumerable<T> Select<T>([NotNull] this IDbCommand command)
             where T : new()
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
             return Eggnumerable.From(command.ExecuteReader, r => r.Select<T>());
         }
 
@@ -38,15 +38,15 @@ namespace Eggado
             [NotNull] this IDbCommand command,
             [NotNull] Func<T, TResult> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
 
         public static IEnumerable<dynamic> Select(
             [NotNull] this IDbCommand command)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
             return Eggnumerable.From(command.ExecuteReader, r => r.Select());
         }
     }

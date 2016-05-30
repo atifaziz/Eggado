@@ -45,8 +45,8 @@ namespace Eggado
             this IDataReader reader,
             Func<#= targs #> selector)
         {
-            if (reader == null) throw new ArgumentNullException("reader");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<#= targs #>, TResult>>(selector);
             while (reader.Read())
@@ -63,8 +63,8 @@ namespace Eggado
             this IDbCommand command,
             Func<#= targs #> selector)
         {
-            if (command == null) throw new ArgumentNullException("command");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
@@ -79,8 +79,8 @@ namespace Eggado
             this DataTable table,
             Func<#= targs #> selector)
         {
-            if (table == null) throw new ArgumentNullException("table");
-            if (selector == null) throw new ArgumentNullException("selector");
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }

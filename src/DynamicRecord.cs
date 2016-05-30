@@ -35,37 +35,29 @@ namespace Eggado
 
         internal DynamicRecord([NotNull] IDataRecord record)
         {
-            if (record == null) throw new ArgumentNullException("record");
+            if (record == null) throw new ArgumentNullException(nameof(record));
             _record = record;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null) throw new ArgumentNullException(nameof(binder));
             var value = _record[binder.Name];
             result = Value(value);
             return true;
         }
 
-        static object Value(object value)
-        {
-            return DBNull.Value != value ? value : null;
-        }
+        static object Value(object value) =>
+            DBNull.Value != value ? value : null;
 
-        public override IEnumerable<string> GetDynamicMemberNames()
-        {
-            return from i in Enumerable.Range(1, _record.FieldCount)
-                   select _record.GetName(i);
-        }
+        public override IEnumerable<string> GetDynamicMemberNames() =>
+            from i in Enumerable.Range(1, _record.FieldCount)
+            select _record.GetName(i);
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-        {
-            return _record.Select(ps => from p in ps select p.Key.AsKeyTo(Value(p.Value))).GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() =>
+            _record.Select(ps => from p in ps select p.Key.AsKeyTo(Value(p.Value)))
+                   .GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
