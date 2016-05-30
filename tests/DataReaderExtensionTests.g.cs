@@ -9,7 +9,7 @@ namespace Eggado.Tests
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 19 Dec 2011 23:23:27 GMT
+    // Mon, 30 May 2016 09:07:07 GMT
 
     partial class DataReaderExtensionTests
     {

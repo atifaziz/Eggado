@@ -60,12 +60,12 @@ namespace Eggado
 
         public static Expression ChangeType(Expression value, Type targetType)
         {
-            return 
+            return
                 Expression.Convert(
                     Expression.Call(
-                        ChangeTypeMethod, 
-                        Expression.Convert(value, typeof(object)), 
-                        Expression.Constant(targetType), 
+                        ChangeTypeMethod,
+                        Expression.Convert(value, typeof(object)),
+                        Expression.Constant(targetType),
                         Culture),
                     targetType);
         }

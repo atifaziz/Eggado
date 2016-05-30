@@ -32,10 +32,10 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 30 May 2016 07:31:25 GMT
+    // Mon, 30 May 2016 07:39:01 GMT
 
     partial class DataReaderExtensions
-    { 
+    {
         public static IEnumerator<TResult> Select<T1, T2, TResult>(
             this IDataReader reader,
             Func<T1, T2, TResult> selector)
@@ -46,7 +46,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, TResult>(
             this IDataReader reader,
@@ -58,7 +58,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, TResult>(
             this IDataReader reader,
@@ -70,7 +70,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, TResult>(
             this IDataReader reader,
@@ -82,7 +82,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, TResult>(
             this IDataReader reader,
@@ -94,7 +94,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, TResult>(
             this IDataReader reader,
@@ -106,7 +106,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
             this IDataReader reader,
@@ -118,7 +118,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
             this IDataReader reader,
@@ -130,7 +130,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this IDataReader reader,
@@ -142,7 +142,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this IDataReader reader,
@@ -154,7 +154,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this IDataReader reader,
@@ -166,7 +166,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this IDataReader reader,
@@ -178,7 +178,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this IDataReader reader,
@@ -190,7 +190,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this IDataReader reader,
@@ -202,7 +202,7 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
 
         public static IEnumerator<TResult> Select<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this IDataReader reader,
@@ -214,11 +214,11 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
+        }
     }
 
     partial class DbCommandExtensions
-    { 
+    {
         public static IEnumerable<TResult> Select<T1, T2, TResult>(
             this IDbCommand command,
             Func<T1, T2, TResult> selector)
@@ -371,7 +371,7 @@ namespace Eggado
     }
 
     partial class DataTableExtensions
-    { 
+    {
         public static IEnumerable<TResult> Select<T1, T2, TResult>(
             this DataTable table,
             Func<T1, T2, TResult> selector)

@@ -34,7 +34,7 @@ namespace Eggado
 
     public static partial class DbCommandExtensions
     {
-        public static IEnumerable<T> Select<T>([NotNull] this IDbCommand command) 
+        public static IEnumerable<T> Select<T>([NotNull] this IDbCommand command)
             where T : new()
         {
             if (command == null) throw new ArgumentNullException("command");

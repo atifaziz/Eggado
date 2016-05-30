@@ -51,7 +51,7 @@ namespace Eggado
         /// A version of <see cref="System.Linq.Enumerable.ToArray{TSource}"/> that is
         /// optimized for 16 elements.
         /// </summary>
-        
+
         internal static T[] ToArray<T>([NotNull] this IEnumerable<T> source)
         {
             if (source == null) throw new ArgumentNullException("source");

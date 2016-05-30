@@ -50,23 +50,23 @@ namespace Eggado
         }
 
         private static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
-        { <#  
+        {<#
     var cscp = new CSharpCodeProvider();
-    var methodsByType = 
+    var methodsByType =
         from g in
-            from method in typeof(Convert).GetMethods() 
+            from method in typeof(Convert).GetMethods()
             let parameters = method.GetParameters()
             where parameters.Length >= 1
                 && parameters.Length <= 2
-                && method.Name.Length > 2 
+                && method.Name.Length > 2
                 && method.Name.StartsWith("To", StringComparison.Ordinal)
                 && method.Name.IndexOf("Base64", StringComparison.Ordinal) < 0
             let outputType = method.ReturnType
             let inputType = parameters.First().ParameterType
             where inputType != outputType
-            let cultural = parameters.Length == 2 
+            let cultural = parameters.Length == 2
                            && parameters.Last().ParameterType == typeof(IFormatProvider)
-            group new 
+            group new
             {
                 Info            = method,
                 InputType       = inputType,
@@ -80,14 +80,14 @@ namespace Eggado
         let method = g.First(m => !multiples || m.IsCultural)
         group method by method.OutputType;
 
-    foreach (var outputType in methodsByType) { 
+    foreach (var outputType in methodsByType) {
 #> 
             // <#= outputType.Key #>
 
 <#      foreach (var method in outputType) { #>
-            { K<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>(), (Expression<Func<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>>) (v => Convert.<#= method.Info.Name #>(v<#= method.IsCultural ? ", CultureInfo.InvariantCulture" : string.Empty #>)) }, 
-<# 
-        } 
+            { K<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>(), (Expression<Func<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>>) (v => Convert.<#= method.Info.Name #>(v<#= method.IsCultural ? ", CultureInfo.InvariantCulture" : string.Empty #>)) },
+<#
+        }
     } #>
         };
     }
@@ -95,8 +95,8 @@ namespace Eggado
 <#+
 static string TrimPrefix(string str, string prefix)
 {
-    return !string.IsNullOrEmpty(prefix) && str.StartsWith(prefix, StringComparison.Ordinal) 
-         ? str.Substring(prefix.Length) 
+    return !string.IsNullOrEmpty(prefix) && str.StartsWith(prefix, StringComparison.Ordinal)
+         ? str.Substring(prefix.Length)
          : str;
 }
 #>

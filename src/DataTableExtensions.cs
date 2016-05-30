@@ -34,7 +34,7 @@ namespace Eggado
 
     public static partial class DataTableExtensions
     {
-        public static IEnumerable<T> Select<T>([NotNull] this DataTable table) 
+        public static IEnumerable<T> Select<T>([NotNull] this DataTable table)
             where T : new()
         {
             if (table == null) throw new ArgumentNullException("table");

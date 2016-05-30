@@ -13,18 +13,18 @@
     table.ReadXml(XmlReader.Create(Host.ResolvePath(@"Products.xml")));
     var cols = table.Columns.Cast<DataColumn>();
     var format = new Func<string, object, string>((fmt, v) => String.Format(CultureInfo.InvariantCulture, fmt, v));
-    var rows = 
+    var rows =
         from DataRow row in table.Rows
         select
             from item in cols.Zip(row.ItemArray, (c, v) => new { Name = c.ColumnName, c.DataType, Value = v })
             let tc = Type.GetTypeCode(item.DataType)
             select new
             {
-                Actual = 
+                Actual =
                     "ProductID".Equals(item.Name, StringComparison.OrdinalIgnoreCase)
                     ? "ProductId"
                     : item.Name,
-                Expected = 
+                Expected =
                     tc == TypeCode.Decimal
                     ? format("{0}m", item.Value)
                     : tc == TypeCode.Boolean
@@ -52,16 +52,16 @@ namespace Eggado.Tests
         private static void AssertProducts(IEnumerator<Product> e)
         {
             Debug.Assert(e != null);
-<# 
+<#
     foreach (var asserts in rows) { #>
 
             Assert.IsTrue(e.MoveNext());
-<# 
+<#
         foreach (var assert in asserts) { #>
             Assert.AreEqual(<#= assert.Expected #>, e.Current.<#= assert.Actual #>);
-<# 
+<#
         } #>
-<# 
+<#
     } #>
         }
     }
@@ -69,7 +69,7 @@ namespace Eggado.Tests
 <#+
 static string AsciiLiteralEncoded(string str)
 {
-    var unquoted = Regex.Replace(str, @"[^\u0020-\u007f]|""|\\", m => 
+    var unquoted = Regex.Replace(str, @"[^\u0020-\u007f]|""|\\", m =>
     {
         var ch = m.Value[0];
         switch (ch)

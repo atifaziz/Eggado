@@ -45,17 +45,17 @@ namespace Eggado.Tests
         {
             AssertProducts(GetProductsTable().Select<Product>());
         }
-        
+
         [TestMethod]
         public void SelectViaSelector()
         {
             var products = GetProductsTable().Select(
             (
-                int productId, string productName, string englishName, 
-                string quantityPerUnit, decimal unitPrice, 
-                int unitsInStock, int unitsOnOrder, int? reorderLevel, 
+                int productId, string productName, string englishName,
+                string quantityPerUnit, decimal unitPrice,
+                int unitsInStock, int unitsOnOrder, int? reorderLevel,
                 bool discontinued, string supplier, string category
-            ) 
+            )
             => new Product
             {
                 ProductId       = productId,
@@ -103,7 +103,7 @@ namespace Eggado.Tests
 
             AssertProducts(products);
         }
-        
+
         private static void AssertProducts(IEnumerable<Product> products)
         {
             using (var e = products.GetEnumerator())

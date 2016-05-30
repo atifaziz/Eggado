@@ -47,7 +47,7 @@ namespace Eggado
         static readonly ConcurrentDictionary<object, object> Cache = new ConcurrentDictionary<object, object>();
 
         public static IEnumerator<T> Select<T>(
-            [NotNull] this IDataReader reader, 
+            [NotNull] this IDataReader reader,
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
             if (reader == null) throw new ArgumentNullException("reader");
@@ -66,14 +66,14 @@ namespace Eggado
         }
 
         public static IEnumerator<T> Select<T>(
-            [NotNull] this IDataReader reader, 
+            [NotNull] this IDataReader reader,
             [NotNull] Func<IDataRecord, T> selector)
         {
             if (reader == null) throw new ArgumentNullException("reader");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            DbEnumerator e; 
-            // DbEnumerator may implement IDisposable in the future so type 
+            DbEnumerator e;
+            // DbEnumerator may implement IDisposable in the future so type
             // type conversion is safe and intended at the runtime level.
             // ReSharper disable once SuspiciousTypeConversion.Global
             using ((e = new DbEnumerator(reader)) as IDisposable)
@@ -87,7 +87,7 @@ namespace Eggado
         }
 
         public static T Select<T>(
-            [NotNull] this IDataRecord record, 
+            [NotNull] this IDataRecord record,
             [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
             if (record == null) throw new ArgumentNullException("record");
@@ -116,7 +116,7 @@ namespace Eggado
         }
 
         public static T CreateRecordSelector<T>(
-            [NotNull] this IDataReader reader, 
+            [NotNull] this IDataReader reader,
             [NotNull] Delegate selector)
         {
             if (reader == null) throw new ArgumentNullException("reader");
@@ -143,14 +143,14 @@ namespace Eggado
             }
 
             var selector = factory(mappings, type);
-            
+
             cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Concat(new[] { mappings.AsKeyTo((Delegate) (object) selector) }).ToArray();
 
             return selector;
         }
 
         public static Expression<T> CreateRecordSelectorLambda<T>(
-            [NotNull] this IDataReader reader, 
+            [NotNull] this IDataReader reader,
             [NotNull] Delegate selector)
         {
             if (reader == null) throw new ArgumentNullException("reader");
@@ -163,7 +163,7 @@ namespace Eggado
             Debug.Assert(mappings != null);
             Debug.Assert(delegateType != null);
             Debug.Assert(typeof(Delegate).IsAssignableFrom(delegateType));
-            
+
             var rpe = Expression.Parameter(typeof(IDataRecord), "record");
             var getters = from m in mappings
                           select Expression.Invoke(GetValueLambda(rpe, m.Ordinal, m.SourceType, m.TargetType), rpe);
@@ -178,7 +178,7 @@ namespace Eggado
 
         static readonly string[] OrdinalParameterNames =
         {
-             "_1",  "_2",  "_3",  "_4",  "_5",  "_6",  "_7",  "_8",  "_9", "_10", 
+             "_1",  "_2",  "_3",  "_4",  "_5",  "_6",  "_7",  "_8",  "_9", "_10",
             "_11", "_12", "_13", "_14", "_15", "_16", "_17", "_18", "_19", "_20",
         };
 
@@ -188,8 +188,8 @@ namespace Eggado
             Debug.Assert(target != null);
 
             var parameters = target.Method.GetParameters();
-            
-            var ordinally = 
+
+            var ordinally =
                 OrdinalParameterNames.Take(parameters.Length)
                                       .Zip(parameters.Select(p => p.Name), (a, b) => a.Equals(b, StringComparison.OrdinalIgnoreCase))
                                       .All(yes => yes);
@@ -227,26 +227,26 @@ namespace Eggado
             return CreateRecordSelectorLambda<T>(EnumerateMappings(reader, typeof(T)));
         }
 
-        static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings) 
+        static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(IEnumerable<Mapping> mappings)
             where T : new()
         {
             Debug.Assert(mappings != null);
 
             var record = Expression.Parameter(typeof(IDataRecord), "record");
             var obj = Expression.Variable(typeof(T));
-            
+
             var statements = new IEnumerable<Expression>[]
             {
                 new[] { Expression.Assign(obj, Expression.New(typeof(T))) },
                 from m in mappings
                 select Expression.Assign(
-                           Expression.MakeMemberAccess(obj, m.Member), 
+                           Expression.MakeMemberAccess(obj, m.Member),
                            Expression.Invoke(
-                               GetValueLambda(record, m.Ordinal, m.SourceType, m.TargetType), 
+                               GetValueLambda(record, m.Ordinal, m.SourceType, m.TargetType),
                                record)),
                 new[] { obj },
             };
-            
+
             var body = Expression.Block(typeof(T), new[] { obj }, statements.SelectMany(s => s));
             return Expression.Lambda<Func<IDataRecord, T>>(body, record);
         }
@@ -264,12 +264,12 @@ namespace Eggado
             return from m in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public, null, null)
                    let p = m.MemberType == MemberTypes.Property ? (PropertyInfo) m : null
                    let f = m.MemberType == MemberTypes.Field ? (FieldInfo) m : null
-                   where (p != null && p.CanRead && p.CanWrite) 
+                   where (p != null && p.CanRead && p.CanWrite)
                       || (f != null && f.Attributes.HasFlag(FieldAttributes.InitOnly))
-                   let type = p != null 
-                            ? p.PropertyType 
-                            : f != null 
-                            ? f.FieldType 
+                   let type = p != null
+                            ? p.PropertyType
+                            : f != null
+                            ? f.FieldType
                             : null
                    let ordinal = source.GetOrdinal(m.Name)
                    let fieldType = source.GetFieldType(ordinal)
@@ -289,7 +289,7 @@ namespace Eggado
             bool nullable;
             var baseTargetType = targetType;
 
-            if (targetType.IsValueType 
+            if (targetType.IsValueType
                 && targetType.IsGenericType
                 && typeof(Nullable<>) == targetType.GetGenericTypeDefinition())
             {
@@ -300,7 +300,7 @@ namespace Eggado
             {
                 nullable = targetType.IsClass;
             }
-            
+
             var method = MethodByType.Find(sourceType, DataRecordGetValueMethod);
             // ReSharper disable once PossiblyMistakenUseOfParamsMethod
             var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
@@ -325,7 +325,7 @@ namespace Eggado
         }
 
         /// <remarks>
-        /// If <paramref name="source"/> is already typed as 
+        /// If <paramref name="source"/> is already typed as
         /// <paramref name="targetType"/> then <paramref name="source"/> is
         /// directly returned as the resulting expression.
         /// </remarks>
@@ -340,8 +340,8 @@ namespace Eggado
                 return source;
 
             var converter = ConversionLambda.Find(sourceType, targetType);
-            return converter != null 
-                 ? Expression.Invoke(converter, source) 
+            return converter != null
+                 ? Expression.Invoke(converter, source)
                  : ConversionLambda.ChangeType(source, targetType);
         }
 
@@ -351,15 +351,15 @@ namespace Eggado
         static readonly Dictionary<Type, MethodInfo> MethodByType = new Dictionary<Type, MethodInfo>
         {
             { typeof(bool),     ReflectMethod(r => r.GetBoolean(0))  },
-            { typeof(char),     ReflectMethod(r => r.GetChar(0))     },     
-            { typeof(byte),     ReflectMethod(r => r.GetByte(0))     },     
-            { typeof(short),    ReflectMethod(r => r.GetInt16(0))    },    
-            { typeof(int),      ReflectMethod(r => r.GetInt32(0))    },    
-            { typeof(long),     ReflectMethod(r => r.GetInt64(0))    },    
-            { typeof(float),    ReflectMethod(r => r.GetFloat(0))    },   
-            { typeof(double),   ReflectMethod(r => r.GetDouble(0))   },   
-            { typeof(decimal),  ReflectMethod(r => r.GetDecimal(0))  },  
-            { typeof(DateTime), ReflectMethod(r => r.GetDateTime(0)) }, 
+            { typeof(char),     ReflectMethod(r => r.GetChar(0))     },
+            { typeof(byte),     ReflectMethod(r => r.GetByte(0))     },
+            { typeof(short),    ReflectMethod(r => r.GetInt16(0))    },
+            { typeof(int),      ReflectMethod(r => r.GetInt32(0))    },
+            { typeof(long),     ReflectMethod(r => r.GetInt64(0))    },
+            { typeof(float),    ReflectMethod(r => r.GetFloat(0))    },
+            { typeof(double),   ReflectMethod(r => r.GetDouble(0))   },
+            { typeof(decimal),  ReflectMethod(r => r.GetDecimal(0))  },
+            { typeof(DateTime), ReflectMethod(r => r.GetDateTime(0)) },
             { typeof(string),   ReflectMethod(r => r.GetString(0))   },
         };
 
@@ -383,8 +383,8 @@ namespace Eggado
 
             public bool Equals(Mappings other)
             {
-                return other != null 
-                    && (ReferenceEquals(this, other) 
+                return other != null
+                    && (ReferenceEquals(this, other)
                         || other._entries.SequenceEqual(_entries));
             }
 
@@ -402,7 +402,7 @@ namespace Eggado
             {
                 if (!_entries.Any())
                     return 0;
-                
+
                 unchecked
                 {
                     var hashes = from m in _entries select m.GetHashCode() * 397;
@@ -446,19 +446,19 @@ namespace Eggado
                 TargetType = targetType;
                 Ordinal = ordinal;
                 Member = member;
-                
+
                 _hashCode = unchecked(
-                    (((ordinal * 397) 
-                    ^ sourceType.GetHashCode() * 397) 
-                    ^ targetType.GetHashCode() * 397) 
+                    (((ordinal * 397)
+                    ^ sourceType.GetHashCode() * 397)
+                    ^ targetType.GetHashCode() * 397)
                     ^ (member != null ? member.GetHashCode() : 0));
             }
 
             public bool Equals(Mapping other)
             {
-                return other != null 
-                    && (ReferenceEquals(this, other) 
-                        || (other.Ordinal == Ordinal 
+                return other != null
+                    && (ReferenceEquals(this, other)
+                        || (other.Ordinal == Ordinal
                             && other.SourceType == SourceType
                             && other.TargetType == TargetType
                             && other.Member == Member));
@@ -478,10 +478,10 @@ namespace Eggado
             {
                 var member = Member;
                 return string.Format(
-                    member == null 
+                    member == null
                     ? @"Ordinal: {0}, SourceType: {1}, TargetType: {2}"
                     : @"Ordinal: {0}, SourceType: {1}, TargetType: {2}, Member: {3}",
-                    Ordinal, SourceType, TargetType, 
+                    Ordinal, SourceType, TargetType,
                     member != null ? member.Name : null);
             }
         }

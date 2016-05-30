@@ -40,12 +40,12 @@ namespace Eggado
     // <#= DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture) #>
 
     partial class DataReaderExtensions
-    { <# 
+    {<#
     var targz = from arity in Enumerable.Range(2, 15)
                 let ts = from n in Enumerable.Range(1, arity)
                         select "T" + n.ToString(CultureInfo.InvariantCulture)
                 select "<" + string.Join(", ", ts) + ", TResult>";
-    
+
     foreach (var targs in targz) { #>
 
         public static IEnumerator<TResult> Select<#= targs #>(
@@ -58,12 +58,12 @@ namespace Eggado
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<#= targs #>, TResult>>(selector);
             while (reader.Read())
                 yield return f(reader, selector);
-        } 
-<#  } #>
+        }
+<#  }#>
     }
 
     partial class DbCommandExtensions
-    { <# 
+    {<#
     foreach (var targs in targz) { #>
 
         public static IEnumerable<TResult> Select<#= targs #>(
@@ -75,11 +75,11 @@ namespace Eggado
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
-<#  } #>
+<#  }#>
     }
 
     partial class DataTableExtensions
-    { <# 
+    {<#
     foreach (var targs in targz) { #>
 
         public static IEnumerable<TResult> Select<#= targs #>(
@@ -91,6 +91,6 @@ namespace Eggado
 
             return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
         }
-<#  } #>
+<#  }#>
     }
 }
