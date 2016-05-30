@@ -1,11 +1,4 @@
-#region License, Terms and Author(s)
-//
-// Eggado
-// Copyright (c) 2011 Atif Aziz. All rights reserved.
-//
-//  Author(s):
-//
-//      Atif Aziz, http://www.raboof.com
+#region Copyright (c) 2011 Atif Aziz. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +25,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 30 May 2016 07:39:01 GMT
+    // Mon, 30 May 2016 09:27:49 GMT
 
     partial class DataReaderExtensions
     {
