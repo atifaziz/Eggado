@@ -215,7 +215,7 @@ namespace Eggado
         public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader)
             where T : new()
         {
-            // TODO if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
             return CreateRecordSelectorLambda<T>(EnumerateMappings(reader, typeof(T)));
         }
 
