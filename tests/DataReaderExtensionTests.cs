@@ -29,7 +29,7 @@ namespace Eggado.Tests
             public string Category { get; set; }
         }
 
-        private DataTable GetProductsTable()
+        DataTable GetProductsTable()
         {
             var table = new DataTable();
             using (var reader = GetType().Assembly.GetManifestResourceReader(GetType(), "Products.xml", Encoding.UTF8))
@@ -104,7 +104,7 @@ namespace Eggado.Tests
             AssertProducts(products);
         }
 
-        private static void AssertProducts(IEnumerable<Product> products)
+        static void AssertProducts(IEnumerable<Product> products)
         {
             using (var e = products.GetEnumerator())
             {

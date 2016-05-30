@@ -36,9 +36,9 @@ namespace Eggado
 
     #endregion
 
-    internal sealed class DynamicRecord : DynamicObject, IEnumerable<KeyValuePair<string, object>>
+    sealed class DynamicRecord : DynamicObject, IEnumerable<KeyValuePair<string, object>>
     {
-        private readonly IDataRecord _record;
+        readonly IDataRecord _record;
 
         internal DynamicRecord([NotNull] IDataRecord record)
         {
@@ -54,7 +54,7 @@ namespace Eggado
             return true;
         }
 
-        private static object Value(object value)
+        static object Value(object value)
         {
             return DBNull.Value != value ? value : null;
         }
