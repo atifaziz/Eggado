@@ -37,10 +37,8 @@ namespace Eggado
 
     partial class ConversionLambda
     {
-        static ConversionKey K<TInput, TOutput>()
-        {
-            return Tuple.Create(typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
-        }
+        static ConversionKey K<TInput, TOutput>() =>
+            Tuple.Create(typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
 
         static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
         {<#
