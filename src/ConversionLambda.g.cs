@@ -27,7 +27,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Tue, 28 Feb 2017 13:33:49 GMT
+    // Tue, 28 Feb 2017 13:40:50 GMT
 
     partial class ConversionLambda
     {
@@ -37,7 +37,7 @@ namespace Eggado
         }
 
         static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
-        { 
+        {
             // System.Boolean
 
             { K<object, bool>(), (Expression<Func<object, bool>>) (v => Convert.ToBoolean(v, CultureInfo.InvariantCulture)) },
@@ -55,7 +55,7 @@ namespace Eggado
             { K<double, bool>(), (Expression<Func<double, bool>>) (v => Convert.ToBoolean(v)) },
             { K<decimal, bool>(), (Expression<Func<decimal, bool>>) (v => Convert.ToBoolean(v)) },
             { K<DateTime, bool>(), (Expression<Func<DateTime, bool>>) (v => Convert.ToBoolean(v)) },
- 
+
             // System.Char
 
             { K<object, char>(), (Expression<Func<object, char>>) (v => Convert.ToChar(v, CultureInfo.InvariantCulture)) },
@@ -73,7 +73,7 @@ namespace Eggado
             { K<double, char>(), (Expression<Func<double, char>>) (v => Convert.ToChar(v)) },
             { K<decimal, char>(), (Expression<Func<decimal, char>>) (v => Convert.ToChar(v)) },
             { K<DateTime, char>(), (Expression<Func<DateTime, char>>) (v => Convert.ToChar(v)) },
- 
+
             // System.SByte
 
             { K<object, sbyte>(), (Expression<Func<object, sbyte>>) (v => Convert.ToSByte(v, CultureInfo.InvariantCulture)) },
@@ -91,7 +91,7 @@ namespace Eggado
             { K<decimal, sbyte>(), (Expression<Func<decimal, sbyte>>) (v => Convert.ToSByte(v)) },
             { K<string, sbyte>(), (Expression<Func<string, sbyte>>) (v => Convert.ToSByte(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, sbyte>(), (Expression<Func<DateTime, sbyte>>) (v => Convert.ToSByte(v)) },
- 
+
             // System.Byte
 
             { K<object, byte>(), (Expression<Func<object, byte>>) (v => Convert.ToByte(v, CultureInfo.InvariantCulture)) },
@@ -109,7 +109,7 @@ namespace Eggado
             { K<decimal, byte>(), (Expression<Func<decimal, byte>>) (v => Convert.ToByte(v)) },
             { K<string, byte>(), (Expression<Func<string, byte>>) (v => Convert.ToByte(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, byte>(), (Expression<Func<DateTime, byte>>) (v => Convert.ToByte(v)) },
- 
+
             // System.Int16
 
             { K<object, short>(), (Expression<Func<object, short>>) (v => Convert.ToInt16(v, CultureInfo.InvariantCulture)) },
@@ -127,7 +127,7 @@ namespace Eggado
             { K<decimal, short>(), (Expression<Func<decimal, short>>) (v => Convert.ToInt16(v)) },
             { K<string, short>(), (Expression<Func<string, short>>) (v => Convert.ToInt16(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, short>(), (Expression<Func<DateTime, short>>) (v => Convert.ToInt16(v)) },
- 
+
             // System.UInt16
 
             { K<object, ushort>(), (Expression<Func<object, ushort>>) (v => Convert.ToUInt16(v, CultureInfo.InvariantCulture)) },
@@ -145,7 +145,7 @@ namespace Eggado
             { K<decimal, ushort>(), (Expression<Func<decimal, ushort>>) (v => Convert.ToUInt16(v)) },
             { K<string, ushort>(), (Expression<Func<string, ushort>>) (v => Convert.ToUInt16(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, ushort>(), (Expression<Func<DateTime, ushort>>) (v => Convert.ToUInt16(v)) },
- 
+
             // System.Int32
 
             { K<object, int>(), (Expression<Func<object, int>>) (v => Convert.ToInt32(v, CultureInfo.InvariantCulture)) },
@@ -163,7 +163,7 @@ namespace Eggado
             { K<decimal, int>(), (Expression<Func<decimal, int>>) (v => Convert.ToInt32(v)) },
             { K<string, int>(), (Expression<Func<string, int>>) (v => Convert.ToInt32(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, int>(), (Expression<Func<DateTime, int>>) (v => Convert.ToInt32(v)) },
- 
+
             // System.UInt32
 
             { K<object, uint>(), (Expression<Func<object, uint>>) (v => Convert.ToUInt32(v, CultureInfo.InvariantCulture)) },
@@ -181,7 +181,7 @@ namespace Eggado
             { K<decimal, uint>(), (Expression<Func<decimal, uint>>) (v => Convert.ToUInt32(v)) },
             { K<string, uint>(), (Expression<Func<string, uint>>) (v => Convert.ToUInt32(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, uint>(), (Expression<Func<DateTime, uint>>) (v => Convert.ToUInt32(v)) },
- 
+
             // System.Int64
 
             { K<object, long>(), (Expression<Func<object, long>>) (v => Convert.ToInt64(v, CultureInfo.InvariantCulture)) },
@@ -199,7 +199,7 @@ namespace Eggado
             { K<decimal, long>(), (Expression<Func<decimal, long>>) (v => Convert.ToInt64(v)) },
             { K<string, long>(), (Expression<Func<string, long>>) (v => Convert.ToInt64(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, long>(), (Expression<Func<DateTime, long>>) (v => Convert.ToInt64(v)) },
- 
+
             // System.UInt64
 
             { K<object, ulong>(), (Expression<Func<object, ulong>>) (v => Convert.ToUInt64(v, CultureInfo.InvariantCulture)) },
@@ -217,7 +217,7 @@ namespace Eggado
             { K<decimal, ulong>(), (Expression<Func<decimal, ulong>>) (v => Convert.ToUInt64(v)) },
             { K<string, ulong>(), (Expression<Func<string, ulong>>) (v => Convert.ToUInt64(v, CultureInfo.InvariantCulture)) },
             { K<DateTime, ulong>(), (Expression<Func<DateTime, ulong>>) (v => Convert.ToUInt64(v)) },
- 
+
             // System.Single
 
             { K<object, float>(), (Expression<Func<object, float>>) (v => Convert.ToSingle(v, CultureInfo.InvariantCulture)) },
@@ -235,7 +235,7 @@ namespace Eggado
             { K<string, float>(), (Expression<Func<string, float>>) (v => Convert.ToSingle(v, CultureInfo.InvariantCulture)) },
             { K<bool, float>(), (Expression<Func<bool, float>>) (v => Convert.ToSingle(v)) },
             { K<DateTime, float>(), (Expression<Func<DateTime, float>>) (v => Convert.ToSingle(v)) },
- 
+
             // System.Double
 
             { K<object, double>(), (Expression<Func<object, double>>) (v => Convert.ToDouble(v, CultureInfo.InvariantCulture)) },
@@ -253,7 +253,7 @@ namespace Eggado
             { K<string, double>(), (Expression<Func<string, double>>) (v => Convert.ToDouble(v, CultureInfo.InvariantCulture)) },
             { K<bool, double>(), (Expression<Func<bool, double>>) (v => Convert.ToDouble(v)) },
             { K<DateTime, double>(), (Expression<Func<DateTime, double>>) (v => Convert.ToDouble(v)) },
- 
+
             // System.Decimal
 
             { K<object, decimal>(), (Expression<Func<object, decimal>>) (v => Convert.ToDecimal(v, CultureInfo.InvariantCulture)) },
@@ -271,7 +271,7 @@ namespace Eggado
             { K<string, decimal>(), (Expression<Func<string, decimal>>) (v => Convert.ToDecimal(v, CultureInfo.InvariantCulture)) },
             { K<bool, decimal>(), (Expression<Func<bool, decimal>>) (v => Convert.ToDecimal(v)) },
             { K<DateTime, decimal>(), (Expression<Func<DateTime, decimal>>) (v => Convert.ToDecimal(v)) },
- 
+
             // System.DateTime
 
             { K<object, DateTime>(), (Expression<Func<object, DateTime>>) (v => Convert.ToDateTime(v, CultureInfo.InvariantCulture)) },
@@ -289,7 +289,7 @@ namespace Eggado
             { K<float, DateTime>(), (Expression<Func<float, DateTime>>) (v => Convert.ToDateTime(v)) },
             { K<double, DateTime>(), (Expression<Func<double, DateTime>>) (v => Convert.ToDateTime(v)) },
             { K<decimal, DateTime>(), (Expression<Func<decimal, DateTime>>) (v => Convert.ToDateTime(v)) },
- 
+
             // System.String
 
             { K<object, string>(), (Expression<Func<object, string>>) (v => Convert.ToString(v, CultureInfo.InvariantCulture)) },

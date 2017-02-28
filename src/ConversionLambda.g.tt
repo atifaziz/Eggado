@@ -73,8 +73,8 @@ namespace Eggado
         let method = g.First(m => !multiples || m.IsCultural)
         group method by method.OutputType;
 
-    foreach (var outputType in methodsByType) {
-#> 
+    foreach (var outputType in methodsByType) { #>
+
             // <#= outputType.Key #>
 
 <#      foreach (var method in outputType) { #>
