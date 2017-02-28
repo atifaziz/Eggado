@@ -27,16 +27,16 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 30 May 2016 09:27:36 GMT
+    // Tue, 28 Feb 2017 13:33:49 GMT
 
     partial class ConversionLambda
     {
-        private static ConversionKey K<TInput, TOutput>()
+        static ConversionKey K<TInput, TOutput>()
         {
             return Tuple.Create(typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
         }
 
-        private static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
+        static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
         { 
             // System.Boolean
 

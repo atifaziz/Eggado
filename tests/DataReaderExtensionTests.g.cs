@@ -9,11 +9,11 @@ namespace Eggado.Tests
     #endregion
 
     // This partial implementation was template-generated:
-    // Mon, 30 May 2016 09:07:07 GMT
+    // Tue, 28 Feb 2017 13:33:35 GMT
 
     partial class DataReaderExtensionTests
     {
-        private static void AssertProducts(IEnumerator<Product> e)
+        static void AssertProducts(IEnumerator<Product> e)
         {
             Debug.Assert(e != null);
 

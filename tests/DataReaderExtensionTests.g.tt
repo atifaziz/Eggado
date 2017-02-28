@@ -49,7 +49,7 @@ namespace Eggado.Tests
 
     partial class DataReaderExtensionTests
     {
-        private static void AssertProducts(IEnumerator<Product> e)
+        static void AssertProducts(IEnumerator<Product> e)
         {
             Debug.Assert(e != null);
 <#
