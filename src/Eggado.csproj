@@ -1,98 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4ED77A7B-4686-4141-9D13-D7E325D92D66}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Eggado</RootNamespace>
-    <AssemblyName>Eggado</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <VersionPrefix>2.0.0</VersionPrefix>
+    <Copyright>Copyright 2011 Atif Aziz. All rights reserved.</Copyright>
+    <Description>ADO.NET Modernizer</Description>
+    <Authors>Atif Aziz</Authors>
+    <Owners>Atif Aziz</Owners>
+    <Company>
+    </Company>
+    <PackageProjectUrl>https://github.com/atifaziz/Eggado</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atifaziz/Eggado</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ado orm micro-orm sql</PackageTags>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>6</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyInfo.g.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ConversionLambda.cs" />
-    <Compile Include="ConversionLambda.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConversionLambda.g.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataSelectors.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSelectors.g.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataTableExtensions.cs" />
-    <Compile Include="DbCommandExtensions.cs" />
-    <Compile Include="DynamicRecord.cs" />
-    <Compile Include="Eggnumerable.cs" />
-    <Compile Include="Mannex\Collections\Generic\Dictionary.cs" />
-    <Compile Include="DataReaderExtensions.cs" />
-    <Compile Include="JetBrains.Annotations.cs" />
-    <Compile Include="Mannex\Collections\Generic\Pairing.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ConversionLambda.g.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConversionLambda.g.cs</LastGenOutput>
-    </None>
-    <None Include="DataSelectors.g.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DataSelectors.g.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AssemblyInfo.g.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyInfo.g.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
