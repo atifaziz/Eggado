@@ -22,7 +22,6 @@ namespace Eggado
     using System.Globalization;
     using System.Linq.Expressions;
     using System.Reflection;
-    using Mannex.Collections.Generic;
 
     #endregion
 
@@ -39,7 +38,7 @@ namespace Eggado
         }
 
         public static Expression Find(RuntimeTypeHandle input, RuntimeTypeHandle output) =>
-            Expressions.Find(Tuple.Create(input, output));
+            Expressions.TryGetValue(Tuple.Create(input, output), out var e) ? e : null;
 
         /// <summary>
         /// Generates an expression that calls <see cref="Convert.ChangeType(object,System.Type,System.IFormatProvider)"/>.

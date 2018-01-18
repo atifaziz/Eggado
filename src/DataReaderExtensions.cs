@@ -126,9 +126,10 @@ namespace Eggado
             var cache = Cache;
 
             var cacheKey = type;
-            var cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cache.Find(cacheKey);
-            if (cachedSelectors != null)
+            IEnumerable<KeyValuePair<Mappings, Delegate>> cachedSelectors = null;
+            if (cache.TryGetValue(cacheKey, out var cachedObject))
             {
+                cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cachedObject;
                 var cached = cachedSelectors.FirstOrDefault(e => e.Key.GetHashCode().Equals(mappings.GetHashCode()) && e.Key.Equals(mappings));
                 if (cached.Key != null)
                     return (T) (object) cached.Value;
@@ -286,9 +287,10 @@ namespace Eggado
                 nullable = targetType.IsClass;
             }
 
-            var method = MethodByType.Find(sourceType, DataRecordGetValueMethod);
+            var method = MethodByType.TryGetValue(sourceType, out var m) ? m : DataRecordGetValueMethod;
             // ReSharper disable once PossiblyMistakenUseOfParamsMethod
-            var result = (Expression) Expression.Call(reader, method, Expression.Constant(ordinal));
+            var result = (Expression)
+                Expression.Call(reader, method, Expression.Constant(ordinal));
 
             result = Convert(result.Type == sourceType
                              ? result
