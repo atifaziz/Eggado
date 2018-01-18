@@ -20,4 +20,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\COPYING.txt" Link="COPYING.txt">
+      <PackagePath />
+    </Content>
+  </ItemGroup>
 </Project>
