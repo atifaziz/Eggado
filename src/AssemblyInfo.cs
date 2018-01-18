@@ -23,32 +23,6 @@ using ComVisible = System.Runtime.InteropServices.ComVisibleAttribute;
 #endregion
 
 //
-// General description
-//
-
-[assembly: AssemblyTitle("Eggado")]
-[assembly: AssemblyDescription("ADO.NET Modernizer")]
-[assembly: AssemblyProduct("Eggado")]
-[assembly: AssemblyCompany("https://bitbucket.org/raboof/eggado")]
-[assembly: AssemblyCopyright("Copyright \u00a9 2011, Atif Aziz. All rights reserved.")]
-[assembly: AssemblyCulture("")]
-
-//
-// Configuration (test, debug, release)
-//
-
-#if TEST
-    #if !DEBUG
-    #warning Test builds should be compiled using the DEBUG configuration.
-    #endif
-    [assembly: AssemblyConfiguration("Test")]
-#elif DEBUG
-    [assembly: AssemblyConfiguration("Debug")]
-#else
-    [assembly: AssemblyConfiguration("Release")]
-#endif
-
-//
 // COM visibility and CLS compliance
 //
 
