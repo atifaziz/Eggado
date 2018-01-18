@@ -30,6 +30,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConversionLambda.g.cs</LastGenOutput>
     </None>
+    <None Update="DataSelectors.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DataSelectors.g.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
@@ -39,6 +43,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ConversionLambda.g.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DataSelectors.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataSelectors.g.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
