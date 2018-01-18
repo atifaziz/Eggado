@@ -42,14 +42,14 @@ namespace Eggado
 
         internal static T[] ToArray<T>(this IEnumerable<T> source)
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-
-            var collection = source as ICollection<T>;
-            if (collection != null)
+            switch (source)
             {
-                var array = new T[collection.Count];
-                collection.CopyTo(array, 0);
-                return array;
+                case null: throw new ArgumentNullException(nameof(source));
+
+                case ICollection<T> collection:
+                    var array = new T[collection.Count];
+                    collection.CopyTo(array, 0);
+                    return array;
             }
 
             using (var e = source.GetEnumerator())
