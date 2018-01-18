@@ -28,7 +28,6 @@ namespace Eggado
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
     #endregion
@@ -40,8 +39,8 @@ namespace Eggado
         static readonly ConcurrentDictionary<object, object> Cache = new ConcurrentDictionary<object, object>();
 
         public static IEnumerator<T> Select<T>(
-            [NotNull] this IDataReader reader,
-            [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
+            this IDataReader reader,
+            Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -53,14 +52,14 @@ namespace Eggado
             }
         }
 
-        public static IEnumerator<IDataRecord> SelectRecords([NotNull] this IDataReader reader)
+        public static IEnumerator<IDataRecord> SelectRecords(this IDataReader reader)
         {
             return Select<IDataRecord>(reader, r => r);
         }
 
         public static IEnumerator<T> Select<T>(
-            [NotNull] this IDataReader reader,
-            [NotNull] Func<IDataRecord, T> selector)
+            this IDataReader reader,
+            Func<IDataRecord, T> selector)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -74,14 +73,14 @@ namespace Eggado
                 yield return selector((IDataRecord) e.Current);
         }
 
-        public static IEnumerator<dynamic> Select([NotNull] this IDataReader reader)
+        public static IEnumerator<dynamic> Select(this IDataReader reader)
         {
             return reader.Select(record => new DynamicRecord(record));
         }
 
         public static T Select<T>(
-            [NotNull] this IDataRecord record,
-            [NotNull] Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
+            this IDataRecord record,
+            Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -90,7 +89,7 @@ namespace Eggado
                             select record.Get(i));
         }
 
-        public static KeyValuePair<string, object> Get([NotNull] this IDataRecord record, int ordinal)
+        public static KeyValuePair<string, object> Get(this IDataRecord record, int ordinal)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
 
@@ -100,8 +99,8 @@ namespace Eggado
         }
 
         public static IEnumerator<TResult> Select<T, TResult>(
-            [NotNull] this IDataReader reader,
-            [NotNull] Func<T, TResult> selector)
+            this IDataReader reader,
+            Func<T, TResult> selector)
         {
             var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
             while (reader.Read())
@@ -109,8 +108,8 @@ namespace Eggado
         }
 
         public static T CreateRecordSelector<T>(
-            [NotNull] this IDataReader reader,
-            [NotNull] Delegate selector)
+            this IDataReader reader,
+            Delegate selector)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -143,8 +142,8 @@ namespace Eggado
         }
 
         public static Expression<T> CreateRecordSelectorLambda<T>(
-            [NotNull] this IDataReader reader,
-            [NotNull] Delegate selector)
+            this IDataReader reader,
+            Delegate selector)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -197,7 +196,7 @@ namespace Eggado
                    select new Mapping(ordinal, fieldType, p.ParameterType);
         }
 
-        public static IEnumerator<T> Select<T>([NotNull] this IDataReader reader)
+        public static IEnumerator<T> Select<T>(this IDataReader reader)
             where T : new()
         {
             var f = reader.CreateRecordSelector<T>();
@@ -205,14 +204,14 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static Func<IDataRecord, T> CreateRecordSelector<T>([NotNull] this IDataReader reader)
+        public static Func<IDataRecord, T> CreateRecordSelector<T>(this IDataReader reader)
             where T : new()
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             return PageRecordSelector(GetMappings(reader, typeof(T)), typeof(T), (mappings, _) => CreateRecordSelectorLambda<T>(mappings).Compile());
         }
 
-        public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>([NotNull] this IDataReader reader)
+        public static Expression<Func<IDataRecord, T>> CreateRecordSelectorLambda<T>(this IDataReader reader)
             where T : new()
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));

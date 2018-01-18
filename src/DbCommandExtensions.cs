@@ -16,18 +16,13 @@
 
 namespace Eggado
 {
-    #region Imports
-
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using JetBrains.Annotations;
-
-    #endregion
 
     public static partial class DbCommandExtensions
     {
-        public static IEnumerable<T> Select<T>([NotNull] this IDbCommand command)
+        public static IEnumerable<T> Select<T>(this IDbCommand command)
             where T : new()
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
@@ -35,8 +30,8 @@ namespace Eggado
         }
 
         public static IEnumerable<TResult> Select<T, TResult>(
-            [NotNull] this IDbCommand command,
-            [NotNull] Func<T, TResult> selector)
+            this IDbCommand command,
+            Func<T, TResult> selector)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -44,7 +39,7 @@ namespace Eggado
         }
 
         public static IEnumerable<dynamic> Select(
-            [NotNull] this IDbCommand command)
+            this IDbCommand command)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             return Eggnumerable.From(command.ExecuteReader, r => r.Select());

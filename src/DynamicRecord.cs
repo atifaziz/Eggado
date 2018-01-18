@@ -24,7 +24,6 @@ namespace Eggado
     using System.Data;
     using System.Dynamic;
     using System.Linq;
-    using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
     #endregion
@@ -33,7 +32,7 @@ namespace Eggado
     {
         readonly IDataRecord _record;
 
-        internal DynamicRecord([NotNull] IDataRecord record)
+        internal DynamicRecord(IDataRecord record)
         {
             if (record == null) throw new ArgumentNullException(nameof(record));
             _record = record;

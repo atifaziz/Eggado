@@ -16,17 +16,12 @@
 
 namespace Eggado
 {
-    #region Imports
-
     using System;
     using System.Collections.Generic;
-    using JetBrains.Annotations;
-
-    #endregion
 
     public static class Eggnumerable
     {
-        public static IEnumerable<T> From<TCursor, T>([NotNull] Func<TCursor> opener, [NotNull] Func<TCursor, IEnumerator<T>> selector)
+        public static IEnumerable<T> From<TCursor, T>(Func<TCursor> opener, Func<TCursor, IEnumerator<T>> selector)
         {
             if (opener == null) throw new ArgumentNullException(nameof(opener));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -45,7 +40,7 @@ namespace Eggado
         /// optimized for 16 elements.
         /// </summary>
 
-        internal static T[] ToArray<T>([NotNull] this IEnumerable<T> source)
+        internal static T[] ToArray<T>(this IEnumerable<T> source)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 

@@ -22,7 +22,6 @@ namespace Eggado
     using System.Globalization;
     using System.Linq.Expressions;
     using System.Reflection;
-    using JetBrains.Annotations;
     using Mannex.Collections.Generic;
 
     #endregion
@@ -32,7 +31,7 @@ namespace Eggado
         public static Expression<Func<TInput, TOutput>> Find<TInput, TOutput>() =>
             (Expression<Func<TInput, TOutput>>) Find(typeof(TInput), typeof(TOutput));
 
-        public static Expression Find([NotNull] Type input, [NotNull] Type output)
+        public static Expression Find(Type input, Type output)
         {
             if (input == null) throw new ArgumentNullException(nameof(input));
             if (output == null) throw new ArgumentNullException(nameof(output));

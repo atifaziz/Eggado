@@ -16,18 +16,13 @@
 
 namespace Eggado
 {
-    #region Imports
-
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using JetBrains.Annotations;
-
-    #endregion
 
     public static partial class DataTableExtensions
     {
-        public static IEnumerable<T> Select<T>([NotNull] this DataTable table)
+        public static IEnumerable<T> Select<T>(this DataTable table)
             where T : new()
         {
             if (table == null) throw new ArgumentNullException(nameof(table));
@@ -35,8 +30,8 @@ namespace Eggado
         }
 
         public static IEnumerable<TResult> Select<T, TResult>(
-            [NotNull] this DataTable table,
-            [NotNull] Func<T, TResult> selector)
+            this DataTable table,
+            Func<T, TResult> selector)
         {
             if (table == null) throw new ArgumentNullException(nameof(table));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -44,7 +39,7 @@ namespace Eggado
         }
 
         public static IEnumerable<dynamic> Select(
-            [NotNull] this DataTable table)
+            this DataTable table)
         {
             if (table == null) throw new ArgumentNullException(nameof(table));
             return Eggnumerable.From(() => new DataTableReader(table), r => r.Select());
