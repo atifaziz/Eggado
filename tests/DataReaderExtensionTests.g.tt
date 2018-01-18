@@ -12,7 +12,7 @@
     var table = new DataTable();
     table.ReadXml(XmlReader.Create(Host.ResolvePath(@"Products.xml")));
     var cols = table.Columns.Cast<DataColumn>();
-    var format = new Func<string, object, string>((fmt, v) => String.Format(CultureInfo.InvariantCulture, fmt, v));
+    var format = new Func<string, object, string>((fmt, v) => string.Format(CultureInfo.InvariantCulture, fmt, v));
     var rows =
         from DataRow row in table.Rows
         select
