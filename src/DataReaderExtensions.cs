@@ -137,7 +137,7 @@ namespace Eggado
 
             var selector = factory(mappings, type);
 
-            cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Concat(new[] { mappings.AsKeyTo((Delegate) (object) selector) }).ToArray();
+            cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Append(mappings.AsKeyTo((Delegate) (object) selector)).ToArray();
 
             return selector;
         }
