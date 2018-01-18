@@ -30,7 +30,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // <#= DateTime.UtcNow.ToString("r", System.Globalization.CultureInfo.InvariantCulture) #>
+    // <#= DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture) #>
 
     partial class DataReaderExtensions
     {<#
