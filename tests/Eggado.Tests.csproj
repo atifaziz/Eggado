@@ -23,4 +23,23 @@
     <ProjectReference Include="..\src\Eggado.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="DataReaderExtensionTests.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DataReaderExtensionTests.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DataReaderExtensionTests.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataReaderExtensionTests.g.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
