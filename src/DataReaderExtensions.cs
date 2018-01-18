@@ -52,10 +52,8 @@ namespace Eggado
             }
         }
 
-        public static IEnumerator<IDataRecord> SelectRecords(this IDataReader reader)
-        {
-            return Select<IDataRecord>(reader, r => r);
-        }
+        public static IEnumerator<IDataRecord> SelectRecords(this IDataReader reader) =>
+            Select<IDataRecord>(reader, r => r);
 
         public static IEnumerator<T> Select<T>(
             this IDataReader reader,
@@ -73,10 +71,8 @@ namespace Eggado
                 yield return selector((IDataRecord) e.Current);
         }
 
-        public static IEnumerator<dynamic> Select(this IDataReader reader)
-        {
-            return reader.Select(record => new DynamicRecord(record));
-        }
+        public static IEnumerator<dynamic> Select(this IDataReader reader) =>
+            reader.Select(record => new DynamicRecord(record));
 
         public static T Select<T>(
             this IDataRecord record,
