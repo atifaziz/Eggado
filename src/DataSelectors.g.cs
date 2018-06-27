@@ -27,10 +27,45 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Wed, 27 Jun 2018 09:17:41 GMT
+    // Wed, 27 Jun 2018 09:35:25 GMT
 
     partial class DataReaderExtensions
     {
+        public static Func<IDataRecord, TResult>
+            CreateRecordSelector<T, TResult>(
+                this IDataReader reader,
+                Func<T, TResult> selector)
+        {
+            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
+            return record => f(record, selector);
+        }
+
+        public static IEnumerator<TResult> Select<T, TResult>(
+            this IDataReader reader,
+            Func<T, TResult> selector)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            var f = reader.CreateRecordSelector(selector);
+            while (reader.Read())
+                yield return f(reader);
+        }
+
+        public static async Task<IList<TResult>> ReadAllAsync<T, TResult>(
+            this DbDataReader reader,
+            Func<T, TResult> selector)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            var f = reader.CreateRecordSelector(selector);
+            var list = new List<TResult>();
+            while (await reader.ReadAsync().ConfigureAwait(false))
+                list.Add(f(reader));
+            return list;
+        }
+
         public static Func<IDataRecord, TResult>
             CreateRecordSelector<T1, T2, TResult>(
                 this IDataReader reader,
@@ -559,6 +594,16 @@ namespace Eggado
 
     partial class DbCommandExtensions
     {
+        public static IEnumerable<TResult> Select<T, TResult>(
+            this IDbCommand command,
+            Func<T, TResult> selector)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
+        }
+
         public static IEnumerable<TResult> Select<T1, T2, TResult>(
             this IDbCommand command,
             Func<T1, T2, TResult> selector)
@@ -712,6 +757,16 @@ namespace Eggado
 
     partial class DataTableExtensions
     {
+        public static IEnumerable<TResult> Select<T, TResult>(
+            this DataTable table,
+            Func<T, TResult> selector)
+        {
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return Eggnumerable.From(table.CreateDataReader, r => r.Select(selector));
+        }
+
         public static IEnumerable<TResult> Select<T1, T2, TResult>(
             this DataTable table,
             Func<T1, T2, TResult> selector)

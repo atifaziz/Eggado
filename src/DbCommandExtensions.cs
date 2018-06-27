@@ -29,15 +29,6 @@ namespace Eggado
             return Eggnumerable.From(command.ExecuteReader, r => r.Select<T>());
         }
 
-        public static IEnumerable<TResult> Select<T, TResult>(
-            this IDbCommand command,
-            Func<T, TResult> selector)
-        {
-            if (command == null) throw new ArgumentNullException(nameof(command));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-            return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
-        }
-
         public static IEnumerable<dynamic> Select(
             this IDbCommand command)
         {

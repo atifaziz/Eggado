@@ -36,9 +36,9 @@ namespace Eggado
 
     partial class DataReaderExtensions
     {<#
-    var targz = from arity in Enumerable.Range(2, 15)
+    var targz = from arity in Enumerable.Range(1, 16)
                 let ts = from n in Enumerable.Range(1, arity)
-                        select "T" + n.ToString(CultureInfo.InvariantCulture)
+                         select "T" + (arity > 1 ? n.ToString(CultureInfo.InvariantCulture) : string.Empty)
                 select "<" + string.Join(", ", ts) + ", TResult>";
 
     foreach (var targs in targz)

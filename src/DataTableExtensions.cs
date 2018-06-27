@@ -29,15 +29,6 @@ namespace Eggado
             return Eggnumerable.From(() => new DataTableReader(table), r => r.Select<T>());
         }
 
-        public static IEnumerable<TResult> Select<T, TResult>(
-            this DataTable table,
-            Func<T, TResult> selector)
-        {
-            if (table == null) throw new ArgumentNullException(nameof(table));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-            return Eggnumerable.From(() => new DataTableReader(table), r => r.Select(selector));
-        }
-
         public static IEnumerable<dynamic> Select(
             this DataTable table)
         {

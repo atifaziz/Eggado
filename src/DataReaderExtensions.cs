@@ -95,33 +95,6 @@ namespace Eggado
             return name.AsKeyTo(value);
         }
 
-        public static IEnumerator<TResult> Select<T, TResult>(
-            this IDataReader reader,
-            Func<T, TResult> selector)
-        {
-            var f = reader.CreateRecordSelector(selector);
-            while (reader.Read())
-                yield return f(reader);
-        }
-
-        public static async Task<IList<TResult>> ReadAllAsync<T, TResult>(
-            this DbDataReader reader, Func<T, TResult> selector)
-        {
-            var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
-            while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
-        }
-
-        public static Func<IDataRecord, TResult> CreateRecordSelector<T, TResult>(
-            this IDataReader reader,
-            Func<T, TResult> selector)
-        {
-            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
-            return record => f(record, selector);
-        }
-
         public static T CreateRecordSelector<T>(
             this IDataReader reader,
             Delegate selector)
