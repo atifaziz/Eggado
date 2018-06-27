@@ -27,7 +27,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Wed, 27 Jun 2018 09:35:25 GMT
+    // Wed, 27 Jun 2018 09:36:45 GMT
 
     partial class DataReaderExtensions
     {
@@ -44,9 +44,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -56,9 +53,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -79,9 +73,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -91,9 +82,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -114,9 +102,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -126,9 +111,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -149,9 +131,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -161,9 +140,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -184,9 +160,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -196,9 +169,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -219,9 +189,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -231,9 +198,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -254,9 +218,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -266,9 +227,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -289,9 +247,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -301,9 +256,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -324,9 +276,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -336,9 +285,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -359,9 +305,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -371,9 +314,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -394,9 +334,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -406,9 +343,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -429,9 +363,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -441,9 +372,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -464,9 +392,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -476,9 +401,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -499,9 +421,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -511,9 +430,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -534,9 +450,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -546,9 +459,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -569,9 +479,6 @@ namespace Eggado
             this IDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -581,9 +488,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))

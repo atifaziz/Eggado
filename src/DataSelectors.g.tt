@@ -57,9 +57,6 @@ namespace Eggado
             this IDataReader reader,
             Func<#= targs #> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
@@ -69,9 +66,6 @@ namespace Eggado
             this DbDataReader reader,
             Func<#= targs #> selector)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
-            if (selector == null) throw new ArgumentNullException(nameof(selector));
-
             var f = reader.CreateRecordSelector(selector);
             var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
