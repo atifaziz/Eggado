@@ -26,6 +26,8 @@ namespace Eggado
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Threading.Tasks;
 
     #endregion
 
@@ -61,6 +63,20 @@ namespace Eggado
             var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
                 yield return f(reader);
+        }
+
+        public static async Task<IList<TResult>> ReadAllAsync<#= targs #>(
+            this DbDataReader reader,
+            Func<#= targs #> selector)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            var f = reader.CreateRecordSelector(selector);
+            var list = new List<TResult>();
+            while (await reader.ReadAsync().ConfigureAwait(false))
+                list.Add(f(reader));
+            return list;
         }
 <#  }#>
     }
