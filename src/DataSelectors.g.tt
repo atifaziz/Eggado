@@ -98,6 +98,30 @@ namespace Eggado
 
             return Eggnumerable.From(command.ExecuteReader, r => r.Select(selector));
         }
+
+        public static async Task<TResult[]> ReadAllAsync<#= targs #>(
+            this DbCommand command,
+            Func<#= targs #> selector) =>
+            (await command.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, <#= targs.Substring(1) #>(
+            this DbCommand command, TCollection collection,
+            Func<#= targs #> selector)
+            where TCollection : ICollection<TResult>
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            using (var reader = await command.ExecuteReaderAsync()
+                                             .ConfigureAwait(false))
+            {
+                var f = reader.CreateRecordSelector(selector);
+                while (await reader.ReadAsync().ConfigureAwait(false))
+                    collection.Add(f(reader));
+                return collection;
+            }
+        }
 <#  }#>
     }
 
