@@ -98,9 +98,17 @@ namespace Eggado
             this IDataReader reader,
             Func<T, TResult> selector)
         {
-            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
+            var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
-                yield return f(reader, selector);
+                yield return f(reader);
+        }
+
+        public static Func<IDataRecord, TResult> CreateRecordSelector<T, TResult>(
+            this IDataReader reader,
+            Func<T, TResult> selector)
+        {
+            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<T, TResult>, TResult>>(selector);
+            return record => f(record, selector);
         }
 
         public static T CreateRecordSelector<T>(

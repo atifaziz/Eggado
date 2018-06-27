@@ -39,7 +39,17 @@ namespace Eggado
                         select "T" + n.ToString(CultureInfo.InvariantCulture)
                 select "<" + string.Join(", ", ts) + ", TResult>";
 
-    foreach (var targs in targz) { #>
+    foreach (var targs in targz)
+    { #>
+
+        public static Func<IDataRecord, TResult>
+            CreateRecordSelector<#= targs #>(
+                this IDataReader reader,
+                Func<#= targs #> selector)
+        {
+            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<#= targs #>, TResult>>(selector);
+            return record => f(record, selector);
+        }
 
         public static IEnumerator<TResult> Select<#= targs #>(
             this IDataReader reader,
@@ -48,16 +58,17 @@ namespace Eggado
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
-            var f = reader.CreateRecordSelector<Func<IDataRecord, Func<#= targs #>, TResult>>(selector);
+            var f = reader.CreateRecordSelector(selector);
             while (reader.Read())
-                yield return f(reader, selector);
+                yield return f(reader);
         }
 <#  }#>
     }
 
     partial class DbCommandExtensions
     {<#
-    foreach (var targs in targz) { #>
+    foreach (var targs in targz)
+    { #>
 
         public static IEnumerable<TResult> Select<#= targs #>(
             this IDbCommand command,
