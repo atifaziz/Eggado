@@ -27,7 +27,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Wed, 27 Jun 2018 09:36:45 GMT
+    // Wed, 27 Jun 2018 09:44:38 GMT
 
     partial class DataReaderExtensions
     {
@@ -49,15 +49,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T, TResult>(
             this DbDataReader reader,
+            Func<T, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -78,15 +87,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -107,15 +125,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -136,15 +163,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -165,15 +201,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -194,15 +239,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -223,15 +277,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -252,15 +315,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -281,15 +353,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -310,15 +391,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -339,15 +429,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -368,15 +467,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -397,15 +505,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -426,15 +543,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -455,15 +581,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 
         public static Func<IDataRecord, TResult>
@@ -484,15 +619,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
+        public static async Task<TResult[]> ReadAllAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this DbDataReader reader,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
+            this DbDataReader reader, TCollection collection,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
     }
 

@@ -62,15 +62,24 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        public static async Task<IList<TResult>> ReadAllAsync<#= targs #>(
+        public static async Task<TResult[]> ReadAllAsync<#= targs #>(
             this DbDataReader reader,
+            Func<#= targs #> selector) =>
+            (await reader.CollectAsync(new List<TResult>(), selector).ConfigureAwait(false)).ToArray();
+
+        public static async Task<TCollection> CollectAsync<TCollection, <#= targs.Substring(1) #>(
+            this DbDataReader reader, TCollection collection,
             Func<#= targs #> selector)
+            where TCollection : ICollection<TResult>
         {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (collection == null) throw new ArgumentNullException(nameof(collection));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
             var f = reader.CreateRecordSelector(selector);
-            var list = new List<TResult>();
             while (await reader.ReadAsync().ConfigureAwait(false))
-                list.Add(f(reader));
-            return list;
+                collection.Add(f(reader));
+            return collection;
         }
 <#  }#>
     }
