@@ -28,7 +28,7 @@ namespace Eggado
     static partial class ConversionLambda
     {
         public static Expression<Func<TInput, TOutput>> Find<TInput, TOutput>() =>
-            (Expression<Func<TInput, TOutput>>) Find(typeof(TInput), typeof(TOutput));
+            (Expression<Func<TInput, TOutput>>)Find(typeof(TInput), typeof(TOutput));
 
         public static Expression Find(Type input, Type output)
         {
@@ -53,10 +53,10 @@ namespace Eggado
                     Culture),
                 targetType);
 
-        static readonly Expression Culture = ((Expression<Func<IFormatProvider>>) (() => CultureInfo.InvariantCulture)).Body;
-        static readonly MethodInfo ChangeTypeMethod = ((MethodCallExpression) ((Expression<Func<object, object>>) (_ => Convert.ChangeType(_, typeof(object), null))).Body).Method;
+        static readonly Expression Culture = ((Expression<Func<IFormatProvider>>)(() => CultureInfo.InvariantCulture)).Body;
+        static readonly MethodInfo ChangeTypeMethod = ((MethodCallExpression)((Expression<Func<object, object>>)(_ => Convert.ChangeType(_, typeof(object), null))).Body).Method;
 
         public static Expression<Func<object, T>> ChangeType<T>() =>
-            value => (T) Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
+            value => (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
     }
 }

@@ -48,7 +48,7 @@ namespace Eggado
 
             while (reader.Read())
             {
-                var record = (IDataRecord) reader;
+                var record = (IDataRecord)reader;
                 yield return record.Select(selector);
             }
         }
@@ -68,8 +68,8 @@ namespace Eggado
             // type conversion is safe and intended at the runtime level.
             // ReSharper disable once SuspiciousTypeConversion.Global
             using ((e = new DbEnumerator(reader)) as IDisposable)
-            while (e.MoveNext())
-                yield return selector((IDataRecord) e.Current);
+                while (e.MoveNext())
+                    yield return selector((IDataRecord)e.Current);
         }
 
         public static IEnumerator<dynamic> Select(this IDataReader reader) =>
@@ -117,15 +117,15 @@ namespace Eggado
             IEnumerable<KeyValuePair<Mappings, Delegate>> cachedSelectors = null;
             if (cache.TryGetValue(cacheKey, out var cachedObject))
             {
-                cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>) cachedObject;
+                cachedSelectors = (IEnumerable<KeyValuePair<Mappings, Delegate>>)cachedObject;
                 var cached = cachedSelectors.FirstOrDefault(e => e.Key.GetHashCode().Equals(mappings.GetHashCode()) && e.Key.Equals(mappings));
                 if (cached.Key != null)
-                    return (T) (object) cached.Value;
+                    return (T)(object)cached.Value;
             }
 
             var selector = factory(mappings, type);
 
-            cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Append(mappings.AsKeyTo((Delegate) (object) selector)).ToArray();
+            cache[cacheKey] = (cachedSelectors ?? Enumerable.Empty<KeyValuePair<Mappings, Delegate>>()).Append(mappings.AsKeyTo((Delegate)(object)selector)).ToArray();
 
             return selector;
         }
@@ -240,8 +240,8 @@ namespace Eggado
             Debug.Assert(targetType != null);
 
             return from m in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Instance | BindingFlags.Public, null, null)
-                   let p = m.MemberType == MemberTypes.Property ? (PropertyInfo) m : null
-                   let f = m.MemberType == MemberTypes.Field ? (FieldInfo) m : null
+                   let p = m.MemberType == MemberTypes.Property ? (PropertyInfo)m : null
+                   let f = m.MemberType == MemberTypes.Field ? (FieldInfo)m : null
                    where (p != null && p.CanRead && p.CanWrite)
                       || (f != null && f.Attributes.HasFlag(FieldAttributes.InitOnly))
                    let type = p?.PropertyType ?? f?.FieldType
@@ -365,7 +365,7 @@ namespace Eggado
                 Equals(obj as Mappings);
 
             public override int GetHashCode() =>                      // ReSharper disable NonReadonlyFieldInGetHashCode
-                (int) (_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
+                (int)(_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
 
             int ComputeHashCode()
             {

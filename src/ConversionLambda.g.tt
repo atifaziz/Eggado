@@ -76,7 +76,7 @@ namespace Eggado
             // <#= outputType.Key #>
 
 <#      foreach (var method in outputType) { #>
-            { K<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>(), (Expression<Func<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>>) (v => Convert.<#= method.Info.Name #>(v<#= method.IsCultural ? ", CultureInfo.InvariantCulture" : string.Empty #>)) },
+            { K<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>(), (Expression<Func<<#= method.InputTypeText #>, <#= method.OutputTypeText #>>>)(v => Convert.<#= method.Info.Name #>(v<#= method.IsCultural ? ", CultureInfo.InvariantCulture" : string.Empty #>)) },
 <#
         }
     } #>
