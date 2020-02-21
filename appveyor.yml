@@ -25,6 +25,8 @@ install:
   - sh: chmod +x dotnet-install.sh
   - sh: ./dotnet-install.sh --jsonfile global.json
   - sh: export PATH="$HOME/.dotnet:$PATH"
+before_build:
+- dotnet --info
 build_script:
 - ps: >-
     $id = $env:APPVEYOR_REPO_COMMIT_TIMESTAMP -replace '([-:]|\.0+Z)', ''
