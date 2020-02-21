@@ -1,19 +1,33 @@
 version: '{build}'
-image: Visual Studio 2017
+image:
+  - Visual Studio 2017
+  - Ubuntu
 skip_commits:
   files:
     - '*.md'
     - '*.txt'
 skip_tags: true
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+install:
+  - cmd: curl -OsSL https://dot.net/v1/dotnet-install.ps1
+  - ps: if ($isWindows) { ./dotnet-install.ps1 -JsonFile global.json }
+  - sh: curl -OsSL https://dot.net/v1/dotnet-install.sh
+  - sh: chmod +x dotnet-install.sh
+  - sh: ./dotnet-install.sh --jsonfile global.json
+  - sh: export PATH="$HOME/.dotnet:$PATH"
 build_script:
 - ps: >-
     $id = $env:APPVEYOR_REPO_COMMIT_TIMESTAMP -replace '([-:]|\.0+Z)', ''
 
     $id = $id.Substring(0, 13)
 
-    .\pack.cmd ci-$id
+    if ($isWindows) { .\pack.cmd ci-$id }
+- sh: ./build.sh
 test_script:
 - cmd: test.cmd
+- sh: ./test.sh
 artifacts:
 - path: dist\*.nupkg
 deploy:
