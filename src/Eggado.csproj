@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <VersionPrefix>2.1.0</VersionPrefix>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>8</LangVersion>
     <Copyright>Copyright 2011 Atif Aziz. All rights reserved.</Copyright>
     <Description>ADO.NET Modernizer</Description>
     <Authors>Atif Aziz</Authors>

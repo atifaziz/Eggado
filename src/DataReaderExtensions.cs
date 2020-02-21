@@ -363,8 +363,8 @@ namespace Eggado
             public override bool Equals(object obj) =>
                 Equals(obj as Mappings);
 
-            public override int GetHashCode() =>                      // ReSharper disable NonReadonlyFieldInGetHashCode
-                (int)(_hashCode ?? (_hashCode = ComputeHashCode())); // ReSharper restore NonReadonlyFieldInGetHashCode
+            public override int GetHashCode() => // ReSharper disable NonReadonlyFieldInGetHashCode
+                _hashCode ??= ComputeHashCode(); // ReSharper restore NonReadonlyFieldInGetHashCode
 
             int ComputeHashCode()
             {
