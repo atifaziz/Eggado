@@ -22,19 +22,18 @@ namespace Eggado
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq.Expressions;
-    using ConversionKey = System.Tuple<System.RuntimeTypeHandle, System.RuntimeTypeHandle>;
 
     #endregion
 
     // This partial implementation was template-generated:
-    // Fri, 21 Feb 2020 16:48:25 GMT
+    // Fri, 21 Feb 2020 17:32:39 GMT
 
     partial class ConversionLambda
     {
-        static ConversionKey K<TInput, TOutput>() =>
-            Tuple.Create(typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
+        static (RuntimeTypeHandle, RuntimeTypeHandle) K<TInput, TOutput>() =>
+            (typeof(TInput).TypeHandle, typeof(TOutput).TypeHandle);
 
-        static readonly IDictionary<ConversionKey, Expression> Expressions = new Dictionary<ConversionKey, Expression>
+        static readonly IDictionary<(RuntimeTypeHandle, RuntimeTypeHandle), Expression> Expressions = new Dictionary<(RuntimeTypeHandle, RuntimeTypeHandle), Expression>
         {
             // System.Boolean
 
