@@ -28,6 +28,7 @@ namespace Eggado
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Threading;
     using Mannex.Collections.Generic;
 
     #endregion
@@ -191,6 +192,18 @@ namespace Eggado
             while (reader.Read())
                 yield return f(reader);
         }
+
+        #if NETSTANDARD2_1
+
+        public static async IAsyncEnumerator<T> SelectAsync<T>(this DbDataReader reader, CancellationToken cancellationToken = default)
+            where T : new()
+        {
+            var f = reader.CreateRecordSelector<T>();
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+                yield return f(reader);
+        }
+
+        #endif
 
         public static Func<IDataRecord, T> CreateRecordSelector<T>(this IDataReader reader)
             where T : new()

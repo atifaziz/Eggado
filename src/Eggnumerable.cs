@@ -18,6 +18,9 @@ namespace Eggado
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public static class Eggnumerable
     {
@@ -33,6 +36,32 @@ namespace Eggado
             while (e.MoveNext())
                 yield return e.Current;
         }
+
+        #if NETSTANDARD2_1
+
+        public static async IAsyncEnumerable<T>
+            FromAsync<TCursor, T>(Func<CancellationToken, Task<TCursor>> opener,
+                                  Func<TCursor, CancellationToken, IAsyncEnumerator<T>> selector,
+                                  [EnumeratorCancellation]CancellationToken cancellationToken = default)
+        {
+            if (opener == null) throw new ArgumentNullException(nameof(opener));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            var cursor = await opener(cancellationToken).ConfigureAwait(false);
+
+            using (cursor as IDisposable)
+            await using ((cursor as IAsyncDisposable).ConfigureAwait(false))
+            {
+                var e = selector(cursor, cancellationToken);
+                await using (selector(cursor, cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                        yield return e.Current;
+                }
+            }
+        }
+
+        #endif
 
         /// <summary>
         /// A version of <see cref="System.Linq.Enumerable.ToArray{TSource}"/> that is

@@ -27,6 +27,7 @@ namespace Eggado
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Threading;
     using System.Threading.Tasks;
 
     #endregion
@@ -61,6 +62,20 @@ namespace Eggado
             while (reader.Read())
                 yield return f(reader);
         }
+
+        #if NETSTANDARD2_1
+
+        public static async IAsyncEnumerator<TResult> SelectAsync<#= targs #>(
+            this DbDataReader reader,
+            Func<#= targs #> selector,
+            CancellationToken cancellationToken = default)
+        {
+            var f = reader.CreateRecordSelector(selector);
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+                yield return f(reader);
+        }
+
+        #endif
 
         public static async Task<TResult[]> ReadAllAsync<#= targs #>(
             this DbDataReader reader,
@@ -100,6 +115,30 @@ namespace Eggado
         }
 <#  }#>
     }
+
+    #if NETSTANDARD2_1
+
+    partial class DbCommandExtensions
+    {<#
+    foreach (var targs in targz)
+    { #>
+
+        public static IAsyncEnumerable<TResult> SelectAsync<#= targs #>(
+            this DbCommand command,
+            Func<#= targs #> selector,
+            CancellationToken cancellationToken = default)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return Eggnumerable.FromAsync(ct => command.ExecuteReaderAsync(ct),
+                                          (r, ct) => r.SelectAsync(selector, ct),
+                                          cancellationToken);
+        }
+<#  }#>
+    }
+
+    #endif // NETSTANDARD2_1
 
     partial class DataTableExtensions
     {<#

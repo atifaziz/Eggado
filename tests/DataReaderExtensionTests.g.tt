@@ -3,6 +3,7 @@
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Data" #>
 <#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Data" #>
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Linq" #>
@@ -14,55 +15,60 @@
     var cols = table.Columns.Cast<DataColumn>();
     var format = new Func<string, object, string>((fmt, v) => string.Format(CultureInfo.InvariantCulture, fmt, v));
     var rows =
-        from DataRow row in table.Rows
-        select
-            from item in cols.Zip(row.ItemArray, (c, v) => new { Name = c.ColumnName, c.DataType, Value = v })
-            let tc = Type.GetTypeCode(item.DataType)
-            select new
-            {
-                Actual =
-                    "ProductID".Equals(item.Name, StringComparison.OrdinalIgnoreCase)
-                    ? "ProductId"
-                    : item.Name,
-                Expected =
-                    tc == TypeCode.Decimal
-                    ? format("{0}m", item.Value)
-                    : tc == TypeCode.Boolean
-                    ? ((bool) item.Value ? "true" : "false")
-                    : tc == TypeCode.String
-                    ? AsciiLiteralEncoded(item.Value.ToString())
-                    : format("{0}", item.Value)
-            };
+        from row in table.Rows.Cast<DataRow>()
+                              .Select((r, i) => new KeyValuePair<int, DataRow>(i, r))
+        select new
+        {
+            row.Key,
+            table.Rows.Count,
+            Asserts =
+                from item in cols.Zip(row.Value.ItemArray, (c, v) => new { Name = c.ColumnName, c.DataType, Value = v })
+                let tc = Type.GetTypeCode(item.DataType)
+                select new
+                {
+                    Actual =
+                        "ProductID".Equals(item.Name, StringComparison.OrdinalIgnoreCase)
+                        ? "ProductId"
+                        : item.Name,
+                    Expected =
+                        tc == TypeCode.Decimal
+                        ? format("{0}m", item.Value)
+                        : tc == TypeCode.Boolean
+                        ? ((bool) item.Value ? "true" : "false")
+                        : tc == TypeCode.String
+                        ? AsciiLiteralEncoded(item.Value.ToString())
+                        : format("{0}", item.Value)
+            }
+        };
 #>
 namespace Eggado.Tests
 {
-    #region Imports
-
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    #endregion
 
     // This partial implementation was template-generated:
     // <#= DateTime.UtcNow.ToString("r", CultureInfo.InvariantCulture) #>
 
     partial class DataReaderExtensionTests
     {
-        static void AssertProducts(IEnumerator<Product> e)
+        static bool AssertProduct(Product p, ref int i)
         {
-            Debug.Assert(e != null);
+            switch (i++)
+            {
 <#
-    foreach (var asserts in rows) { #>
-
-            Assert.IsTrue(e.MoveNext());
+    foreach (var row in rows) { #>
+                case <#= row.Key.ToString(CultureInfo.InvariantCulture) #>:
 <#
-        foreach (var assert in asserts) { #>
-            Assert.AreEqual(<#= assert.Expected #>, e.Current.<#= assert.Actual #>);
+        foreach (var assert in row.Asserts) { #>
+                    Assert.AreEqual(<#= assert.Expected #>, p.<#= assert.Actual #>);
 <#
         } #>
+                    return <#= row.Key + 1 == row.Count ? "false" : "true" #>;
 <#
     } #>
+                default:
+                    Assert.Fail();
+                    return default;
+            }
         }
     }
 }

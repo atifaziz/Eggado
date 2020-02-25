@@ -5,6 +5,7 @@ namespace Eggado.Tests
     using System.Collections.Generic;
     using System.Data;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Xml;
     using Mannex.Reflection;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,6 +48,15 @@ namespace Eggado.Tests
         }
 
         [TestMethod]
+        public async Task SelectAsync()
+        {
+            var products =
+                Eggnumerable.FromAsync(_ => Task.FromResult(new DataTableReader(GetProductsTable())),
+                                       (r, ct) => r.SelectAsync<Product>(ct));
+            await AssertProducts(products);
+        }
+
+        [TestMethod]
         public void SelectViaSelector()
         {
             var products = GetProductsTable().Select(
@@ -72,6 +82,36 @@ namespace Eggado.Tests
             });
 
             AssertProducts(products);
+        }
+
+        [TestMethod]
+        public async Task SelectViaSelectorAsync()
+        {
+            var products =
+                Eggnumerable.FromAsync(_ => Task.FromResult(new DataTableReader(GetProductsTable())),
+                    (r, ct) => r.SelectAsync(cancellationToken: ct, selector:
+                    (
+                        int productId, string productName, string englishName,
+                        string quantityPerUnit, decimal unitPrice,
+                        int unitsInStock, int unitsOnOrder, int? reorderLevel,
+                        bool discontinued, string supplier, string category
+                    )
+                    => new Product
+                    {
+                        ProductId = productId,
+                        ProductName = productName,
+                        EnglishName = englishName,
+                        QuantityPerUnit = quantityPerUnit,
+                        UnitPrice = unitPrice,
+                        UnitsInStock = unitsInStock,
+                        UnitsOnOrder = unitsOnOrder,
+                        ReorderLevel = reorderLevel,
+                        Discontinued = discontinued,
+                        Supplier = supplier,
+                        Category = category,
+                    }));
+
+            await AssertProducts(products);
         }
 
         [TestMethod]
@@ -104,13 +144,64 @@ namespace Eggado.Tests
             AssertProducts(products);
         }
 
+        [TestMethod]
+        public async Task SelectOrdinallyViaSelectorAsync()
+        {
+            var products =
+                Eggnumerable.FromAsync(_ => Task.FromResult(new DataTableReader(GetProductsTable())),
+                    (r, ct) => r.SelectAsync(cancellationToken: ct, selector:
+                    (
+                        // ReSharper disable InconsistentNaming
+                        int _1, string _2, string _3,
+                        string _4, decimal _5,
+                        int _6, int _7, int? _8,
+                        bool _9, string _10, string _11
+                    // ReSharper restore InconsistentNaming
+                    )
+                    => new Product
+                    {
+                        ProductId       = _1,
+                        ProductName     = _2,
+                        EnglishName     = _3,
+                        QuantityPerUnit = _4,
+                        UnitPrice       = _5,
+                        UnitsInStock    = _6,
+                        UnitsOnOrder    = _7,
+                        ReorderLevel    = _8,
+                        Discontinued    = _9,
+                        Supplier        = _10,
+                        Category        = _11,
+                    }));
+
+            await AssertProducts(products);
+        }
+
         static void AssertProducts(IEnumerable<Product> products)
         {
-            using (var e = products.GetEnumerator())
+            using var e = products.GetEnumerator();
+            Assert.IsTrue(e.MoveNext());
+            var i = 0;
+            bool more;
+            do
             {
-                AssertProducts(e);
-                Assert.IsFalse(e.MoveNext());
+                more = AssertProduct(e.Current, ref i);
+                Assert.AreEqual(more, e.MoveNext());
             }
+            while (more);
+        }
+
+        static async Task AssertProducts(IAsyncEnumerable<Product> products)
+        {
+            await using var e = products.GetAsyncEnumerator();
+            Assert.IsTrue(await e.MoveNextAsync());
+            var i = 0;
+            bool more;
+            do
+            {
+                more = AssertProduct(e.Current, ref i);
+                Assert.AreEqual(more, await e.MoveNextAsync());
+            }
+            while (more);
         }
     }
 }
