@@ -20,6 +20,7 @@ namespace Eggado.Experimental
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Linq;
 
     public interface IDataReaderQuery<out T>
     {
@@ -39,16 +40,15 @@ namespace Eggado.Experimental
 
     public static class Eggnumerable
     {
-        public static IEnumerable<T> From<T>(Func<IDataReader> opener, IDataReaderQuery<IDataReaderQuery<T>> reader)
+        public static IEnumerable<T> From<T>(Func<IDataReader> opener, IDataReaderQuery<IDataReaderQuery<T>> query)
         {
             if (opener == null) throw new ArgumentNullException(nameof(opener));
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (query == null) throw new ArgumentNullException(nameof(query));
 
-            using var cursor = opener();
-
-            var rr = reader.GetResult(cursor);
-            while (cursor.Read())
-                yield return rr.GetResult(cursor);
+            using var reader = opener();
+            var result = query.GetResult(reader);
+            while (reader.Read())
+                yield return result.GetResult(reader);
         }
     }
 
@@ -72,11 +72,27 @@ namespace Eggado.Experimental
                 yield return rr.GetResult(reader);
         }
 
+        public static readonly IDataReaderQuery<int> FieldCount = Create(r => r.FieldCount);
+
+        public static readonly IDataReaderQuery<IList<KeyValuePair<int, string>>> Names =
+            from fc in FieldCount
+            from fs in Enumerable.Range(0, fc)
+                                 .Select(ord => from name in GetName(ord)
+                                                select KeyValuePair.Create(ord, name))
+                                 .Collect()
+            select fs;
+
+        public static IDataReaderQuery<DataTable> GetSchemaTable() => Create(r => r.GetSchemaTable());
         public static IDataReaderQuery<int> GetOrdinal(string name) => Create(r => r.GetOrdinal(name));
 
-        static IDataReaderQuery<IDataRecord> Record => Create(r => (IDataRecord)r);
+        public static IDataReaderQuery<string> GetName(int ordinal) => Create(r => r.GetName(ordinal));
 
         public static IDataReaderQuery<bool> IsDBNull(int ordinal) => Create(r => r.IsDBNull(ordinal));
+
+        static IDataReaderQuery<IList<string>> X =
+            from ns in Names
+            from ss in ns.Where(n => n.Value.StartsWith("$")).Select(n => GetString(n.Key)).Collect()
+            select ss;
 
         public static IDataReaderQuery<DataReaderFieldQueryArgs, object>   GetValue   (int ordinal) => Create(new DataReaderFieldQueryArgs(ordinal), (arg, r) => r.GetValue(arg.Ordinal));
         public static IDataReaderQuery<DataReaderFieldQueryArgs, char>     GetChar    (int ordinal) => Create(new DataReaderFieldQueryArgs(ordinal), (arg, r) => r.GetChar(arg.Ordinal));
@@ -120,6 +136,9 @@ namespace Eggado.Experimental
 
         public static IDataReaderQuery<TResult> SelectMany<T, TResult>(this IDataReaderQuery<T> reader, Func<T, IDataReaderQuery<TResult>> selector) =>
             Create(r => selector(reader.GetResult(r)).GetResult(r));
+
+        public static IDataReaderQuery<IList<T>> Collect<T>(this IEnumerable<IDataReaderQuery<T>> queries) =>
+            Create(r => queries.Select(q => q.GetResult(r)).ToList());
 
         public static IDataReaderQuery<TResult>
             SelectMany<TFirst, TSecond, TResult>(this IDataReaderQuery<TFirst> first,
