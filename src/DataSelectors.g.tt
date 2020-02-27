@@ -125,15 +125,13 @@ namespace Eggado
 
         public static IAsyncEnumerable<TResult> SelectAsync<#= targs #>(
             this DbCommand command,
-            Func<#= targs #> selector,
-            CancellationToken cancellationToken = default)
+            Func<#= targs #> selector)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return Eggnumerable.FromAsync(ct => command.ExecuteReaderAsync(ct),
-                                          (r, ct) => r.SelectAsync(selector, ct),
-                                          cancellationToken);
+                                          (r, ct) => r.SelectAsync(selector, ct));
         }
 <#  }#>
     }
