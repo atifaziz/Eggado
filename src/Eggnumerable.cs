@@ -29,20 +29,33 @@ namespace Eggado
             if (opener == null) throw new ArgumentNullException(nameof(opener));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
-            var cursor = opener();
-            using var _ = cursor as IDisposable;
-            using var e = selector(cursor);
+            return _(); IEnumerable<T> _()
+            {
+                var cursor = opener();
+                using var _ = cursor as IDisposable;
+                using var e = selector(cursor);
 
-            while (e.MoveNext())
-                yield return e.Current;
+                while (e.MoveNext())
+                    yield return e.Current;
+            }
         }
 
         #if NETSTANDARD2_1
 
-        public static async IAsyncEnumerable<T>
+        public static IAsyncEnumerable<T>
             FromAsync<TCursor, T>(Func<CancellationToken, Task<TCursor>> opener,
-                                  Func<TCursor, CancellationToken, IAsyncEnumerator<T>> selector,
-                                  [EnumeratorCancellation]CancellationToken cancellationToken = default)
+                                  Func<TCursor, CancellationToken, IAsyncEnumerator<T>> selector)
+        {
+            if (opener == null) throw new ArgumentNullException(nameof(opener));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return FromAsyncImpl(opener, selector);
+        }
+
+        static async IAsyncEnumerable<T>
+            FromAsyncImpl<TCursor, T>(Func<CancellationToken, Task<TCursor>> opener,
+                                      Func<TCursor, CancellationToken, IAsyncEnumerator<T>> selector,
+                                      [EnumeratorCancellation]CancellationToken cancellationToken = default)
         {
             if (opener == null) throw new ArgumentNullException(nameof(opener));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
