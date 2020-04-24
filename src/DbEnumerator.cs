@@ -107,20 +107,20 @@ namespace Eggado
         void BuildSchemaInfo()
         {
             var count = _reader.FieldCount;
-            var fieldnames = new string[count];
+            var fieldNames = new string[count];
             for (var i = 0; i < count; ++i)
             {
-                fieldnames[i] = _reader.GetName(i);
+                fieldNames[i] = _reader.GetName(i);
             }
-            BuildSchemaTableInfoTableNames(fieldnames);
+            BuildSchemaTableInfoTableNames(fieldNames);
 
             var si = new SchemaInfo[count];
             for (var i = 0; i < si.Length; i++)
             {
                 SchemaInfo s = default;
-                s.name = _reader.GetName(i);
-                s.type = _reader.GetFieldType(i);
-                s.typeName = _reader.GetDataTypeName(i);
+                s.Name = _reader.GetName(i);
+                s.Type = _reader.GetFieldType(i);
+                s.TypeName = _reader.GetDataTypeName(i);
                 si[i] = s;
             }
 

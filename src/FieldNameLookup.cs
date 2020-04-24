@@ -166,30 +166,30 @@ namespace Eggado
 
     sealed class FieldNameLookup : BasicFieldNameLookup
     {
-        readonly int _defaultLocaleID;
+        readonly int _defaultLocaleId;
 
-        public FieldNameLookup(string[] fieldNames, int defaultLocaleID) : base(fieldNames)
+        public FieldNameLookup(string[] fieldNames, int defaultLocaleId) : base(fieldNames)
         {
-            _defaultLocaleID = defaultLocaleID;
+            _defaultLocaleId = defaultLocaleId;
         }
 
-        public FieldNameLookup(System.Collections.ObjectModel.ReadOnlyCollection<string> columnNames, int defaultLocaleID) : base(columnNames)
+        public FieldNameLookup(System.Collections.ObjectModel.ReadOnlyCollection<string> columnNames, int defaultLocaleId) : base(columnNames)
         {
-            _defaultLocaleID = defaultLocaleID;
+            _defaultLocaleId = defaultLocaleId;
         }
 
-        public FieldNameLookup(IDataReader reader, int defaultLocaleID) : base(reader)
+        public FieldNameLookup(IDataReader reader, int defaultLocaleId) : base(reader)
         {
-            _defaultLocaleID = defaultLocaleID;
+            _defaultLocaleId = defaultLocaleId;
         }
 
         //The compare info is specified by the server by specifying the default LocaleId.
         protected override CompareInfo GetCompareInfo()
         {
             CompareInfo compareInfo = null;
-            if (-1 != _defaultLocaleID)
+            if (-1 != _defaultLocaleId)
             {
-                compareInfo = CompareInfo.GetCompareInfo(_defaultLocaleID);
+                compareInfo = CompareInfo.GetCompareInfo(_defaultLocaleId);
             }
             if (null == compareInfo)
             {

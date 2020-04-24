@@ -69,7 +69,7 @@ namespace Eggado
 
         public string GetName(int i)
         {
-            return _schemaInfo[i].name;
+            return _schemaInfo[i].Name;
         }
 
 
@@ -85,12 +85,12 @@ namespace Eggado
 
         public string GetDataTypeName(int i)
         {
-            return _schemaInfo[i].typeName;
+            return _schemaInfo[i].TypeName;
         }
 
         public Type GetFieldType(int i)
         {
-            return _schemaInfo[i].type;
+            return _schemaInfo[i].Type;
         }
 
         public int GetOrdinal(string name)
@@ -341,32 +341,32 @@ namespace Eggado
         }
 
         // only StackOverflowException & ThreadAbortException are sealed classes
-        static readonly Type s_stackOverflowType = typeof(StackOverflowException);
-        static readonly Type s_outOfMemoryType = typeof(OutOfMemoryException);
-        static readonly Type s_threadAbortType = typeof(System.Threading.ThreadAbortException);
-        static readonly Type s_nullReferenceType = typeof(NullReferenceException);
-        static readonly Type s_accessViolationType = typeof(AccessViolationException);
-        static readonly Type s_securityType = typeof(System.Security.SecurityException);
+        static readonly Type StackOverflowType = typeof(StackOverflowException);
+        static readonly Type OutOfMemoryType = typeof(OutOfMemoryException);
+        static readonly Type ThreadAbortType = typeof(System.Threading.ThreadAbortException);
+        static readonly Type NullReferenceType = typeof(NullReferenceException);
+        static readonly Type AccessViolationType = typeof(AccessViolationException);
+        static readonly Type SecurityType = typeof(System.Security.SecurityException);
 
         static bool IsCatchableExceptionType(Exception e)
         {
             // a 'catchable' exception is defined by what it is not.
             var type = e.GetType();
 
-            return ((type != s_stackOverflowType) &&
-                     (type != s_outOfMemoryType) &&
-                     (type != s_threadAbortType) &&
-                     (type != s_nullReferenceType) &&
-                     (type != s_accessViolationType) &&
-                     !s_securityType.IsAssignableFrom(type));
+            return ((type != StackOverflowType) &&
+                     (type != OutOfMemoryType) &&
+                     (type != ThreadAbortType) &&
+                     (type != NullReferenceType) &&
+                     (type != AccessViolationType) &&
+                     !SecurityType.IsAssignableFrom(type));
         }
     }
 
     // this doesn't change per record, only alloc once
     struct SchemaInfo
     {
-        public string name;
-        public string typeName;
-        public Type type;
+        public string Name;
+        public string TypeName;
+        public Type Type;
     }
 }
