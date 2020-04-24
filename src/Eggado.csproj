@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
     <VersionPrefix>2.2.0</VersionPrefix>
     <LangVersion>8</LangVersion>
-    <Copyright>Copyright 2011 Atif Aziz. All rights reserved.</Copyright>
+    <Copyright>Copyright 2011 Atif Aziz. Portions Copyright .NET Foundation and Contributors. All rights reserved.</Copyright>
     <Description>ADO.NET Modernizer</Description>
     <Authors>Atif Aziz</Authors>
     <Owners>Atif Aziz</Owners>
