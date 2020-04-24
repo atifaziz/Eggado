@@ -35,7 +35,7 @@ namespace Eggado
 
     public class DbEnumerator : IEnumerator
     {
-        IDataReader _reader;
+        readonly IDataReader _reader;
         DbDataRecord _current;
         SchemaInfo[] _schemaInfo; // shared schema info among all the data records
         PropertyDescriptorCollection _descriptors; // cached property descriptors
