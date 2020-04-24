@@ -116,11 +116,9 @@ namespace Eggado
             var si = new SchemaInfo[count];
             for (var i = 0; i < si.Length; i++)
             {
-                SchemaInfo s = default;
-                s.Name = _reader.GetName(i);
-                s.Type = _reader.GetFieldType(i);
-                s.TypeName = _reader.GetDataTypeName(i);
-                si[i] = s;
+                si[i] = new SchemaInfo(_reader.GetName(i),
+                                       _reader.GetDataTypeName(i),
+                                       _reader.GetFieldType(i));
             }
 
             _schemaInfo = si;

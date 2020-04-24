@@ -363,10 +363,13 @@ namespace Eggado
     }
 
     // this doesn't change per record, only alloc once
-    struct SchemaInfo
+    readonly struct SchemaInfo
     {
-        public string Name;
-        public string TypeName;
-        public Type Type;
+        public readonly string Name;
+        public readonly string TypeName;
+        public readonly Type Type;
+
+        public SchemaInfo(string name, string typeName, Type type) =>
+            (Name, TypeName, Type) = (name, typeName, type);
     }
 }
