@@ -19,6 +19,7 @@ namespace Eggado
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
 
     public static partial class DbCommandExtensions
     {
@@ -40,5 +41,28 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException(nameof(command));
             return Eggnumerable.From(command.ExecuteReader, r => r.SelectRecords());
         }
+
+        #if ASYNC_STREAMS
+
+        public static IAsyncEnumerable<T> SelectAsync<T>(this DbCommand command)
+            where T : new()
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            return Eggnumerable.FromAsync(command.ExecuteReaderAsync, (r, ct) => r.SelectAsync<T>(ct));
+        }
+
+        public static IAsyncEnumerable<dynamic> SelectAsync(this DbCommand command)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            return Eggnumerable.FromAsync(command.ExecuteReaderAsync, (r, ct) => r.SelectAsync(ct));
+        }
+
+        public static IAsyncEnumerable<IDataRecord> SelectRecordsAsync(this DbCommand command)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            return Eggnumerable.FromAsync(command.ExecuteReaderAsync, (r, ct) => r.SelectRecordsAsync(ct));
+        }
+
+        #endif
     }
 }

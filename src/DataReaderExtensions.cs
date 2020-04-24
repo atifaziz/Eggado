@@ -53,12 +53,46 @@ namespace Eggado
             }
         }
 
-        public static IEnumerator<IDataRecord> SelectRecords(this IDataReader reader) =>
-            Select<IDataRecord>(reader, r => r);
+        #if ASYNC_STREAMS
 
-        public static IEnumerator<T> Select<T>(
-            this IDataReader reader,
-            Func<IDataRecord, T> selector)
+        public static IAsyncEnumerator<T>
+            SelectAsync<T>(this DbDataReader reader,
+                           Func<IEnumerable<KeyValuePair<string, object>>, T> selector) =>
+            SelectAsync(reader, CancellationToken.None, selector);
+
+        public static async IAsyncEnumerator<T> SelectAsync<T>(
+            this DbDataReader reader, CancellationToken cancellationToken,
+            Func<IEnumerable<KeyValuePair<string, object>>, T> selector)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            {
+                var record = (IDataRecord)reader;
+                yield return record.Select(selector);
+            }
+        }
+
+        #endif
+
+        public static IEnumerator<IDataRecord> SelectRecords(this IDataReader reader) =>
+            reader.Select((IDataRecord r) => r);
+
+        #if ASYNC_STREAMS
+
+        public static IAsyncEnumerator<IDataRecord>
+            SelectRecordsAsync(this DbDataReader reader) =>
+            SelectRecordsAsync(reader, CancellationToken.None);
+
+        public static IAsyncEnumerator<IDataRecord>
+            SelectRecordsAsync(this DbDataReader reader, CancellationToken cancellationToken) =>
+            reader.SelectAsync(cancellationToken, (IDataRecord r) => r);
+
+        #endif
+
+        public static IEnumerator<T> Select<T>(this IDataReader reader,
+                                               Func<IDataRecord, T> selector)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -72,8 +106,38 @@ namespace Eggado
                     yield return selector((IDataRecord)e.Current);
         }
 
+        #if ASYNC_STREAMS
+
+        public static IAsyncEnumerator<T>
+            SelectAsync<T>(this DbDataReader reader,
+                           Func<IDataRecord, T> selector) =>
+            SelectAsync(reader, CancellationToken.None, selector);
+
+        public static async IAsyncEnumerator<T>
+            SelectAsync<T>(this DbDataReader reader,
+                           CancellationToken cancellationToken,
+                           Func<IDataRecord, T> selector)
+        {
+            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            await using var e = new DbEnumerator(reader, false, cancellationToken);
+            while (await e.MoveNextAsync().ConfigureAwait(false))
+                yield return selector(e.Current);
+        }
+
+        #endif
+
         public static IEnumerator<dynamic> Select(this IDataReader reader) =>
             reader.Select(record => new DynamicRecord(record));
+
+        #if ASYNC_STREAMS
+
+        public static IAsyncEnumerator<dynamic>
+            SelectAsync(this DbDataReader reader, CancellationToken cancellationToken) =>
+            reader.SelectAsync(cancellationToken, record => new DynamicRecord(record));
+
+        #endif
 
         public static T Select<T>(
             this IDataRecord record,
@@ -195,8 +259,13 @@ namespace Eggado
 
         #if ASYNC_STREAMS
 
-        public static async IAsyncEnumerator<T> SelectAsync<T>(this DbDataReader reader, CancellationToken cancellationToken = default)
-            where T : new()
+        public static IAsyncEnumerator<T>
+            SelectAsync<T>(this DbDataReader reader) where T : new() =>
+            SelectAsync<T>(reader, new CancellationToken());
+
+        public static async IAsyncEnumerator<T>
+            SelectAsync<T>(this DbDataReader reader,
+                           CancellationToken cancellationToken) where T : new()
         {
             var f = reader.CreateRecordSelector<T>();
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
