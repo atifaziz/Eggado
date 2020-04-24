@@ -37,7 +37,7 @@ namespace Eggado
         readonly FieldNameLookup _fieldNameLookup;
 
         // copy all runtime data information
-        internal DataRecordInternal(SchemaInfo[] schemaInfo, object[] values, PropertyDescriptorCollection descriptors, FieldNameLookup fieldNameLookup)
+        public DataRecordInternal(SchemaInfo[] schemaInfo, object[] values, PropertyDescriptorCollection descriptors, FieldNameLookup fieldNameLookup)
         {
             Debug.Assert(null != schemaInfo, "invalid attempt to instantiate DataRecordInternal with null schema information");
             Debug.Assert(null != values, "invalid attempt to instantiate DataRecordInternal with null value[]");

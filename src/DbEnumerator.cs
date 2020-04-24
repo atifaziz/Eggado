@@ -35,10 +35,10 @@ namespace Eggado
 
     public class DbEnumerator : IEnumerator
     {
-        internal IDataReader _reader;
-        internal DbDataRecord _current;
-        internal SchemaInfo[] _schemaInfo; // shared schema info among all the data records
-        internal PropertyDescriptorCollection _descriptors; // cached property descriptors
+        IDataReader _reader;
+        DbDataRecord _current;
+        SchemaInfo[] _schemaInfo; // shared schema info among all the data records
+        PropertyDescriptorCollection _descriptors; // cached property descriptors
         FieldNameLookup _fieldNameLookup;
         readonly bool _closeReader;
 
@@ -206,7 +206,7 @@ namespace Eggado
             readonly int _ordinal;
             readonly Type _type;
 
-            internal DbColumnDescriptor(int ordinal, string name, Type type)
+            public DbColumnDescriptor(int ordinal, string name, Type type)
                 : base(name, null)
             {
                 _ordinal = ordinal;
