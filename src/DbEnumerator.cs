@@ -111,7 +111,7 @@ namespace Eggado
             }
 
             _schemaInfo = si;
-            _fieldNameLookup = new FieldNameLookup(_reader, -1);
+            _fieldNameLookup = new FieldNameLookup(_reader);
 
             // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/AdapterUtil.Common.cs
 
