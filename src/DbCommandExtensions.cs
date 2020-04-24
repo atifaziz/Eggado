@@ -34,5 +34,11 @@ namespace Eggado
             if (command == null) throw new ArgumentNullException(nameof(command));
             return Eggnumerable.From(command.ExecuteReader, r => r.Select());
         }
+
+        public static IEnumerable<IDataRecord> SelectRecords(this IDbCommand command)
+        {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            return Eggnumerable.From(command.ExecuteReader, r => r.SelectRecords());
+        }
     }
 }
