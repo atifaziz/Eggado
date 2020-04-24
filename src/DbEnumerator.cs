@@ -30,28 +30,24 @@ namespace Eggado
     using System.Data.Common;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/DbEnumerator.cs
 
-    public class DbEnumerator : IEnumerator
+    public partial class DbEnumerator : IEnumerator
     {
-        readonly IDataReader _reader;
-        IDataRecord _current;
+        readonly DbDataReader _reader;
+        readonly CancellationToken _cancellationToken;
         SchemaInfo[] _schemaInfo; // shared schema info among all the data records
         FieldNameLookup _fieldNameLookup;
         readonly bool _closeReader;
 
         // users must get enumerators off of the datareader interfaces
-        public DbEnumerator(IDataReader reader)
-        {
-            if (null == reader)
-            {
-                throw new ArgumentNullException(nameof(reader));
-            }
-            _reader = reader;
-        }
+        public DbEnumerator(DbDataReader reader, CancellationToken cancellationToken = default) :
+            this(reader, false, cancellationToken) {}
 
-        public DbEnumerator(IDataReader reader, bool closeReader)
+        public DbEnumerator(DbDataReader reader, bool closeReader, CancellationToken cancellationToken = default)
         {
             if (null == reader)
             {
@@ -59,21 +55,14 @@ namespace Eggado
             }
             _reader = reader;
             _closeReader = closeReader;
+            _cancellationToken = cancellationToken;
         }
 
-        public DbEnumerator(DbDataReader reader)
-            : this((IDataReader)reader)
-        {
-        }
+        object IEnumerator.Current => Current;
 
-        public DbEnumerator(DbDataReader reader, bool closeReader)
-            : this((IDataReader)reader, closeReader)
-        {
-        }
+        public IDataRecord Current { get; private set; }
 
-        public object Current => _current;
-
-        public bool MoveNext()
+        void OnMoveNext()
         {
             if (null == _schemaInfo)
             {
@@ -81,14 +70,24 @@ namespace Eggado
             }
 
             Debug.Assert(null != _schemaInfo, "unable to build schema information!");
-            _current = null;
+
+            Current = null;
+        }
+
+        IDataRecord ReadRecord()
+        {
+            var values = new object[_schemaInfo.Length];
+            _reader.GetValues(values); // this.GetValues()
+            return new DataRecordInternal(_schemaInfo, values, _fieldNameLookup);
+        }
+
+        public bool MoveNext()
+        {
+            OnMoveNext();
 
             if (_reader.Read())
             {
-                // setup our current record
-                var values = new object[_schemaInfo.Length];
-                _reader.GetValues(values); // this.GetValues()
-                _current = new DataRecordInternal(_schemaInfo, values, _fieldNameLookup);
+                Current = ReadRecord();
                 return true;
             }
             if (_closeReader)
@@ -197,4 +196,32 @@ namespace Eggado
             }
         }
     }
+
+    #if NETSTANDARD2_1
+
+    partial class DbEnumerator : IAsyncEnumerator<IDataRecord>
+    {
+        public async ValueTask<bool> MoveNextAsync()
+        {
+            OnMoveNext();
+
+            if (!await _reader.ReadAsync(_cancellationToken).ConfigureAwait(false))
+            {
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+
+            Current = ReadRecord();
+            return true;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (!_closeReader)
+                return;
+            await _reader.CloseAsync().ConfigureAwait(false);
+        }
+    }
+
+    #endif // NETSTANDARD2_1
 }
