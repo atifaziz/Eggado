@@ -193,7 +193,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<T> SelectAsync<T>(this DbDataReader reader, CancellationToken cancellationToken = default)
             where T : new()

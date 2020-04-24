@@ -178,7 +178,7 @@ namespace Eggado
         }
     }
 
-    #if NETSTANDARD2_1
+    #if ASYNC_STREAMS
 
     partial class DbEnumerator : IAsyncEnumerator<IDataRecord>
     {
@@ -204,5 +204,5 @@ namespace Eggado
         }
     }
 
-    #endif // NETSTANDARD2_1
+    #endif // ASYNC_STREAMS
 }

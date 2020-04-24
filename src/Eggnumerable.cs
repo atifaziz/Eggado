@@ -40,7 +40,7 @@ namespace Eggado
             }
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static IAsyncEnumerable<T>
             FromAsync<TCursor, T>(Func<CancellationToken, Task<TCursor>> opener,

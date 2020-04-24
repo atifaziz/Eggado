@@ -63,7 +63,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<#= targs #>(
             this DbDataReader reader,
@@ -116,7 +116,7 @@ namespace Eggado
 <#  }#>
     }
 
-    #if NETSTANDARD2_1
+    #if ASYNC_STREAMS
 
     partial class DbCommandExtensions
     {<#
@@ -136,7 +136,7 @@ namespace Eggado
 <#  }#>
     }
 
-    #endif // NETSTANDARD2_1
+    #endif // ASYNC_STREAMS
 
     partial class DataTableExtensions
     {<#

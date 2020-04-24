@@ -28,7 +28,7 @@ namespace Eggado
     #endregion
 
     // This partial implementation was template-generated:
-    // Thu, 27 Feb 2020 08:41:30 GMT
+    // Fri, 24 Apr 2020 13:22:18 GMT
 
     partial class DataReaderExtensions
     {
@@ -50,7 +50,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T, TResult>(
             this DbDataReader reader,
@@ -102,7 +102,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, TResult>(
             this DbDataReader reader,
@@ -154,7 +154,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, TResult>(
             this DbDataReader reader,
@@ -206,7 +206,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, TResult>(
             this DbDataReader reader,
@@ -258,7 +258,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, TResult>(
             this DbDataReader reader,
@@ -310,7 +310,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, TResult>(
             this DbDataReader reader,
@@ -362,7 +362,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, TResult>(
             this DbDataReader reader,
@@ -414,7 +414,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
             this DbDataReader reader,
@@ -466,7 +466,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
             this DbDataReader reader,
@@ -518,7 +518,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this DbDataReader reader,
@@ -570,7 +570,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this DbDataReader reader,
@@ -622,7 +622,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this DbDataReader reader,
@@ -674,7 +674,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this DbDataReader reader,
@@ -726,7 +726,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this DbDataReader reader,
@@ -778,7 +778,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this DbDataReader reader,
@@ -830,7 +830,7 @@ namespace Eggado
                 yield return f(reader);
         }
 
-        #if NETSTANDARD2_1
+        #if ASYNC_STREAMS
 
         public static async IAsyncEnumerator<TResult> SelectAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this DbDataReader reader,
@@ -1028,7 +1028,7 @@ namespace Eggado
         }
     }
 
-    #if NETSTANDARD2_1
+    #if ASYNC_STREAMS
 
     partial class DbCommandExtensions
     {
@@ -1209,7 +1209,7 @@ namespace Eggado
         }
     }
 
-    #endif // NETSTANDARD2_1
+    #endif // ASYNC_STREAMS
 
     partial class DataTableExtensions
     {
