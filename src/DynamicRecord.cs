@@ -32,7 +32,7 @@ namespace Eggado
     {
         readonly IDataRecord _record;
 
-        internal DynamicRecord(IDataRecord record) =>
+        public DynamicRecord(IDataRecord record) =>
             _record = record ?? throw new ArgumentNullException(nameof(record));
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
