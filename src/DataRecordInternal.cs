@@ -136,7 +136,7 @@ namespace Eggado
             // is invalid
             if (dataIndex > int.MaxValue)
             {
-                throw ADP.InvalidSourceBufferIndex(cbytes, dataIndex, nameof(dataIndex));
+                throw InvalidSourceBufferIndex(cbytes, dataIndex, nameof(dataIndex));
             }
 
             ndataIndex = (int)dataIndex;
@@ -159,31 +159,31 @@ namespace Eggado
                 // until arrays are 64 bit, we have to do these casts
                 Array.Copy(data, ndataIndex, buffer, bufferIndex, cbytes);
             }
-            catch (Exception e) when (ADP.IsCatchableExceptionType(e))
+            catch (Exception e) when (IsCatchableExceptionType(e))
             {
                 cbytes = data.Length;
 
                 if (length < 0)
                 {
-                    throw ADP.InvalidDataLength(length);
+                    throw InvalidDataLength(length);
                 }
 
                 // if bad buffer index, throw
                 if (bufferIndex < 0 || bufferIndex >= buffer.Length)
                 {
-                    throw ADP.InvalidDestinationBufferIndex(length, bufferIndex, nameof(bufferIndex));
+                    throw InvalidDestinationBufferIndex(length, bufferIndex, nameof(bufferIndex));
                 }
 
                 // if bad data index, throw
                 if (dataIndex < 0 || dataIndex >= cbytes)
                 {
-                    throw ADP.InvalidSourceBufferIndex(length, dataIndex, nameof(dataIndex));
+                    throw InvalidSourceBufferIndex(length, dataIndex, nameof(dataIndex));
                 }
 
                 // if there is not enough room in the buffer for data
                 if (cbytes + bufferIndex > buffer.Length)
                 {
-                    throw ADP.InvalidBufferSizeOrIndex(cbytes, bufferIndex);
+                    throw InvalidBufferSizeOrIndex(cbytes, bufferIndex);
                 }
             }
 
@@ -206,7 +206,7 @@ namespace Eggado
             // is invalid
             if (dataIndex > int.MaxValue)
             {
-                throw ADP.InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
+                throw InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
             }
 
             int ndataIndex = (int)dataIndex;
@@ -235,35 +235,55 @@ namespace Eggado
 
                 Array.Copy(data, ndataIndex, buffer, bufferIndex, cchars);
             }
-            catch (Exception e) when (ADP.IsCatchableExceptionType(e))
+            catch (Exception e) when (IsCatchableExceptionType(e))
             {
                 cchars = data.Length;
 
                 if (length < 0)
                 {
-                    throw ADP.InvalidDataLength(length);
+                    throw InvalidDataLength(length);
                 }
 
                 // if bad buffer index, throw
                 if (bufferIndex < 0 || bufferIndex >= buffer.Length)
                 {
-                    throw ADP.InvalidDestinationBufferIndex(buffer.Length, bufferIndex, nameof(bufferIndex));
+                    throw InvalidDestinationBufferIndex(buffer.Length, bufferIndex, nameof(bufferIndex));
                 }
 
                 // if bad data index, throw
                 if (ndataIndex < 0 || ndataIndex >= cchars)
                 {
-                    throw ADP.InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
+                    throw InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
                 }
 
                 // if there is not enough room in the buffer for data
                 if (cchars + bufferIndex > buffer.Length)
                 {
-                    throw ADP.InvalidBufferSizeOrIndex(cchars, bufferIndex);
+                    throw InvalidBufferSizeOrIndex(cchars, bufferIndex);
                 }
             }
 
             return cchars;
+        }
+
+        static ArgumentOutOfRangeException InvalidSourceBufferIndex(int maxLen, long srcOffset, string parameterName)
+        {
+            return new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid source buffer (size of {maxLen}) offset: {srcOffset}"), parameterName);
+        }
+
+        static ArgumentOutOfRangeException InvalidDestinationBufferIndex(int maxLen, int dstOffset, string parameterName)
+        {
+            return new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid destination buffer (size of {maxLen}) offset: {dstOffset}"), parameterName);
+        }
+
+        static IndexOutOfRangeException InvalidBufferSizeOrIndex(int numBytes, int bufferIndex)
+        {
+            return new IndexOutOfRangeException(FormattableString.Invariant($"Buffer offset '{bufferIndex}' plus the bytes available '{numBytes}' is greater than the length of the passed in buffer."));
+        }
+
+        static Exception InvalidDataLength(long length)
+        {
+            return new IndexOutOfRangeException(FormattableString.Invariant($"Data length '{length}' is less than 0."));
         }
 
         public override Guid GetGuid(int i)
@@ -385,6 +405,27 @@ namespace Eggado
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
+        }
+
+        // only StackOverflowException & ThreadAbortException are sealed classes
+        private static readonly Type s_stackOverflowType = typeof(StackOverflowException);
+        private static readonly Type s_outOfMemoryType = typeof(OutOfMemoryException);
+        private static readonly Type s_threadAbortType = typeof(System.Threading.ThreadAbortException);
+        private static readonly Type s_nullReferenceType = typeof(NullReferenceException);
+        private static readonly Type s_accessViolationType = typeof(AccessViolationException);
+        private static readonly Type s_securityType = typeof(System.Security.SecurityException);
+
+        static bool IsCatchableExceptionType(Exception e)
+        {
+            // a 'catchable' exception is defined by what it is not.
+            Type type = e.GetType();
+
+            return ((type != s_stackOverflowType) &&
+                     (type != s_outOfMemoryType) &&
+                     (type != s_threadAbortType) &&
+                     (type != s_nullReferenceType) &&
+                     (type != s_accessViolationType) &&
+                     !s_securityType.IsAssignableFrom(type));
         }
     }
 

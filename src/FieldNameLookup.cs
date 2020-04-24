@@ -113,7 +113,9 @@ namespace Eggado
                 if (-1 == index)
                 {
                     // do the slow search now (kana, width insensitive comparison)
-                    index = LinearIndexOf(fieldName, ADP.DefaultCompareOptions);
+                    index = LinearIndexOf(fieldName, CompareOptions.IgnoreKanaType
+                                                   | CompareOptions.IgnoreWidth
+                                                   | CompareOptions.IgnoreCase);
                 }
             }
 
