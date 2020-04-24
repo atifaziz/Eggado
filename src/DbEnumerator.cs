@@ -36,9 +36,8 @@ namespace Eggado
     public class DbEnumerator : IEnumerator
     {
         readonly IDataReader _reader;
-        DbDataRecord _current;
+        IDataRecord _current;
         SchemaInfo[] _schemaInfo; // shared schema info among all the data records
-        PropertyDescriptorCollection _descriptors; // cached property descriptors
         FieldNameLookup _fieldNameLookup;
         readonly bool _closeReader;
 
@@ -81,7 +80,7 @@ namespace Eggado
                 BuildSchemaInfo();
             }
 
-            Debug.Assert(null != _schemaInfo && null != _descriptors, "unable to build schema information!");
+            Debug.Assert(null != _schemaInfo, "unable to build schema information!");
             _current = null;
 
             if (_reader.Read())
@@ -89,7 +88,7 @@ namespace Eggado
                 // setup our current record
                 var values = new object[_schemaInfo.Length];
                 _reader.GetValues(values); // this.GetValues()
-                _current = new DataRecordInternal(_schemaInfo, values, _descriptors, _fieldNameLookup);
+                _current = new DataRecordInternal(_schemaInfo, values, _fieldNameLookup);
                 return true;
             }
             if (_closeReader)
@@ -116,20 +115,17 @@ namespace Eggado
             BuildSchemaTableInfoTableNames(fieldnames);
 
             var si = new SchemaInfo[count];
-            var props = new PropertyDescriptor[_reader.FieldCount];
             for (var i = 0; i < si.Length; i++)
             {
                 SchemaInfo s = default;
                 s.name = _reader.GetName(i);
                 s.type = _reader.GetFieldType(i);
                 s.typeName = _reader.GetDataTypeName(i);
-                props[i] = new DbColumnDescriptor(i, fieldnames[i], s.type);
                 si[i] = s;
             }
 
             _schemaInfo = si;
             _fieldNameLookup = new FieldNameLookup(_reader, -1);
-            _descriptors = new PropertyDescriptorCollection(props);
 
             // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/AdapterUtil.Common.cs
 
@@ -199,28 +195,6 @@ namespace Eggado
                     return uniqueIndex;
                 }
             }
-        }
-
-        sealed class DbColumnDescriptor : PropertyDescriptor
-        {
-            readonly int _ordinal;
-            readonly Type _type;
-
-            public DbColumnDescriptor(int ordinal, string name, Type type)
-                : base(name, null)
-            {
-                _ordinal = ordinal;
-                _type = type;
-            }
-
-            public override Type ComponentType => typeof(IDataRecord);
-            public override bool IsReadOnly => true;
-            public override Type PropertyType => _type;
-            public override bool CanResetValue(object component) => false;
-            public override object GetValue(object component) => ((IDataRecord)component)[_ordinal];
-            public override void ResetValue(object component) => throw new NotSupportedException();
-            public override void SetValue(object component, object value) => throw new NotSupportedException();
-            public override bool ShouldSerializeValue(object component) => false;
         }
     }
 }

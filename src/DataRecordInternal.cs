@@ -23,31 +23,28 @@
 namespace Eggado
 {
     using System;
-    using System.ComponentModel;
-    using System.Data.Common;
+    using System.Data;
     using System.Diagnostics;
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/DataRecordInternal.cs
 
-    sealed class DataRecordInternal : DbDataRecord, ICustomTypeDescriptor
+    sealed class DataRecordInternal : IDataRecord
     {
         readonly SchemaInfo[] _schemaInfo;
         readonly object[] _values;
-        PropertyDescriptorCollection _propertyDescriptors;
         readonly FieldNameLookup _fieldNameLookup;
 
         // copy all runtime data information
-        public DataRecordInternal(SchemaInfo[] schemaInfo, object[] values, PropertyDescriptorCollection descriptors, FieldNameLookup fieldNameLookup)
+        public DataRecordInternal(SchemaInfo[] schemaInfo, object[] values, FieldNameLookup fieldNameLookup)
         {
             Debug.Assert(null != schemaInfo, "invalid attempt to instantiate DataRecordInternal with null schema information");
             Debug.Assert(null != values, "invalid attempt to instantiate DataRecordInternal with null value[]");
             _schemaInfo = schemaInfo;
             _values = values;
-            _propertyDescriptors = descriptors;
             _fieldNameLookup = fieldNameLookup;
         }
 
-        public override int FieldCount
+        public int FieldCount
         {
             get
             {
@@ -55,7 +52,7 @@ namespace Eggado
             }
         }
 
-        public override int GetValues(object[] values)
+        public int GetValues(object[] values)
         {
             if (null == values)
             {
@@ -70,33 +67,38 @@ namespace Eggado
             return copyLen;
         }
 
-        public override string GetName(int i)
+        public string GetName(int i)
         {
             return _schemaInfo[i].name;
         }
 
 
-        public override object GetValue(int i)
+        public object GetValue(int i)
         {
             return _values[i];
         }
 
-        public override string GetDataTypeName(int i)
+        public IDataReader GetData(int i)
+        {
+            throw new NotSupportedException();
+        }
+
+        public string GetDataTypeName(int i)
         {
             return _schemaInfo[i].typeName;
         }
 
-        public override Type GetFieldType(int i)
+        public Type GetFieldType(int i)
         {
             return _schemaInfo[i].type;
         }
 
-        public override int GetOrdinal(string name)
+        public int GetOrdinal(string name)
         {
             return _fieldNameLookup.GetOrdinal(name);
         }
 
-        public override object this[int i]
+        public object this[int i]
         {
             get
             {
@@ -104,7 +106,7 @@ namespace Eggado
             }
         }
 
-        public override object this[string name]
+        public object this[string name]
         {
             get
             {
@@ -112,17 +114,17 @@ namespace Eggado
             }
         }
 
-        public override bool GetBoolean(int i)
+        public bool GetBoolean(int i)
         {
             return ((bool)_values[i]);
         }
 
-        public override byte GetByte(int i)
+        public byte GetByte(int i)
         {
             return ((byte)_values[i]);
         }
 
-        public override long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
+        public long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
         {
             var cbytes = 0;
             int ndataIndex;
@@ -190,9 +192,9 @@ namespace Eggado
             return cbytes;
         }
 
-        public override char GetChar(int i) => ((string)_values[i])[0];
+        public char GetChar(int i) => ((string)_values[i])[0];
 
-        public override long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
+        public long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
         {
             // if the object doesn't contain a char[] then the user will get an exception
             var s = (string)_values[i];
@@ -286,125 +288,56 @@ namespace Eggado
             return new IndexOutOfRangeException(FormattableString.Invariant($"Data length '{length}' is less than 0."));
         }
 
-        public override Guid GetGuid(int i)
+        public Guid GetGuid(int i)
         {
             return ((Guid)_values[i]);
         }
 
 
-        public override short GetInt16(int i)
+        public short GetInt16(int i)
         {
             return ((short)_values[i]);
         }
 
-        public override int GetInt32(int i)
+        public int GetInt32(int i)
         {
             return ((int)_values[i]);
         }
 
-        public override long GetInt64(int i)
+        public long GetInt64(int i)
         {
             return ((long)_values[i]);
         }
 
-        public override float GetFloat(int i)
+        public float GetFloat(int i)
         {
             return ((float)_values[i]);
         }
 
-        public override double GetDouble(int i)
+        public double GetDouble(int i)
         {
             return ((double)_values[i]);
         }
 
-        public override string GetString(int i)
+        public string GetString(int i)
         {
             return ((string)_values[i]);
         }
 
-        public override decimal GetDecimal(int i)
+        public decimal GetDecimal(int i)
         {
             return ((decimal)_values[i]);
         }
 
-        public override DateTime GetDateTime(int i)
+        public DateTime GetDateTime(int i)
         {
             return ((DateTime)_values[i]);
         }
 
-        public override bool IsDBNull(int i)
+        public bool IsDBNull(int i)
         {
             var o = _values[i];
             return (null == o || Convert.IsDBNull(o));
-        }
-
-        //
-        // ICustomTypeDescriptor
-        //
-
-        AttributeCollection ICustomTypeDescriptor.GetAttributes()
-        {
-            return new AttributeCollection(null);
-        }
-
-        string ICustomTypeDescriptor.GetClassName()
-        {
-            return null;
-        }
-
-        string ICustomTypeDescriptor.GetComponentName()
-        {
-            return null;
-        }
-
-        TypeConverter ICustomTypeDescriptor.GetConverter()
-        {
-            return null;
-        }
-
-        EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
-        {
-            return null;
-        }
-
-
-        PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
-        {
-            return null;
-        }
-
-        object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
-        {
-            return null;
-        }
-
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
-        {
-            return new EventDescriptorCollection(null);
-        }
-
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
-        {
-            return new EventDescriptorCollection(null);
-        }
-
-        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
-        {
-            return ((ICustomTypeDescriptor)this).GetProperties(null);
-        }
-
-        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
-        {
-            if (_propertyDescriptors == null)
-            {
-                _propertyDescriptors = new PropertyDescriptorCollection(null);
-            }
-            return _propertyDescriptors;
-        }
-
-        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
-        {
-            return this;
         }
 
         // only StackOverflowException & ThreadAbortException are sealed classes
