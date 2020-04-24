@@ -24,6 +24,7 @@ namespace Eggado
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Data;
     using System.Globalization;
 
@@ -40,23 +41,15 @@ namespace Eggado
         // By default _compareInfo is set to InvariantCulture CompareInfo
         CompareInfo _compareInfo;
 
-        public BasicFieldNameLookup(string[] fieldNames)
-        {
-            if (null == fieldNames)
-            {
-                throw new ArgumentNullException(nameof(fieldNames));
-            }
-            _fieldNames = fieldNames;
-        }
+        public BasicFieldNameLookup(string[] fieldNames) =>
+            _fieldNames = fieldNames ?? throw new ArgumentNullException(nameof(fieldNames));
 
-        public BasicFieldNameLookup(System.Collections.ObjectModel.ReadOnlyCollection<string> columnNames)
+        public BasicFieldNameLookup(ReadOnlyCollection<string> columnNames)
         {
             var length = columnNames.Count;
             var fieldNames = new string[length];
             for (var i = 0; i < length; ++i)
-            {
                 fieldNames[i] = columnNames[i];
-            }
             _fieldNames = fieldNames;
             GenerateLookup();
         }
@@ -66,47 +59,37 @@ namespace Eggado
             var length = reader.FieldCount;
             var fieldNames = new string[length];
             for (var i = 0; i < length; ++i)
-            {
                 fieldNames[i] = reader.GetName(i);
-            }
             _fieldNames = fieldNames;
         }
 
         public int GetOrdinal(string fieldName)
         {
-            if (null == fieldName)
+            if (null == fieldName) throw new ArgumentNullException(nameof(fieldName));
+
+            return IndexOf(fieldName) switch
             {
-                throw new ArgumentNullException(nameof(fieldName));
-            }
-            var index = IndexOf(fieldName);
-            if (-1 == index)
-            {
-                throw new IndexOutOfRangeException(fieldName);
-            }
-            return index;
+                -1 => throw new IndexOutOfRangeException(fieldName),
+                var index => index
+            };
         }
 
         public int IndexOfName(string fieldName)
         {
             if (null == _fieldNameLookup)
-            {
                 GenerateLookup();
-            }
 
-            int value;
             // via case sensitive search, first match with lowest ordinal matches
-            return _fieldNameLookup.TryGetValue(fieldName, out value) ? value : -1;
+            return _fieldNameLookup.TryGetValue(fieldName, out var value) ? value : -1;
         }
 
         public int IndexOf(string fieldName)
         {
             if (null == _fieldNameLookup)
-            {
                 GenerateLookup();
-            }
-            int index;
+
             // via case sensitive search, first match with lowest ordinal matches
-            if (!_fieldNameLookup.TryGetValue(fieldName, out index))
+            if (!_fieldNameLookup.TryGetValue(fieldName, out var index))
             {
                 // via case insensitive search, first match with lowest ordinal matches
                 index = LinearIndexOf(fieldName, CompareOptions.IgnoreCase);
@@ -122,17 +105,11 @@ namespace Eggado
             return index;
         }
 
-        protected virtual CompareInfo GetCompareInfo()
-        {
-            return CultureInfo.InvariantCulture.CompareInfo;
-        }
+        protected virtual CompareInfo GetCompareInfo() => CultureInfo.InvariantCulture.CompareInfo;
 
         int LinearIndexOf(string fieldName, CompareOptions compareOptions)
         {
-            if (null == _compareInfo)
-            {
-                _compareInfo = GetCompareInfo();
-            }
+            _compareInfo ??= GetCompareInfo();
 
             var length = _fieldNames.Length;
             for (var i = 0; i < length; ++i)
@@ -158,6 +135,7 @@ namespace Eggado
                 var fieldName = _fieldNames[i];
                 hash[fieldName] = i;
             }
+
             _fieldNameLookup = hash;
         }
     }
@@ -168,34 +146,19 @@ namespace Eggado
     {
         readonly int _defaultLocaleId;
 
-        public FieldNameLookup(string[] fieldNames, int defaultLocaleId) : base(fieldNames)
-        {
+        public FieldNameLookup(string[] fieldNames, int defaultLocaleId) : base(fieldNames) =>
             _defaultLocaleId = defaultLocaleId;
-        }
 
-        public FieldNameLookup(System.Collections.ObjectModel.ReadOnlyCollection<string> columnNames, int defaultLocaleId) : base(columnNames)
-        {
+        public FieldNameLookup(ReadOnlyCollection<string> columnNames, int defaultLocaleId) :
+            base(columnNames) =>
             _defaultLocaleId = defaultLocaleId;
-        }
 
-        public FieldNameLookup(IDataReader reader, int defaultLocaleId) : base(reader)
-        {
+        public FieldNameLookup(IDataReader reader, int defaultLocaleId) : base(reader) =>
             _defaultLocaleId = defaultLocaleId;
-        }
 
         //The compare info is specified by the server by specifying the default LocaleId.
-        protected override CompareInfo GetCompareInfo()
-        {
-            CompareInfo compareInfo = null;
-            if (-1 != _defaultLocaleId)
-            {
-                compareInfo = CompareInfo.GetCompareInfo(_defaultLocaleId);
-            }
-            if (null == compareInfo)
-            {
-                compareInfo = base.GetCompareInfo();
-            }
-            return compareInfo;
-        }
+        protected override CompareInfo GetCompareInfo() =>
+            -1 != _defaultLocaleId ? CompareInfo.GetCompareInfo(_defaultLocaleId)
+                                   : base.GetCompareInfo();
     }
 }

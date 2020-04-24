@@ -25,6 +25,8 @@ namespace Eggado
     using System;
     using System.Data;
     using System.Diagnostics;
+    using System.Security;
+    using System.Threading;
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/DataRecordInternal.cs
 
@@ -44,119 +46,71 @@ namespace Eggado
             _fieldNameLookup = fieldNameLookup;
         }
 
-        public int FieldCount
-        {
-            get
-            {
-                return _schemaInfo.Length;
-            }
-        }
+        public int FieldCount => _schemaInfo.Length;
 
         public int GetValues(object[] values)
         {
-            if (null == values)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            if (null == values) throw new ArgumentNullException(nameof(values));
 
-            var copyLen = (values.Length < _schemaInfo.Length) ? values.Length : _schemaInfo.Length;
+            var copyLen = values.Length < _schemaInfo.Length
+                        ? values.Length
+                        : _schemaInfo.Length;
+
             for (var i = 0; i < copyLen; i++)
-            {
                 values[i] = _values[i];
-            }
+
             return copyLen;
         }
 
-        public string GetName(int i)
-        {
-            return _schemaInfo[i].Name;
-        }
+        public string GetName(int i) => _schemaInfo[i].Name;
+        public object GetValue(int i) => _values[i];
+        public string GetDataTypeName(int i) => _schemaInfo[i].TypeName;
+        public Type GetFieldType(int i) => _schemaInfo[i].Type;
+        public int GetOrdinal(string name) => _fieldNameLookup.GetOrdinal(name);
 
+        public object this[int i] => GetValue(i);
+        public object this[string name] => GetValue(GetOrdinal(name));
 
-        public object GetValue(int i)
-        {
-            return _values[i];
-        }
+        public bool IsDBNull(int i) =>
+            _values[i] switch { null => true, var o => Convert.IsDBNull(o) };
 
-        public IDataReader GetData(int i)
-        {
-            throw new NotSupportedException();
-        }
+        public IDataReader GetData(int i) => throw new NotSupportedException();
 
-        public string GetDataTypeName(int i)
-        {
-            return _schemaInfo[i].TypeName;
-        }
-
-        public Type GetFieldType(int i)
-        {
-            return _schemaInfo[i].Type;
-        }
-
-        public int GetOrdinal(string name)
-        {
-            return _fieldNameLookup.GetOrdinal(name);
-        }
-
-        public object this[int i]
-        {
-            get
-            {
-                return GetValue(i);
-            }
-        }
-
-        public object this[string name]
-        {
-            get
-            {
-                return GetValue(GetOrdinal(name));
-            }
-        }
-
-        public bool GetBoolean(int i)
-        {
-            return ((bool)_values[i]);
-        }
-
-        public byte GetByte(int i)
-        {
-            return ((byte)_values[i]);
-        }
+        public bool     GetBoolean(int i)  => (bool)_values[i];
+        public byte     GetByte(int i)     => (byte)_values[i];
+        public Guid     GetGuid(int i)     => (Guid)_values[i];
+        public short    GetInt16(int i)    => (short)_values[i];
+        public int      GetInt32(int i)    => (int)_values[i];
+        public long     GetInt64(int i)    => (long)_values[i];
+        public float    GetFloat(int i)    => (float)_values[i];
+        public double   GetDouble(int i)   => (double)_values[i];
+        public string   GetString(int i)   => (string)_values[i];
+        public decimal  GetDecimal(int i)  => (decimal)_values[i];
+        public DateTime GetDateTime(int i) => (DateTime)_values[i];
+        public char     GetChar(int i)     => ((string)_values[i])[0];
 
         public long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
         {
-            var cbytes = 0;
-            int ndataIndex;
-
             var data = (byte[])_values[i];
-
-            cbytes = data.Length;
+            var cbytes = data.Length;
 
             // since arrays can't handle 64 bit values and this interface doesn't
             // allow chunked access to data, a dataIndex outside the rang of Int32
             // is invalid
             if (dataIndex > int.MaxValue)
-            {
                 throw InvalidSourceBufferIndex(cbytes, dataIndex, nameof(dataIndex));
-            }
-
-            ndataIndex = (int)dataIndex;
 
             // if no buffer is passed in, return the number of characters we have
             if (null == buffer)
                 return cbytes;
 
+            var ndataIndex = (int)dataIndex;
+
             try
             {
+                // help the user out in the case where there's less data than requested
                 if (ndataIndex < cbytes)
-                {
-                    // help the user out in the case where there's less data than requested
-                    if ((ndataIndex + length) > cbytes)
-                        cbytes = cbytes - ndataIndex;
-                    else
-                        cbytes = length;
-                }
+                    cbytes = ndataIndex + length > cbytes ? cbytes - ndataIndex : length;
 
                 // until arrays are 64 bit, we have to do these casts
                 Array.Copy(data, ndataIndex, buffer, bufferIndex, cbytes);
@@ -166,74 +120,48 @@ namespace Eggado
                 cbytes = data.Length;
 
                 if (length < 0)
-                {
                     throw InvalidDataLength(length);
-                }
 
                 // if bad buffer index, throw
                 if (bufferIndex < 0 || bufferIndex >= buffer.Length)
-                {
                     throw InvalidDestinationBufferIndex(length, bufferIndex, nameof(bufferIndex));
-                }
 
                 // if bad data index, throw
                 if (dataIndex < 0 || dataIndex >= cbytes)
-                {
                     throw InvalidSourceBufferIndex(length, dataIndex, nameof(dataIndex));
-                }
 
                 // if there is not enough room in the buffer for data
                 if (cbytes + bufferIndex > buffer.Length)
-                {
                     throw InvalidBufferSizeOrIndex(cbytes, bufferIndex);
-                }
             }
 
             return cbytes;
         }
 
-        public char GetChar(int i) => ((string)_values[i])[0];
-
         public long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
         {
             // if the object doesn't contain a char[] then the user will get an exception
             var s = (string)_values[i];
-
             var data = s.ToCharArray();
-
             var cchars = data.Length;
 
             // since arrays can't handle 64 bit values and this interface doesn't
             // allow chunked access to data, a dataIndex outside the rang of Int32
             // is invalid
             if (dataIndex > int.MaxValue)
-            {
                 throw InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
-            }
-
-            var ndataIndex = (int)dataIndex;
-
 
             // if no buffer is passed in, return the number of characters we have
             if (null == buffer)
-            {
                 return cchars;
-            }
+
+            var ndataIndex = (int)dataIndex;
 
             try
             {
+                // help the user out in the case where there's less data than requested
                 if (ndataIndex < cchars)
-                {
-                    // help the user out in the case where there's less data than requested
-                    if ((ndataIndex + length) > cchars)
-                    {
-                        cchars = cchars - ndataIndex;
-                    }
-                    else
-                    {
-                        cchars = length;
-                    }
-                }
+                    cchars = ndataIndex + length > cchars ? cchars - ndataIndex : length;
 
                 Array.Copy(data, ndataIndex, buffer, bufferIndex, cchars);
             }
@@ -242,127 +170,54 @@ namespace Eggado
                 cchars = data.Length;
 
                 if (length < 0)
-                {
                     throw InvalidDataLength(length);
-                }
 
                 // if bad buffer index, throw
                 if (bufferIndex < 0 || bufferIndex >= buffer.Length)
-                {
-                    throw InvalidDestinationBufferIndex(buffer.Length, bufferIndex, nameof(bufferIndex));
-                }
+                    throw InvalidDestinationBufferIndex(buffer.Length, bufferIndex,
+                        nameof(bufferIndex));
 
                 // if bad data index, throw
                 if (ndataIndex < 0 || ndataIndex >= cchars)
-                {
                     throw InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
-                }
 
                 // if there is not enough room in the buffer for data
                 if (cchars + bufferIndex > buffer.Length)
-                {
                     throw InvalidBufferSizeOrIndex(cchars, bufferIndex);
-                }
             }
 
             return cchars;
         }
 
-        static ArgumentOutOfRangeException InvalidSourceBufferIndex(int maxLen, long srcOffset, string parameterName)
-        {
-            return new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid source buffer (size of {maxLen}) offset: {srcOffset}"), parameterName);
-        }
+        static ArgumentOutOfRangeException InvalidSourceBufferIndex(int maxLen, long srcOffset, string parameterName) =>
+            new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid source buffer (size of {maxLen}) offset: {srcOffset}"), parameterName);
 
-        static ArgumentOutOfRangeException InvalidDestinationBufferIndex(int maxLen, int dstOffset, string parameterName)
-        {
-            return new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid destination buffer (size of {maxLen}) offset: {dstOffset}"), parameterName);
-        }
+        static ArgumentOutOfRangeException InvalidDestinationBufferIndex(int maxLen, int dstOffset, string parameterName) =>
+            new ArgumentOutOfRangeException(FormattableString.Invariant($"Invalid destination buffer (size of {maxLen}) offset: {dstOffset}"), parameterName);
 
-        static IndexOutOfRangeException InvalidBufferSizeOrIndex(int numBytes, int bufferIndex)
-        {
-            return new IndexOutOfRangeException(FormattableString.Invariant($"Buffer offset '{bufferIndex}' plus the bytes available '{numBytes}' is greater than the length of the passed in buffer."));
-        }
+        static IndexOutOfRangeException InvalidBufferSizeOrIndex(int numBytes, int bufferIndex) =>
+            new IndexOutOfRangeException(FormattableString.Invariant($"Buffer offset '{bufferIndex}' plus the bytes available '{numBytes}' is greater than the length of the passed in buffer."));
 
-        static Exception InvalidDataLength(long length)
-        {
-            return new IndexOutOfRangeException(FormattableString.Invariant($"Data length '{length}' is less than 0."));
-        }
+        static Exception InvalidDataLength(long length) =>
+            new IndexOutOfRangeException(FormattableString.Invariant($"Data length '{length}' is less than 0."));
 
-        public Guid GetGuid(int i)
-        {
-            return ((Guid)_values[i]);
-        }
-
-
-        public short GetInt16(int i)
-        {
-            return ((short)_values[i]);
-        }
-
-        public int GetInt32(int i)
-        {
-            return ((int)_values[i]);
-        }
-
-        public long GetInt64(int i)
-        {
-            return ((long)_values[i]);
-        }
-
-        public float GetFloat(int i)
-        {
-            return ((float)_values[i]);
-        }
-
-        public double GetDouble(int i)
-        {
-            return ((double)_values[i]);
-        }
-
-        public string GetString(int i)
-        {
-            return ((string)_values[i]);
-        }
-
-        public decimal GetDecimal(int i)
-        {
-            return ((decimal)_values[i]);
-        }
-
-        public DateTime GetDateTime(int i)
-        {
-            return ((DateTime)_values[i]);
-        }
-
-        public bool IsDBNull(int i)
-        {
-            var o = _values[i];
-            return (null == o || Convert.IsDBNull(o));
-        }
-
-        // only StackOverflowException & ThreadAbortException are sealed classes
-        static readonly Type StackOverflowType = typeof(StackOverflowException);
-        static readonly Type OutOfMemoryType = typeof(OutOfMemoryException);
-        static readonly Type ThreadAbortType = typeof(System.Threading.ThreadAbortException);
-        static readonly Type NullReferenceType = typeof(NullReferenceException);
-        static readonly Type AccessViolationType = typeof(AccessViolationException);
-        static readonly Type SecurityType = typeof(System.Security.SecurityException);
-
-        static bool IsCatchableExceptionType(Exception e)
+        static bool IsCatchableExceptionType(Exception e) => e switch
         {
             // a 'catchable' exception is defined by what it is not.
-            var type = e.GetType();
+            // only StackOverflowException & ThreadAbortException are sealed classes
 
-            return ((type != StackOverflowType) &&
-                     (type != OutOfMemoryType) &&
-                     (type != ThreadAbortType) &&
-                     (type != NullReferenceType) &&
-                     (type != AccessViolationType) &&
-                     !SecurityType.IsAssignableFrom(type));
-        }
+            StackOverflowException   _ => false,
+            OutOfMemoryException     _ => false,
+            ThreadAbortException     _ => false,
+            NullReferenceException   _ => false,
+            AccessViolationException _ => false,
+            SecurityException        _ => false,
+            _                          => true
+        };
     }
 
     // this doesn't change per record, only alloc once
+
     readonly struct SchemaInfo
     {
         public readonly string Name;

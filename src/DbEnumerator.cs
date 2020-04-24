@@ -49,11 +49,7 @@ namespace Eggado
 
         public DbEnumerator(DbDataReader reader, bool closeReader, CancellationToken cancellationToken = default)
         {
-            if (null == reader)
-            {
-                throw new ArgumentNullException(nameof(reader));
-            }
-            _reader = reader;
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             _closeReader = closeReader;
             _cancellationToken = cancellationToken;
         }
@@ -65,9 +61,7 @@ namespace Eggado
         void OnMoveNext()
         {
             if (null == _schemaInfo)
-            {
                 BuildSchemaInfo();
-            }
 
             Debug.Assert(null != _schemaInfo, "unable to build schema information!");
 
@@ -85,32 +79,27 @@ namespace Eggado
         {
             OnMoveNext();
 
-            if (_reader.Read())
+            if (!_reader.Read())
             {
-                Current = ReadRecord();
-                return true;
+                if (_closeReader)
+                    _reader.Close();
+                return false;
             }
-            if (_closeReader)
-            {
-                _reader.Close();
-            }
-            return false;
+
+            Current = ReadRecord();
+            return true;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Reset()
-        {
-            throw new NotSupportedException();
-        }
+        public void Reset() => throw new NotSupportedException();
 
         void BuildSchemaInfo()
         {
             var count = _reader.FieldCount;
             var fieldNames = new string[count];
             for (var i = 0; i < count; ++i)
-            {
                 fieldNames[i] = _reader.GetName(i);
-            }
+
             BuildSchemaTableInfoTableNames(fieldNames);
 
             var si = new SchemaInfo[count];
@@ -139,14 +128,11 @@ namespace Eggado
                 for (var i = columnNameArray.Length - 1; 0 <= i; --i)
                 {
                     var columnName = columnNameArray[i];
-                    if ((null != columnName) && (0 < columnName.Length))
+                    if (!string.IsNullOrEmpty(columnName))
                     {
                         columnName = columnName.ToLowerInvariant();
-                        int index;
-                        if (hash.TryGetValue(columnName, out index))
-                        {
+                        if (hash.TryGetValue(columnName, out var index))
                             startIndex = Math.Min(startIndex, index);
-                        }
                         hash[columnName] = i;
                     }
                     else
@@ -155,6 +141,7 @@ namespace Eggado
                         startIndex = i;
                     }
                 }
+
                 var uniqueIndex = 1;
                 for (var i = startIndex; i < columnNameArray.Length; ++i)
                 {
@@ -169,9 +156,7 @@ namespace Eggado
                     {
                         columnName = columnName.ToLowerInvariant();
                         if (i != hash[columnName])
-                        {
                             GenerateUniqueName(hash, ref columnNameArray[i], i, 1);
-                        }
                     }
                 }
 
