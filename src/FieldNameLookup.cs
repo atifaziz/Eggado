@@ -51,9 +51,9 @@ namespace Eggado
 
         public BasicFieldNameLookup(System.Collections.ObjectModel.ReadOnlyCollection<string> columnNames)
         {
-            int length = columnNames.Count;
-            string[] fieldNames = new string[length];
-            for (int i = 0; i < length; ++i)
+            var length = columnNames.Count;
+            var fieldNames = new string[length];
+            for (var i = 0; i < length; ++i)
             {
                 fieldNames[i] = columnNames[i];
             }
@@ -63,9 +63,9 @@ namespace Eggado
 
         public BasicFieldNameLookup(IDataReader reader)
         {
-            int length = reader.FieldCount;
-            string[] fieldNames = new string[length];
-            for (int i = 0; i < length; ++i)
+            var length = reader.FieldCount;
+            var fieldNames = new string[length];
+            for (var i = 0; i < length; ++i)
             {
                 fieldNames[i] = reader.GetName(i);
             }
@@ -78,7 +78,7 @@ namespace Eggado
             {
                 throw new ArgumentNullException(nameof(fieldName));
             }
-            int index = IndexOf(fieldName);
+            var index = IndexOf(fieldName);
             if (-1 == index)
             {
                 throw new IndexOutOfRangeException(fieldName);
@@ -134,8 +134,8 @@ namespace Eggado
                 _compareInfo = GetCompareInfo();
             }
 
-            int length = _fieldNames.Length;
-            for (int i = 0; i < length; ++i)
+            var length = _fieldNames.Length;
+            for (var i = 0; i < length; ++i)
             {
                 if (0 == _compareInfo.Compare(fieldName, _fieldNames[i], compareOptions))
                 {
@@ -149,13 +149,13 @@ namespace Eggado
         // RTM common code for generating Dictionary from array of column names
         void GenerateLookup()
         {
-            int length = _fieldNames.Length;
-            Dictionary<string, int> hash = new Dictionary<string, int>(length);
+            var length = _fieldNames.Length;
+            var hash = new Dictionary<string, int>(length);
 
             // via case sensitive search, first match with lowest ordinal matches
-            for (int i = length - 1; 0 <= i; --i)
+            for (var i = length - 1; 0 <= i; --i)
             {
-                string fieldName = _fieldNames[i];
+                var fieldName = _fieldNames[i];
                 hash[fieldName] = i;
             }
             _fieldNameLookup = hash;

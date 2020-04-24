@@ -87,7 +87,7 @@ namespace Eggado
             if (_reader.Read())
             {
                 // setup our current record
-                object[] values = new object[_schemaInfo.Length];
+                var values = new object[_schemaInfo.Length];
                 _reader.GetValues(values); // this.GetValues()
                 _current = new DataRecordInternal(_schemaInfo, values, _descriptors, _fieldNameLookup);
                 return true;
@@ -107,17 +107,17 @@ namespace Eggado
 
         void BuildSchemaInfo()
         {
-            int count = _reader.FieldCount;
-            string[] fieldnames = new string[count];
-            for (int i = 0; i < count; ++i)
+            var count = _reader.FieldCount;
+            var fieldnames = new string[count];
+            for (var i = 0; i < count; ++i)
             {
                 fieldnames[i] = _reader.GetName(i);
             }
             BuildSchemaTableInfoTableNames(fieldnames);
 
-            SchemaInfo[] si = new SchemaInfo[count];
-            PropertyDescriptor[] props = new PropertyDescriptor[_reader.FieldCount];
-            for (int i = 0; i < si.Length; i++)
+            var si = new SchemaInfo[count];
+            var props = new PropertyDescriptor[_reader.FieldCount];
+            for (var i = 0; i < si.Length; i++)
             {
                 SchemaInfo s = default;
                 s.name = _reader.GetName(i);
@@ -140,12 +140,12 @@ namespace Eggado
 
             static void BuildSchemaTableInfoTableNames(string[] columnNameArray)
             {
-                Dictionary<string, int> hash = new Dictionary<string, int>(columnNameArray.Length);
+                var hash = new Dictionary<string, int>(columnNameArray.Length);
 
-                int startIndex = columnNameArray.Length; // lowest non-unique index
-                for (int i = columnNameArray.Length - 1; 0 <= i; --i)
+                var startIndex = columnNameArray.Length; // lowest non-unique index
+                for (var i = columnNameArray.Length - 1; 0 <= i; --i)
                 {
-                    string columnName = columnNameArray[i];
+                    var columnName = columnNameArray[i];
                     if ((null != columnName) && (0 < columnName.Length))
                     {
                         columnName = columnName.ToLowerInvariant();
@@ -162,10 +162,10 @@ namespace Eggado
                         startIndex = i;
                     }
                 }
-                int uniqueIndex = 1;
-                for (int i = startIndex; i < columnNameArray.Length; ++i)
+                var uniqueIndex = 1;
+                for (var i = startIndex; i < columnNameArray.Length; ++i)
                 {
-                    string columnName = columnNameArray[i];
+                    var columnName = columnNameArray[i];
                     if (0 == columnName.Length)
                     {
                         // generate a unique name
@@ -188,8 +188,8 @@ namespace Eggado
                 {
                     for (; ; ++uniqueIndex)
                     {
-                        string uniqueName = columnName + uniqueIndex.ToString(CultureInfo.InvariantCulture);
-                        string lowerName = uniqueName.ToLowerInvariant();
+                        var uniqueName = columnName + uniqueIndex.ToString(CultureInfo.InvariantCulture);
+                        var lowerName = uniqueName.ToLowerInvariant();
                         if (hash.TryAdd(lowerName, index))
                         {
                             columnName = uniqueName;

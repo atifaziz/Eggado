@@ -62,8 +62,8 @@ namespace Eggado
                 throw new ArgumentNullException(nameof(values));
             }
 
-            int copyLen = (values.Length < _schemaInfo.Length) ? values.Length : _schemaInfo.Length;
-            for (int i = 0; i < copyLen; i++)
+            var copyLen = (values.Length < _schemaInfo.Length) ? values.Length : _schemaInfo.Length;
+            for (var i = 0; i < copyLen; i++)
             {
                 values[i] = _values[i];
             }
@@ -124,10 +124,10 @@ namespace Eggado
 
         public override long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
         {
-            int cbytes = 0;
+            var cbytes = 0;
             int ndataIndex;
 
-            byte[] data = (byte[])_values[i];
+            var data = (byte[])_values[i];
 
             cbytes = data.Length;
 
@@ -195,11 +195,11 @@ namespace Eggado
         public override long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
         {
             // if the object doesn't contain a char[] then the user will get an exception
-            string s = (string)_values[i];
+            var s = (string)_values[i];
 
-            char[] data = s.ToCharArray();
+            var data = s.ToCharArray();
 
-            int cchars = data.Length;
+            var cchars = data.Length;
 
             // since arrays can't handle 64 bit values and this interface doesn't
             // allow chunked access to data, a dataIndex outside the rang of Int32
@@ -209,7 +209,7 @@ namespace Eggado
                 throw InvalidSourceBufferIndex(cchars, dataIndex, nameof(dataIndex));
             }
 
-            int ndataIndex = (int)dataIndex;
+            var ndataIndex = (int)dataIndex;
 
 
             // if no buffer is passed in, return the number of characters we have
@@ -334,7 +334,7 @@ namespace Eggado
 
         public override bool IsDBNull(int i)
         {
-            object o = _values[i];
+            var o = _values[i];
             return (null == o || Convert.IsDBNull(o));
         }
 
@@ -418,7 +418,7 @@ namespace Eggado
         static bool IsCatchableExceptionType(Exception e)
         {
             // a 'catchable' exception is defined by what it is not.
-            Type type = e.GetType();
+            var type = e.GetType();
 
             return ((type != s_stackOverflowType) &&
                      (type != s_outOfMemoryType) &&
