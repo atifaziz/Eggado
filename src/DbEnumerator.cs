@@ -35,7 +35,7 @@ namespace Eggado
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/DbEnumerator.cs
 
-    public partial class DbEnumerator : IEnumerator
+    partial class DbEnumerator : IEnumerator
     {
         readonly DbDataReader _reader;
         readonly CancellationToken _cancellationToken;
@@ -44,10 +44,8 @@ namespace Eggado
         readonly bool _closeReader;
 
         // users must get enumerators off of the datareader interfaces
-        public DbEnumerator(DbDataReader reader, CancellationToken cancellationToken = default) :
-            this(reader, false, cancellationToken) {}
-
-        public DbEnumerator(DbDataReader reader, bool closeReader, CancellationToken cancellationToken = default)
+        public DbEnumerator(DbDataReader reader, bool closeReader = false,
+                            CancellationToken cancellationToken = default)
         {
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             _closeReader = closeReader;
