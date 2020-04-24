@@ -39,8 +39,8 @@ namespace Eggado
         internal DbDataRecord _current;
         internal SchemaInfo[] _schemaInfo; // shared schema info among all the data records
         internal PropertyDescriptorCollection _descriptors; // cached property descriptors
-        private FieldNameLookup _fieldNameLookup;
-        private readonly bool _closeReader;
+        FieldNameLookup _fieldNameLookup;
+        readonly bool _closeReader;
 
         // users must get enumerators off of the datareader interfaces
         public DbEnumerator(IDataReader reader)
@@ -105,7 +105,7 @@ namespace Eggado
             throw new NotSupportedException();
         }
 
-        private void BuildSchemaInfo()
+        void BuildSchemaInfo()
         {
             int count = _reader.FieldCount;
             string[] fieldnames = new string[count];
@@ -201,10 +201,10 @@ namespace Eggado
             }
         }
 
-        private sealed class DbColumnDescriptor : PropertyDescriptor
+        sealed class DbColumnDescriptor : PropertyDescriptor
         {
-            private readonly int _ordinal;
-            private readonly Type _type;
+            readonly int _ordinal;
+            readonly Type _type;
 
             internal DbColumnDescriptor(int ordinal, string name, Type type)
                 : base(name, null)

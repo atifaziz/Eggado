@@ -29,12 +29,12 @@ namespace Eggado
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/DataRecordInternal.cs
 
-    internal sealed class DataRecordInternal : DbDataRecord, ICustomTypeDescriptor
+    sealed class DataRecordInternal : DbDataRecord, ICustomTypeDescriptor
     {
-        private readonly SchemaInfo[] _schemaInfo;
-        private readonly object[] _values;
-        private PropertyDescriptorCollection _propertyDescriptors;
-        private readonly FieldNameLookup _fieldNameLookup;
+        readonly SchemaInfo[] _schemaInfo;
+        readonly object[] _values;
+        PropertyDescriptorCollection _propertyDescriptors;
+        readonly FieldNameLookup _fieldNameLookup;
 
         // copy all runtime data information
         internal DataRecordInternal(SchemaInfo[] schemaInfo, object[] values, PropertyDescriptorCollection descriptors, FieldNameLookup fieldNameLookup)
@@ -408,12 +408,12 @@ namespace Eggado
         }
 
         // only StackOverflowException & ThreadAbortException are sealed classes
-        private static readonly Type s_stackOverflowType = typeof(StackOverflowException);
-        private static readonly Type s_outOfMemoryType = typeof(OutOfMemoryException);
-        private static readonly Type s_threadAbortType = typeof(System.Threading.ThreadAbortException);
-        private static readonly Type s_nullReferenceType = typeof(NullReferenceException);
-        private static readonly Type s_accessViolationType = typeof(AccessViolationException);
-        private static readonly Type s_securityType = typeof(System.Security.SecurityException);
+        static readonly Type s_stackOverflowType = typeof(StackOverflowException);
+        static readonly Type s_outOfMemoryType = typeof(OutOfMemoryException);
+        static readonly Type s_threadAbortType = typeof(System.Threading.ThreadAbortException);
+        static readonly Type s_nullReferenceType = typeof(NullReferenceException);
+        static readonly Type s_accessViolationType = typeof(AccessViolationException);
+        static readonly Type s_securityType = typeof(System.Security.SecurityException);
 
         static bool IsCatchableExceptionType(Exception e)
         {
@@ -430,7 +430,7 @@ namespace Eggado
     }
 
     // this doesn't change per record, only alloc once
-    internal struct SchemaInfo
+    struct SchemaInfo
     {
         public string name;
         public string typeName;

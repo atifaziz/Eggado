@@ -29,16 +29,16 @@ namespace Eggado
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/Common/src/System/Data/Common/BasicFieldNameLookup.cs
 
-    internal class BasicFieldNameLookup
+    class BasicFieldNameLookup
     {
         // Dictionary stores the index into the _fieldNames, match via case-sensitive
-        private Dictionary<string, int> _fieldNameLookup;
+        Dictionary<string, int> _fieldNameLookup;
 
         // original names for linear searches when exact matches fail
-        private readonly string[] _fieldNames;
+        readonly string[] _fieldNames;
 
         // By default _compareInfo is set to InvariantCulture CompareInfo
-        private CompareInfo _compareInfo;
+        CompareInfo _compareInfo;
 
         public BasicFieldNameLookup(string[] fieldNames)
         {
@@ -127,7 +127,7 @@ namespace Eggado
             return CultureInfo.InvariantCulture.CompareInfo;
         }
 
-        private int LinearIndexOf(string fieldName, CompareOptions compareOptions)
+        int LinearIndexOf(string fieldName, CompareOptions compareOptions)
         {
             if (null == _compareInfo)
             {
@@ -147,7 +147,7 @@ namespace Eggado
         }
 
         // RTM common code for generating Dictionary from array of column names
-        private void GenerateLookup()
+        void GenerateLookup()
         {
             int length = _fieldNames.Length;
             Dictionary<string, int> hash = new Dictionary<string, int>(length);
@@ -164,9 +164,9 @@ namespace Eggado
 
     // Source: https://github.com/dotnet/runtime/blob/33bedaf3bcc95d91dde5f09251a5972fbac5f05e/src/libraries/System.Data.Common/src/System/Data/Common/FieldNameLookup.cs
 
-    internal sealed class FieldNameLookup : BasicFieldNameLookup
+    sealed class FieldNameLookup : BasicFieldNameLookup
     {
-        private readonly int _defaultLocaleID;
+        readonly int _defaultLocaleID;
 
         public FieldNameLookup(string[] fieldNames, int defaultLocaleID) : base(fieldNames)
         {
