@@ -29,6 +29,7 @@ namespace Eggado
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Threading;
+    using System.Threading.Tasks;
     using Mannex.Collections.Generic;
 
     #endregion
@@ -121,9 +122,12 @@ namespace Eggado
             if (reader == null) throw new ArgumentNullException(nameof(reader));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
-            await using var e = new DbEnumerator(reader, false, cancellationToken);
-            while (await e.MoveNextAsync().ConfigureAwait(false))
-                yield return selector(e.Current);
+            var e = new DbEnumerator(reader, false, cancellationToken);
+            await using (e.ConfigureAwait(false))
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                    yield return selector(e.Current);
+            }
         }
 
         #endif
