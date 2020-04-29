@@ -133,6 +133,9 @@ namespace Eggado
 
         #if ASYNC_STREAMS
 
+        public static IAsyncEnumerator<dynamic> SelectAsync(this DbDataReader reader) =>
+            reader.SelectAsync(CancellationToken.None);
+
         public static IAsyncEnumerator<dynamic>
             SelectAsync(this DbDataReader reader, CancellationToken cancellationToken) =>
             reader.SelectAsync(cancellationToken, record => new DynamicRecord(record));
