@@ -19,6 +19,9 @@ Eggado is independent of any ADO.NET provider. That's because it simply
 extends and deals in terms of [`IDataRecord`][idrcd], [`IDataReader`][idrdr]
 and [`IDbCommand`][idcmd].
 
+Starting with version 2.2, the API has full asynchronous support
+(`async`/`await`), including reading data as [asynchronous streams].
+
 ## Example 1
 
 ```c#
@@ -118,3 +121,4 @@ using (var command = new SqlCeCommand(@"
 [idrcd]: https://msdn.microsoft.com/en-us/library/system.data.idatarecord.aspx
 [idrdr]: https://msdn.microsoft.com/en-us/library/system.data.idatareader.aspx
 [idcmd]: https://msdn.microsoft.com/en-us/library/system.data.idbcommand.aspx
+[asynchronous streams]: https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/generate-consume-asynchronous-stream
